@@ -61,18 +61,18 @@ export default function CustomCursor() {
     <>
       {/* Precision center dot in Hot Pink */}
       <div
-        className="fixed top-0 left-0 w-1.5 h-1.5 rounded-full bg-[#FF1493] pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-transform duration-75"
+        className="fixed top-0 left-0 w-2 h-2 rounded-full bg-[#FF1493] pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-transform duration-75 shadow-[0_0_10px_#FF1493]"
         style={{
           transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
         }}
       />
 
-      {/* Trailing subtle minimal ring */}
+      {/* Trailing smooth magnetic aura in Hot Pink */}
       <div
-        className={`fixed top-0 left-0 rounded-full border pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 transition-all duration-200 ease-out ${
+        className={`fixed top-0 left-0 rounded-full border pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ease-out ${
           isHovered
-            ? 'w-9 h-9 border-[#FF1493] scale-110'
-            : 'w-6 h-6 border-white/20'
+            ? 'w-12 h-12 border-[#FF1493] bg-[#FF1493]/20 scale-125 shadow-[0_0_20px_rgba(255,20,147,0.4)]'
+            : 'w-7 h-7 border-[#FF1493]/40 bg-[#FF1493]/5'
         }`}
         style={{
           transform: `translate3d(${trailing.x}px, ${trailing.y}px, 0)`,

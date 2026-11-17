@@ -9,43 +9,48 @@ export default {
     extend: {
       colors: {
         background: '#050505',
-        'background-secondary': '#0A0A0A',
         surface: {
-          DEFAULT: '#111111',
+          DEFAULT: '#0B0B0B',
           card: '#111111',
-          hover: '#161616',
-        },
-        text: {
-          primary: '#F5F5F5',
-          secondary: '#999999',
-          muted: '#666666',
+          cardHover: '#161616',
+          glass: 'rgba(17, 17, 17, 0.8)',
         },
         accent: {
           DEFAULT: '#FF1493',
           pink: '#FF1493',
-          softPink: '#FF69B4',
-          // backward compat aliases
+          pinkLight: '#FF4FBF',
+          pinkNeon: '#FF69B4',
+          // keep aliases pointing to hot pink so any lingering classes automatically turn pink
           blue: '#FF1493',
-          violet: '#FF69B4',
+          violet: '#FF4FBF',
         },
         content: {
-          primary: '#F5F5F5',
-          secondary: '#999999',
-          muted: '#666666',
+          primary: '#FFFFFF',
+          secondary: '#B3B3B3',
+          muted: '#737373',
         },
         border: {
-          DEFAULT: 'rgba(255, 255, 255, 0.12)',
-          subtle: 'rgba(255, 255, 255, 0.12)',
-          pink: 'rgba(255, 20, 147, 0.40)',
+          subtle: 'rgba(255, 20, 147, 0.20)',
+          pink: 'rgba(255, 20, 147, 0.35)',
+          glow: 'rgba(255, 20, 147, 0.6)',
         }
       },
       fontFamily: {
-        display: ['Space Grotesk', 'sans-serif'],
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        mono: ['IBM Plex Mono', 'monospace'],
+        sans: ['Space Grotesk', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['Space Grotesk', 'Inter', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+      },
+      backgroundImage: {
+        'pink-radial': 'radial-gradient(circle at 50% 50%, rgba(255, 20, 147, 0.18), transparent 70%)',
+        'pink-glow': 'radial-gradient(circle at 50% 30%, rgba(255, 20, 147, 0.22), rgba(255, 79, 191, 0.08) 50%, transparent 80%)',
+        'pink-gradient': 'linear-gradient(135deg, #FF1493 0%, #FF4FBF 100%)',
       },
       boxShadow: {
-        'pink-accent': '0 0 20px -3px rgba(255, 20, 147, 0.3)',
+        'glow-pink': '0 0 35px -5px rgba(255, 20, 147, 0.5)',
+        'glow-pink-sm': '0 0 15px -3px rgba(255, 20, 147, 0.4)',
+        'glow-blue': '0 0 35px -5px rgba(255, 20, 147, 0.5)',
+        'glow-violet': '0 0 35px -5px rgba(255, 79, 191, 0.4)',
+        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.7)',
       },
     },
   },

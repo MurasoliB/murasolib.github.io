@@ -1,18 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowDown } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ArrowDown } from 'lucide-react';
 import About from '../components/About';
 import TechStack from '../components/TechStack';
-import EditorialProjects from '../components/EditorialProjects';
 import ExperienceEducation from '../components/ExperienceEducation';
 import Contact from '../components/Contact';
-import ProjectModal from '../components/ProjectModal';
-import { personalInfo } from '../data/portfolioData';
+import { featuredProjects, personalInfo } from '../data/portfolioData';
 
 export default function HomePage() {
   const location = useLocation();
-  const [selectedProject, setSelectedProject] = useState(null);
 
   useEffect(() => {
     if (location.hash) {
@@ -28,161 +25,178 @@ export default function HomePage() {
   return (
     <div className="relative z-10 flex flex-col w-full">
       
-      {/* ===================================================================
-          05. HERO — ASYMMETRICAL FULL-SCREEN EDITORIAL COMPOSITION
-         =================================================================== */}
+      {/* Full-Screen Hero Fold with Hot Pink Glow & Typography */}
       <section
         id="home"
-        className="relative min-h-screen flex flex-col justify-between pt-32 pb-12 max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 w-full"
+        className="relative min-h-screen flex flex-col justify-between pt-32 pb-14 max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 w-full overflow-hidden"
       >
-        {/* Main Asymmetrical Split: Left Typography / Right Editorial Portrait */}
-        <div className="my-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center py-6">
-          
-          {/* Left Column (7 cols): Massive Name & Statement */}
-          <div className="lg:col-span-7 space-y-8">
-            
-            {/* Small Label */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-[#999999]"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FF1493]" />
-              <span>// Software & AI Architecture</span>
-            </motion.div>
+        {/* Subtle Animated Pink Radial Glow */}
+        <div className="absolute top-1/3 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-[#FF1493]/15 via-[#FF4FBF]/5 to-transparent rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-gradient-radial from-[#FF4FBF]/10 to-transparent rounded-full blur-[160px] pointer-events-none" />
 
-            {/* Huge Two-Line Name Typography */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="text-6xl sm:text-7xl md:text-8xl lg:text-[6.5rem] xl:text-[8rem] font-display font-black tracking-tighter leading-[0.88] select-none text-[#F5F5F5]"
-            >
-              MURASOLI<br />
-              <span>BALA</span><span className="text-[#FF1493]">JI.</span>
-            </motion.h1>
-
-            {/* Introduction & Philosophy Paragraph */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="space-y-3 max-w-xl"
-            >
-              <p className="font-mono text-sm sm:text-base text-[#F5F5F5] font-medium tracking-tight">
-                IT Undergrad <span className="text-[#FF1493]">·</span> AI & Full-Stack Builder
-              </p>
-              <p className="text-sm sm:text-base text-[#999999] leading-relaxed">
-                Information Technology undergraduate at {personalInfo.educationInstitute}. Architecting autonomous voice assistants, hydrodynamic geospatial simulations, and resilient enterprise data systems.
-              </p>
-            </motion.div>
-
-            {/* Action Links */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex items-center gap-8 pt-2 font-mono text-xs uppercase tracking-wider"
-            >
-              <a
-                href="#projects"
-                className="group inline-flex items-center gap-2 text-[#F5F5F5] hover:text-[#FF1493] transition-colors"
-              >
-                <span className="border-b border-[#F5F5F5] group-hover:border-[#FF1493] pb-0.5">Explore Projects</span>
-                <span className="text-[#FF1493] group-hover:translate-x-1 transition-transform">→</span>
-              </a>
-
-              <a
-                href="#contact"
-                className="group inline-flex items-center gap-2 text-[#999999] hover:text-[#F5F5F5] transition-colors"
-              >
-                <span className="border-b border-transparent group-hover:border-[#F5F5F5] pb-0.5">Contact</span>
-                <span className="text-[#FF1493] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
-              </a>
-            </motion.div>
-
+        {/* Top Tag & Availability */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-wrap items-center justify-between gap-4 relative z-10"
+        >
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#FF1493] shadow-[0_0_10px_#FF1493]" />
+            <span className="text-xs font-mono text-[#FF69B4] tracking-widest uppercase">
+              // Software & AI Architecture
+            </span>
           </div>
 
-          {/* Right Column (5 cols): Cinematic High-Contrast Portrait */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-5 relative"
-          >
-            <div className="relative mx-auto max-w-[420px] lg:max-w-none rounded-xl overflow-hidden border border-[rgba(255,255,255,0.12)] shadow-[0_0_40px_rgba(255,20,147,0.12)] bg-[#0A0A0A] group">
-              
-              {/* High-Contrast Editorial Portrait */}
-              <img
-                src="/assets/images/hero-portrait.png"
-                alt="Murasoli Balaji - Editorial Portrait"
-                className="w-full h-auto aspect-[4/5] object-cover object-top filter grayscale contrast-125 brightness-90 group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-              />
+          <div className="flex items-center gap-2 font-mono text-xs text-[#B3B3B3] px-3.5 py-1.5 rounded-full bg-[#111111] border border-[rgba(255,20,147,0.25)]">
+            <span className="w-2 h-2 rounded-full bg-[#FF1493] animate-pulse shadow-[0_0_8px_#FF1493]" />
+            <span>{personalInfo.availability}</span>
+          </div>
+        </motion.div>
 
-              {/* Seamless Vignette Fading Into Black */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent opacity-80" />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/40 via-transparent to-transparent" />
+        {/* Massive Screen-Filling Headline with Hot Pink Accent */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="my-auto py-10 relative z-10"
+        >
+          <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10.5rem] font-display font-black text-white tracking-tighter leading-[0.88] select-none">
+            MURASOLI<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#FF69B4] to-[#FF1493]">
+              BALAJI
+            </span>
+            <span className="text-[#FF1493] drop-shadow-[0_0_20px_#FF1493]">.</span>
+          </h1>
+        </motion.div>
 
-              {/* Minimal Editorial Annotation */}
-              <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-[#999999]">
-                <span>// Editorial Capture</span>
-                <span className="text-[#FF1493]">{personalInfo.location}</span>
-              </div>
-            </div>
-          </motion.div>
+        {/* Bottom Wide Bar */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.25 }}
+          className="pt-8 border-t border-[rgba(255,20,147,0.20)] flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10"
+        >
+          <div className="max-w-xl">
+            <p className="text-base sm:text-xl text-white font-light leading-relaxed">
+              IT Undergrad <span className="text-[#FF69B4]">·</span> AI & Full-Stack Builder.
+            </p>
+            <p className="text-xs sm:text-sm font-mono text-[#B3B3B3] mt-1">
+              Building intelligent systems at <span className="text-[#FF69B4]">{personalInfo.educationInstitute}</span> · {personalInfo.location}
+            </p>
+          </div>
 
-        </div>
+          <div className="flex flex-wrap items-center gap-5 font-mono text-xs">
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FF1493] text-white font-semibold hover:bg-[#FF4FBF] shadow-[0_0_25px_rgba(255,20,147,0.45)] hover:shadow-[0_0_35px_rgba(255,20,147,0.7)] transition-all duration-300 group"
+            >
+              <span>Explore Projects</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+
+            <Link
+              to="/#contact"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#111111] border border-[rgba(255,20,147,0.3)] text-white hover:border-[#FF1493] hover:shadow-[0_0_15px_rgba(255,20,147,0.3)] transition-all"
+            >
+              Get in Touch
+            </Link>
+          </div>
+        </motion.div>
 
         {/* Minimal Scroll Down Indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.8 }}
-          className="flex items-center justify-between pt-6 border-t border-[rgba(255,255,255,0.12)] font-mono text-[11px] uppercase tracking-widest text-[#666666]"
+          transition={{ delay: 1, duration: 1 }}
+          className="absolute bottom-2 left-1/2 -translate-x-1/2 hidden md:flex items-center gap-2 font-mono text-[10px] text-[#B3B3B3] tracking-widest uppercase pointer-events-none"
         >
-          <span>Kongu Engineering College</span>
-          <div className="flex items-center gap-2 text-[#999999]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#FF1493]" />
-            <span>Scroll to Discover</span>
-            <ArrowDown className="w-3 h-3 text-[#FF1493] animate-bounce" />
-          </div>
-          <span>B.Tech Information Technology</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#FF1493] animate-ping" />
+          <span>Scroll to Discover</span>
         </motion.div>
       </section>
 
-      {/* ===================================================================
-          06. ABOUT — PERSONAL INTRODUCTION (EDITORIAL MAGAZINE SPREAD)
-         =================================================================== */}
+      {/* 1. Profile & Philosophy */}
       <About />
 
-      {/* ===================================================================
-          07. TECHNOLOGIES — TYPOGRAPHIC INDEX
-         =================================================================== */}
+      {/* 2. Technical Stack */}
       <TechStack />
 
-      {/* ===================================================================
-          08. FEATURED PROJECTS — EDITORIAL CASE STUDIES
-         =================================================================== */}
-      <EditorialProjects onInspect={(proj) => setSelectedProject(proj)} />
+      {/* 3. Wide Selected Works Showcase */}
+      <section id="projects-preview" className="relative py-32 border-t border-[rgba(255,20,147,0.20)] overflow-hidden">
+        <div className="max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 w-full">
+          
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-16">
+            <div>
+              <span className="text-xs font-mono text-[#FF69B4] tracking-widest uppercase block mb-3">
+                // Selected Works
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-display font-bold text-white tracking-tight">
+                Featured Projects<span className="text-[#FF1493]">.</span>
+              </h2>
+            </div>
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-2 text-xs font-mono text-[#B3B3B3] hover:text-[#FF1493] transition-colors group"
+            >
+              <span>View All Projects Archive</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
 
-      {/* ===================================================================
-          09. JOURNEY — MINIMAL VERTICAL TIMELINE
-         =================================================================== */}
+          {/* Wide Project Rows with Pink Hover Illumination */}
+          <div className="divide-y divide-[rgba(255,20,147,0.15)]">
+            {featuredProjects.map((project) => (
+              <Link
+                key={project.id}
+                to="/projects"
+                className="group py-10 first:pt-0 flex flex-col lg:flex-row lg:items-baseline justify-between gap-6 transition-all hover:bg-[#111111]/40 px-4 -mx-4 rounded-2xl"
+              >
+                <div className="lg:w-4/12 flex items-baseline gap-6">
+                  <span className="font-mono text-xs text-[#FF1493] font-bold">
+                    {project.number}
+                  </span>
+                  <div>
+                    <h3 className="text-2xl sm:text-3xl font-display font-semibold text-white group-hover:text-[#FF69B4] transition-colors">
+                      {project.title}
+                    </h3>
+                    <span className="text-xs font-mono text-[#B3B3B3] block mt-1">
+                      {project.badge}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="lg:w-6/12">
+                  <p className="text-sm sm:text-base text-[#B3B3B3] leading-relaxed group-hover:text-white transition-colors">
+                    {project.tagline}
+                  </p>
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {project.tags.map((t) => (
+                      <span key={t} className="text-xs font-mono text-[#737373] group-hover:text-[#B3B3B3] transition-colors">
+                        #{t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="lg:w-2/12 flex lg:justify-end items-center">
+                  <span className="inline-flex items-center gap-2 text-xs font-mono text-[#B3B3B3] group-hover:text-[#FF1493] transition-colors">
+                    <span>Inspect</span>
+                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* 4. Milestones */}
       <ExperienceEducation />
 
-      {/* ===================================================================
-          10. CONTACT — PERSONAL CONNECTION
-         =================================================================== */}
+      {/* 5. Contact */}
       <Contact />
-
-      {/* Project Deep Dive Modal */}
-      <ProjectModal
-        project={selectedProject}
-        isOpen={!!selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
-
     </div>
   );
 }

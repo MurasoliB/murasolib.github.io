@@ -9,33 +9,25 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative py-12 border-t border-[rgba(255,255,255,0.12)] font-mono text-xs text-[#666666] z-10 w-full">
-      <div className="max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 flex flex-col md:flex-row items-center justify-between gap-6">
-        
-        {/* Monogram & Identity */}
-        <div className="flex items-center gap-3">
-          <span className="font-semibold text-[#F5F5F5] tracking-wider">
-            MB<span className="text-[#FF1493]">.</span>
-          </span>
-          <span>/</span>
-          <span className="text-[#999999]">{personalInfo.name}</span>
-          <span className="hidden sm:inline text-[#444444]">·</span>
-          <span className="hidden sm:inline text-[#666666]">{personalInfo.educationInstitute}</span>
+    <footer className="relative py-14 bg-[#050505]/80 backdrop-blur-md border-t border-[rgba(255,20,147,0.25)] font-mono text-xs text-[#B3B3B3] z-10 w-full">
+      <div className="max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 flex flex-col sm:flex-row items-center justify-between gap-6">
+        {/* Author & Affiliation */}
+        <div className="flex items-center gap-2">
+          <span className="text-white font-medium">{personalInfo.name}</span>
+          <span className="text-[#FF1493]">/</span>
+          <span>{personalInfo.educationInstitute}</span>
+          <span className="text-white/20">·</span>
+          <span>{personalInfo.location}</span>
         </div>
 
-        {/* Copyright */}
-        <div className="text-center md:text-left text-[#666666]">
-          <span>© {new Date().getFullYear()} Murasoli Balaji. Crafted with intentional minimalism.</span>
-        </div>
-
-        {/* Socials & Back to Top */}
+        {/* Social Icons & Back to Top */}
         <div className="flex items-center gap-6">
           <a
             href={personalInfo.github}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            className="text-[#999999] hover:text-[#F5F5F5] transition-colors"
+            className="text-[#FF1493] hover:text-[#FF69B4] hover:scale-110 transition-all"
           >
             <Github className="w-4 h-4" />
           </a>
@@ -44,21 +36,20 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn"
-            className="text-[#999999] hover:text-[#F5F5F5] transition-colors"
+            className="text-[#FF1493] hover:text-[#FF69B4] hover:scale-110 transition-all"
           >
             <Linkedin className="w-4 h-4" />
           </a>
-          <span className="text-[rgba(255,255,255,0.12)]">|</span>
+          <span className="text-white/20">|</span>
           <button
             onClick={scrollToTop}
-            className="group flex items-center gap-1.5 text-[#999999] hover:text-[#F5F5F5] transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 text-white hover:text-[#FF1493] transition-colors"
             aria-label="Back to top"
           >
             <span>Top</span>
-            <ArrowUp className="w-3.5 h-3.5 text-[#FF1493] group-hover:-translate-y-0.5 transition-transform" />
+            <ArrowUp className="w-3.5 h-3.5 text-[#FF1493]" />
           </button>
         </div>
-
       </div>
     </footer>
   );
