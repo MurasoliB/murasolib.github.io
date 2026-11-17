@@ -1,34 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { Github, Linkedin } from './Icons';
 import { personalInfo } from '../data/portfolioData';
 
 const navItems = [
-  { name: 'Home', href: '#home' },
-  { name: 'About', href: '#about' },
-  { name: 'Skills', href: '#skills' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Journey', href: '#journey' },
-  { name: 'Contact', href: '#contact' },
+  { name: 'Home', href: '/' },
+  { name: 'About', href: '/#about' },
+  { name: 'Skills', href: '/#skills' },
+  { name: 'Projects', href: '/projects' },
+  { name: 'Journey', href: '/#journey' },
+  { name: 'Contact', href: '/#contact' },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const isProjectsPage = location.pathname === '/projects';
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
+
+      if (isProjectsPage) {
+        setActiveSection('projects');
+        return;
+      }
 
       if (window.scrollY < 80) {
         setActiveSection('home');
         return;
       }
 
-      // Determine active section based on scroll position
-      const sections = navItems.map((item) => item.href.substring(1));
+      const sections = ['about', 'skills', 'projects-preview', 'journey', 'contact'];
       const scrollPos = window.scrollY + 200;
 
       for (const section of sections) {
@@ -37,7 +45,7 @@ export default function Navbar() {
           const top = el.offsetTop;
           const height = el.offsetHeight;
           if (scrollPos >= top && scrollPos < top + height) {
-            setActiveSection(section);
+            setActiveSection(section === 'projects-preview' ? 'projects' : section);
             break;
           }
         }
@@ -45,8 +53,9 @@ export default function Navbar() {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isProjectsPage]);
 
   // Prevent background scroll when mobile menu is open
   useEffect(() => {
@@ -61,15 +70,15 @@ export default function Navbar() {
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? 'py-3.5 bg-background/80 backdrop-blur-xl border-b border-border-subtle shadow-glass'
+          scrolled || isProjectsPage
+            ? 'py-3.5 bg-background/85 backdrop-blur-xl border-b border-border-subtle shadow-glass'
             : 'py-6 bg-transparent'
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between">
           {/* Brand Monogram Logo */}
-          <a
-            href="#home"
+          <Link
+            to="/"
             className="group flex items-center gap-3 relative focus:outline-none"
             aria-label="Murasoli Balaji Home"
           >
@@ -84,16 +93,19 @@ export default function Navbar() {
                 Portfolio
               </span>
             </div>
-          </a>
+          </Link>
 
           {/* Desktop Nav Items */}
           <nav className="hidden md:flex items-center gap-1 bg-surface-glass border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-md">
             {navItems.map((item) => {
-              const isActive = activeSection === item.href.substring(1);
+              const isActive = isProjectsPage
+                ? item.name === 'Projects'
+                : activeSection.toLowerCase() === item.name.toLowerCase();
+
               return (
-                <a
+                <Link
                   key={item.name}
-                  href={item.href}
+                  to={item.href}
                   className={`relative px-4 py-1.5 text-xs font-medium tracking-wide transition-colors duration-200 rounded-full ${
                     isActive ? 'text-white font-semibold' : 'text-content-secondary hover:text-white'
                   }`}
@@ -106,7 +118,7 @@ export default function Navbar() {
                     />
                   )}
                   <span className="relative z-10">{item.name}</span>
-                </a>
+                </Link>
               );
             })}
           </nav>
@@ -133,13 +145,13 @@ export default function Navbar() {
               <Linkedin className="w-4 h-4" />
             </a>
 
-            <a
-              href="#contact"
+            <Link
+              to="/#contact"
               className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-accent-blue/10 border border-accent-blue/30 text-accent-blue hover:bg-accent-blue hover:text-white hover:shadow-glow-blue transition-all duration-300"
             >
               <span>Connect</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
+            </Link>
           </div>
 
           {/* Mobile Menu Toggle Button */}
@@ -168,20 +180,21 @@ export default function Navbar() {
                 Navigation
               </span>
               {navItems.map((item, idx) => (
-                <motion.a
+                <motion.div
                   key={item.name}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  className={`text-2xl font-display font-bold py-2 border-b border-white/5 flex items-center justify-between ${
-                    activeSection === item.href.substring(1) ? 'text-accent-blue' : 'text-content-primary'
-                  }`}
                 >
-                  <span>{item.name}</span>
-                  <ArrowUpRight className="w-4 h-4 text-content-muted" />
-                </motion.a>
+                  <Link
+                    to={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-2xl font-display font-bold py-2 border-b border-white/5 flex items-center justify-between text-content-primary hover:text-accent-blue"
+                  >
+                    <span>{item.name}</span>
+                    <ArrowUpRight className="w-4 h-4 text-content-muted" />
+                  </Link>
+                </motion.div>
               ))}
             </div>
 
@@ -207,13 +220,13 @@ export default function Navbar() {
                 </a>
               </div>
 
-              <a
-                href="#contact"
+              <Link
+                to="/#contact"
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full text-center py-3.5 rounded-xl bg-accent-blue font-semibold text-white text-sm shadow-glow-blue"
               >
                 Let's Connect
-              </a>
+              </Link>
             </div>
           </motion.div>
         )}
