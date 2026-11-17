@@ -100,6 +100,24 @@ export const featuredProjects = [
     ],
     github: "https://github.com/MurasoliB/Centralised-Clubs-Cells",
     badge: "Full-Stack"
+  },
+  {
+    id: "nl-student-search",
+    number: "05",
+    title: "Student Search via Natural Language",
+    tagline: "Groq API powered NL-to-SQL & semantic student retrieval engine",
+    description:
+      "An intelligent academic query platform utilizing the Groq API for ultra-fast LPU inference, converting conversational natural language requests into structured database lookups and real-time student record filtering.",
+    tags: ["Python", "Groq API", "NLP", "LLM", "SQL", "LPU Inference"],
+    image: "/assets/images/nl-student-search-preview.jpg",
+    features: [
+      "Natural language conversational query translation into structured database lookups",
+      "Sub-second LLM inference powered by Groq LPU processing architecture",
+      "Semantic filtering across student grades, departments, and academic metrics",
+      "Zero-syntax conversational interface eliminating manual SQL query writing"
+    ],
+    github: "https://github.com/MurasoliB/Student-Details-Search-Using-Natural-Language-Query",
+    badge: "NLP & Groq API"
   }
 ];
 
