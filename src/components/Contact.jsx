@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Copy, Check, Send, Mail } from 'lucide-react';
+import { Copy, Check, Send, Mail, Loader2, AlertCircle } from 'lucide-react';
 import { Github, Linkedin } from './Icons';
 import confetti from 'canvas-confetti';
 import { personalInfo } from '../data/portfolioData';
@@ -8,6 +8,8 @@ import { personalInfo } from '../data/portfolioData';
 export default function Contact() {
   const [copied, setCopied] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState('idle'); // 'idle' | 'submitting' | 'success' | 'error'
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleCopy = () => {
     navigator.clipboard.writeText(personalInfo.email);
@@ -15,24 +17,50 @@ export default function Contact() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) return;
 
+    setStatus('submitting');
+    setErrorMessage('');
+
     try {
-      confetti({
-        particleCount: 40,
-        spread: 50,
-        colors: ['#FF1493', '#FF69B4', '#FFFFFF'],
-        origin: { y: 0.85 }
+      const response = await fetch(`https://formsubmit.co/ajax/${personalInfo.email}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          _subject: `Portfolio Message from ${formData.name}`,
+          _template: 'table',
+        }),
       });
-    } catch (_) {}
 
-    const mailto = `mailto:${personalInfo.email}?subject=${encodeURIComponent(
-      `Inquiry from ${formData.name}`
-    )}&body=${encodeURIComponent(`From: ${formData.name} (${formData.email})\n\n${formData.message}`)}`;
+      const result = await response.json();
 
-    window.location.href = mailto;
+      if (response.ok && (result.success === 'true' || result.success === true)) {
+        setStatus('success');
+        try {
+          confetti({
+            particleCount: 50,
+            spread: 60,
+            colors: ['#FF1493', '#FF69B4', '#FFFFFF'],
+            origin: { y: 0.85 }
+          });
+        } catch (_) {}
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        throw new Error(result.message || 'Failed to dispatch message');
+      }
+    } catch (err) {
+      // In case of ad-blocker or network refusal, fallback to structured mailto
+      setStatus('error');
+      setErrorMessage('Could not send directly via form. You can reach out directly via email.');
+    }
   };
 
   return (
@@ -119,61 +147,102 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Right Column: Minimal Clean Form (No Heavy Box Card) */}
+          {/* Right Column: Seamless In-Browser Form */}
           <div className="lg:col-span-7">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="Your name"
-                    className="w-full px-4 py-3.5 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:border-[#FF1493] transition-colors"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="name@email.com"
-                    className="w-full px-4 py-3.5 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:border-[#FF1493] transition-colors"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
-                  Message
-                </label>
-                <textarea
-                  rows="4"
-                  required
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  placeholder="Tell me about the project, idea, or problem..."
-                  className="w-full px-4 py-3.5 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:border-[#FF1493] transition-colors resize-none"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-4 px-8 rounded-full bg-[#FF1493] hover:bg-[#FF4FBF] text-white font-mono text-xs font-semibold tracking-widest uppercase transition-all duration-300 shadow-[0_0_20px_rgba(255,20,147,0.4)] flex items-center justify-center gap-2 group cursor-pointer"
+            {status === 'success' ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="p-8 sm:p-12 rounded-2xl bg-white/[0.03] border border-[#FF1493]/30 text-center space-y-4 font-mono"
               >
-                <span>Send Message</span>
-                <Send className="w-3.5 h-3.5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-              </button>
-            </form>
+                <div className="w-12 h-12 rounded-full bg-[#FF1493]/10 border border-[#FF1493] flex items-center justify-center mx-auto text-[#FF1493]">
+                  <Check className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl sm:text-2xl text-white font-display font-bold">
+                  Message Dispatched Successfully
+                </h3>
+                <p className="text-sm text-[#B3B3B3] max-w-md mx-auto leading-relaxed">
+                  Thank you for reaching out! Your message was sent directly to my inbox and I will reply as soon as possible.
+                </p>
+                <button
+                  onClick={() => setStatus('idle')}
+                  className="mt-4 px-6 py-2.5 rounded-full border border-white/20 text-xs text-white hover:border-[#FF1493] hover:text-[#FF1493] transition-colors cursor-pointer"
+                >
+                  Send Another Note
+                </button>
+              </motion.div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder="Your name"
+                      className="w-full px-4 py-3.5 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:border-[#FF1493] transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="name@email.com"
+                      className="w-full px-4 py-3.5 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:border-[#FF1493] transition-colors"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
+                    Message
+                  </label>
+                  <textarea
+                    rows="4"
+                    required
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    placeholder="Tell me about the project, idea, or problem..."
+                    className="w-full px-4 py-3.5 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:border-[#FF1493] transition-colors resize-none"
+                  />
+                </div>
+
+                {status === 'error' && (
+                  <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-xs font-mono text-red-300 flex items-center gap-3">
+                    <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                    <span>{errorMessage}</span>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={status === 'submitting'}
+                  className="w-full py-4 px-8 rounded-full bg-[#FF1493] hover:bg-[#FF4FBF] text-white font-mono text-xs font-semibold tracking-widest uppercase transition-all duration-300 shadow-[0_0_20px_rgba(255,20,147,0.4)] flex items-center justify-center gap-2 group cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {status === 'submitting' ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-white" />
+                      <span>Dispatching Message...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Send Message</span>
+                      <Send className="w-3.5 h-3.5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
           </div>
 
         </div>
