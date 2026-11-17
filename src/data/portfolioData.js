@@ -79,7 +79,7 @@ export const featuredProjects = [
       "Role-based privilege segregation for faculty and students",
       "Exportable grade records and performance analytics"
     ],
-    github: "https://github.com/murasolib",
+    github: "https://github.com/MurasoliB/Student_Evaluation_Using_Java_JDBC",
     badge: "Database System"
   },
   {
