@@ -118,6 +118,24 @@ export const featuredProjects = [
     ],
     github: "https://github.com/MurasoliB/Student-Details-Search-Using-Natural-Language-Query",
     badge: "NLP & Groq API"
+  },
+  {
+    id: "oral-cancer-ai",
+    number: "06",
+    title: "Oral Cancer Prediction using AI",
+    tagline: "Deep learning computer vision for histopathological screening & diagnosis",
+    description:
+      "A clinical-grade diagnostic deep learning system trained on medical oral lesion imagery, utilizing convolutional neural networks for early-stage malignancy classification, lesion segmentation, and risk probability assessment.",
+    tags: ["Python", "Deep Learning", "Computer Vision", "TensorFlow", "Medical AI", "CNN"],
+    image: "/assets/images/oral-cancer-ai-preview.jpg",
+    features: [
+      "Convolutional neural network architecture for high-accuracy lesion classification",
+      "Automated binary and multi-class histopathological malignancy screening",
+      "Grad-CAM visual explainability heatmaps highlighting diagnostic cellular regions",
+      "Probability confidence scoring for clinical decision support"
+    ],
+    github: "https://github.com/MurasoliB/Oral-Cancer-Prediction-Using-Artificial-Intelligence",
+    badge: "Medical AI & Vision"
   }
 ];
 
