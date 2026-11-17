@@ -9,7 +9,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative py-14 bg-[#050505] border-t border-[rgba(255,20,147,0.25)] font-mono text-xs text-[#B3B3B3] z-10 w-full">
+    <footer className="relative py-14 bg-[#050505]/80 backdrop-blur-md border-t border-[rgba(255,20,147,0.25)] font-mono text-xs text-[#B3B3B3] z-10 w-full">
       <div className="max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 flex flex-col sm:flex-row items-center justify-between gap-6">
         {/* Author & Affiliation */}
         <div className="flex items-center gap-2">

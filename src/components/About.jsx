@@ -4,7 +4,7 @@ import { personalInfo } from '../data/portfolioData';
 
 export default function About() {
   return (
-    <section id="about" className="relative py-32 md:py-44 border-t border-[rgba(255,20,147,0.20)] overflow-hidden w-full bg-[#050505]">
+    <section id="about" className="relative py-32 md:py-44 border-t border-[rgba(255,20,147,0.20)] overflow-hidden w-full">
       {/* Subtle Pink Ambient Glow */}
       <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[450px] h-[450px] bg-gradient-radial from-[#FF1493]/10 to-transparent rounded-full blur-[140px] pointer-events-none" />
 

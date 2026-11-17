@@ -4,7 +4,7 @@ import { journeyTimeline } from '../data/portfolioData';
 
 export default function ExperienceEducation() {
   return (
-    <section id="journey" className="relative py-32 md:py-40 border-t border-[rgba(255,20,147,0.20)] overflow-hidden w-full bg-[#050505]">
+    <section id="journey" className="relative py-32 md:py-40 border-t border-[rgba(255,20,147,0.20)] overflow-hidden w-full">
       {/* Pink Ambient Glow */}
       <div className="absolute top-1/2 left-1/4 w-[450px] h-[450px] bg-gradient-radial from-[#FF1493]/10 to-transparent rounded-full blur-[140px] pointer-events-none" />
 

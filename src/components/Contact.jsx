@@ -36,7 +36,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="relative py-32 md:py-40 border-t border-[rgba(255,20,147,0.20)] overflow-hidden w-full bg-[#050505]">
+    <section id="contact" className="relative py-32 md:py-40 border-t border-[rgba(255,20,147,0.20)] overflow-hidden w-full">
       {/* Pink Glow Overlay */}
       <div className="absolute top-1/2 right-1/4 w-[500px] h-[500px] bg-gradient-radial from-[#FF1493]/15 via-[#FF4FBF]/5 to-transparent rounded-full blur-[150px] pointer-events-none" />
 

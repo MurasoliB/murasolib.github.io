@@ -14,7 +14,7 @@ export default function ProjectsPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen pt-36 pb-32 z-10 w-full bg-[#050505]">
+    <div className="relative min-h-screen pt-36 pb-32 z-10 w-full bg-[#050505]/75 backdrop-blur-sm">
       {/* Pink Glow Behind Main Content */}
       <div className="absolute top-1/4 left-1/3 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-radial from-[#FF1493]/10 to-transparent rounded-full blur-[160px] pointer-events-none" />
 

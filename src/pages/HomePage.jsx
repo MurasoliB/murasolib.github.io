@@ -23,7 +23,7 @@ export default function HomePage() {
   }, [location]);
 
   return (
-    <div className="relative z-10 flex flex-col w-full bg-[#050505]">
+    <div className="relative z-10 flex flex-col w-full">
       
       {/* Full-Screen Hero Fold with Hot Pink Glow & Typography */}
       <section

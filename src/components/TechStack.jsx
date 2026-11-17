@@ -48,7 +48,7 @@ const skillIcons = {
 
 export default function TechStack() {
   return (
-    <section id="stack" className="relative py-32 md:py-40 border-t border-[rgba(255,20,147,0.20)] overflow-hidden w-full bg-[#050505]">
+    <section id="stack" className="relative py-32 md:py-40 border-t border-[rgba(255,20,147,0.20)] overflow-hidden w-full">
       {/* Subtle Pink Ambient Glow */}
       <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-gradient-radial from-[#FF1493]/10 to-transparent rounded-full blur-[150px] pointer-events-none" />
 
