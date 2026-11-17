@@ -8,8 +8,8 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative py-12 border-t border-white/5 font-mono text-xs text-content-muted z-10">
-      <div className="max-w-4xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <footer className="relative py-14 border-t border-white/5 font-mono text-xs text-content-muted z-10 w-full">
+      <div className="max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <span>{personalInfo.name}</span>
           <span className="mx-2 text-white/20">·</span>

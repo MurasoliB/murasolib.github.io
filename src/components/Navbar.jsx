@@ -33,11 +33,11 @@ export default function Navbar() {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled || isProjects
-            ? 'py-4 bg-background/80 backdrop-blur-xl border-b border-white/5'
+            ? 'py-4 bg-background/85 backdrop-blur-xl border-b border-white/5'
             : 'py-6 bg-transparent'
         }`}
       >
-        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
+        <div className="max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 flex items-center justify-between">
           {/* Minimal Monogram */}
           <Link
             to="/"
@@ -53,7 +53,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Links */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-10">
             {navLinks.map((link) => {
               const active = isProjects
                 ? link.name === 'Projects'
@@ -63,7 +63,7 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   to={link.href}
-                  className={`text-xs font-mono tracking-wider transition-colors duration-200 ${
+                  className={`text-xs font-mono tracking-widest uppercase transition-colors duration-200 ${
                     active
                       ? 'text-accent-blue font-medium'
                       : 'text-content-secondary hover:text-white'
@@ -76,7 +76,7 @@ export default function Navbar() {
           </nav>
 
           {/* Right Socials & Contact */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-5">
             <a
               href={personalInfo.github}
               target="_blank"
@@ -97,7 +97,7 @@ export default function Navbar() {
             </a>
             <Link
               to="/#contact"
-              className="text-xs font-mono text-white px-3.5 py-1.5 rounded-full border border-white/10 hover:border-accent-blue/50 hover:bg-accent-blue/5 transition-all"
+              className="text-xs font-mono text-white px-4 py-2 rounded-full border border-white/10 hover:border-accent-blue/50 hover:bg-accent-blue/5 transition-all"
             >
               Get in Touch
             </Link>

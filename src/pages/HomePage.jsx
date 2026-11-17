@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ArrowDown } from 'lucide-react';
 import About from '../components/About';
 import TechStack from '../components/TechStack';
 import ExperienceEducation from '../components/ExperienceEducation';
@@ -23,25 +23,59 @@ export default function HomePage() {
   }, [location]);
 
   return (
-    <div className="relative z-10 flex flex-col">
-      {/* Minimal Top Hero / Intro Header */}
-      <section id="home" className="min-h-[55vh] flex flex-col justify-end pb-12 pt-32 max-w-4xl mx-auto px-6 w-full">
+    <div className="relative z-10 flex flex-col w-full">
+      
+      {/* Full-Screen Hero / Intro Fold */}
+      <section
+        id="home"
+        className="min-h-screen flex flex-col justify-between pt-32 pb-14 max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 w-full"
+      >
+        {/* Top Tag & Availability */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-wrap items-center justify-between gap-4"
         >
-          <div className="text-xs font-mono text-accent-blue tracking-widest uppercase mb-4">
-            // Software & AI Builder
-          </div>
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-display font-black text-white tracking-tighter leading-none mb-5">
-            {personalInfo.name}<span className="text-accent-blue">.</span>
-          </h1>
-          <p className="text-base sm:text-xl text-content-secondary max-w-xl leading-relaxed font-light">
-            {personalInfo.headline}. {personalInfo.subheadline}
-          </p>
+          <span className="text-xs font-mono text-accent-blue tracking-widest uppercase">
+            // Software & AI Architecture
+          </span>
 
-          <div className="flex items-center gap-6 mt-8 font-mono text-xs">
+          <div className="flex items-center gap-2 font-mono text-xs text-content-muted">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>{personalInfo.availability}</span>
+          </div>
+        </motion.div>
+
+        {/* Massive Screen-Filling Typography */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="my-auto py-12"
+        >
+          <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10.5rem] font-display font-black text-white tracking-tighter leading-[0.85] select-none">
+            MURASOLI<br />BALAJI<span className="text-accent-blue">.</span>
+          </h1>
+        </motion.div>
+
+        {/* Bottom Wide Bar */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.25 }}
+          className="pt-8 border-t border-white/10 flex flex-col md:flex-row md:items-end justify-between gap-6"
+        >
+          <div className="max-w-xl">
+            <p className="text-base sm:text-xl text-content-primary font-light leading-relaxed">
+              {personalInfo.headline}.
+            </p>
+            <p className="text-xs sm:text-sm font-mono text-content-muted mt-1">
+              {personalInfo.educationInstitute} · {personalInfo.location}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-6 font-mono text-xs">
             <Link
               to="/projects"
               className="inline-flex items-center gap-2 text-white hover:text-accent-blue transition-colors group"
@@ -66,15 +100,16 @@ export default function HomePage() {
       {/* 2. Technical Stack */}
       <TechStack />
 
-      {/* 3. Minimal Projects Teaser Row */}
-      <section id="projects-preview" className="relative py-28 md:py-36 border-t border-white/5 overflow-hidden">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-14">
+      {/* 3. Wide Selected Works Showcase */}
+      <section id="projects-preview" className="relative py-32 border-t border-white/5 overflow-hidden">
+        <div className="max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 w-full">
+          
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-16">
             <div>
               <span className="text-xs font-mono text-accent-blue tracking-widest uppercase block mb-3">
                 // Selected Works
               </span>
-              <h2 className="text-3xl sm:text-4xl font-display font-bold text-white tracking-tight">
+              <h2 className="text-3xl sm:text-5xl font-display font-bold text-white tracking-tight">
                 Featured Projects.
               </h2>
             </div>
@@ -82,40 +117,56 @@ export default function HomePage() {
               to="/projects"
               className="inline-flex items-center gap-2 text-xs font-mono text-content-secondary hover:text-white transition-colors group"
             >
-              <span>View All Projects</span>
+              <span>View All Projects Archive</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
-          {/* Minimal Project Rows */}
+          {/* Wide Project Rows */}
           <div className="divide-y divide-white/5">
             {featuredProjects.map((project) => (
               <Link
                 key={project.id}
                 to="/projects"
-                className="group py-8 first:pt-0 flex flex-col md:flex-row md:items-baseline justify-between gap-4 transition-all"
+                className="group py-10 first:pt-0 flex flex-col lg:flex-row lg:items-baseline justify-between gap-6 transition-all"
               >
-                <div className="md:w-1/3 flex items-baseline gap-4">
-                  <span className="font-mono text-xs text-accent-blue">
+                <div className="lg:w-4/12 flex items-baseline gap-6">
+                  <span className="font-mono text-xs text-accent-blue font-bold">
                     {project.number}
                   </span>
-                  <h3 className="text-xl font-display font-semibold text-white group-hover:text-accent-blue transition-colors">
-                    {project.title}
-                  </h3>
+                  <div>
+                    <h3 className="text-2xl sm:text-3xl font-display font-semibold text-white group-hover:text-accent-blue transition-colors">
+                      {project.title}
+                    </h3>
+                    <span className="text-xs font-mono text-content-muted block mt-1">
+                      {project.badge}
+                    </span>
+                  </div>
                 </div>
 
-                <div className="md:w-1/2">
-                  <p className="text-sm text-content-secondary line-clamp-2">
+                <div className="lg:w-6/12">
+                  <p className="text-sm sm:text-base text-content-secondary leading-relaxed">
                     {project.tagline}
                   </p>
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {project.tags.map((t) => (
+                      <span key={t} className="text-xs font-mono text-content-muted">
+                        #{t}
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="md:w-1/6 flex justify-end">
-                  <ArrowUpRight className="w-5 h-5 text-content-muted group-hover:text-accent-blue group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                <div className="lg:w-2/12 flex lg:justify-end items-center">
+                  <span className="inline-flex items-center gap-2 text-xs font-mono text-content-muted group-hover:text-accent-blue transition-colors">
+                    <span>Inspect</span>
+                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </span>
                 </div>
               </Link>
             ))}
           </div>
+
         </div>
       </section>
 
