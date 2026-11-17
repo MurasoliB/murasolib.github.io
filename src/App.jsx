@@ -10,7 +10,7 @@ import ProjectsPage from './pages/ProjectsPage';
 export default function App() {
   return (
     <Router>
-      <div className="relative bg-background text-content-primary min-h-screen selection:bg-accent-blue/30 selection:text-white">
+      <div className="relative bg-background text-content-primary min-h-screen selection:bg-[#FF1493]/30 selection:text-white">
         {/* Precision Custom Cursor */}
         <CustomCursor />
 

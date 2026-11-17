@@ -23,39 +23,50 @@ export default function HomePage() {
   }, [location]);
 
   return (
-    <div className="relative z-10 flex flex-col w-full">
+    <div className="relative z-10 flex flex-col w-full bg-[#050505]">
       
-      {/* Full-Screen Hero / Intro Fold */}
+      {/* Full-Screen Hero Fold with Hot Pink Glow & Typography */}
       <section
         id="home"
-        className="min-h-screen flex flex-col justify-between pt-32 pb-14 max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 w-full"
+        className="relative min-h-screen flex flex-col justify-between pt-32 pb-14 max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 w-full overflow-hidden"
       >
+        {/* Subtle Animated Pink Radial Glow */}
+        <div className="absolute top-1/3 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-[#FF1493]/15 via-[#FF4FBF]/5 to-transparent rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-gradient-radial from-[#FF4FBF]/10 to-transparent rounded-full blur-[160px] pointer-events-none" />
+
         {/* Top Tag & Availability */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="flex flex-wrap items-center justify-between gap-4"
+          className="flex flex-wrap items-center justify-between gap-4 relative z-10"
         >
-          <span className="text-xs font-mono text-accent-blue tracking-widest uppercase">
-            // Software & AI Architecture
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#FF1493] shadow-[0_0_10px_#FF1493]" />
+            <span className="text-xs font-mono text-[#FF69B4] tracking-widest uppercase">
+              // Software & AI Architecture
+            </span>
+          </div>
 
-          <div className="flex items-center gap-2 font-mono text-xs text-content-muted">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="flex items-center gap-2 font-mono text-xs text-[#B3B3B3] px-3.5 py-1.5 rounded-full bg-[#111111] border border-[rgba(255,20,147,0.25)]">
+            <span className="w-2 h-2 rounded-full bg-[#FF1493] animate-pulse shadow-[0_0_8px_#FF1493]" />
             <span>{personalInfo.availability}</span>
           </div>
         </motion.div>
 
-        {/* Massive Screen-Filling Typography */}
+        {/* Massive Screen-Filling Headline with Hot Pink Accent */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="my-auto py-12"
+          className="my-auto py-10 relative z-10"
         >
-          <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10.5rem] font-display font-black text-white tracking-tighter leading-[0.85] select-none">
-            MURASOLI<br />BALAJI<span className="text-accent-blue">.</span>
+          <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10.5rem] font-display font-black text-white tracking-tighter leading-[0.88] select-none">
+            MURASOLI<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#FF69B4] to-[#FF1493]">
+              BALAJI
+            </span>
+            <span className="text-[#FF1493] drop-shadow-[0_0_20px_#FF1493]">.</span>
           </h1>
         </motion.div>
 
@@ -64,33 +75,44 @@ export default function HomePage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.25 }}
-          className="pt-8 border-t border-white/10 flex flex-col md:flex-row md:items-end justify-between gap-6"
+          className="pt-8 border-t border-[rgba(255,20,147,0.20)] flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10"
         >
           <div className="max-w-xl">
-            <p className="text-base sm:text-xl text-content-primary font-light leading-relaxed">
-              {personalInfo.headline}.
+            <p className="text-base sm:text-xl text-white font-light leading-relaxed">
+              IT Undergrad <span className="text-[#FF69B4]">·</span> AI & Full-Stack Builder.
             </p>
-            <p className="text-xs sm:text-sm font-mono text-content-muted mt-1">
-              {personalInfo.educationInstitute} · {personalInfo.location}
+            <p className="text-xs sm:text-sm font-mono text-[#B3B3B3] mt-1">
+              Building intelligent systems at <span className="text-[#FF69B4]">{personalInfo.educationInstitute}</span> · {personalInfo.location}
             </p>
           </div>
 
-          <div className="flex items-center gap-6 font-mono text-xs">
+          <div className="flex flex-wrap items-center gap-5 font-mono text-xs">
             <Link
               to="/projects"
-              className="inline-flex items-center gap-2 text-white hover:text-accent-blue transition-colors group"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FF1493] text-white font-semibold hover:bg-[#FF4FBF] shadow-[0_0_25px_rgba(255,20,147,0.45)] hover:shadow-[0_0_35px_rgba(255,20,147,0.7)] transition-all duration-300 group"
             >
               <span>Explore Projects</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <span className="text-white/20">|</span>
+
             <Link
               to="/#contact"
-              className="text-content-muted hover:text-white transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#111111] border border-[rgba(255,20,147,0.3)] text-white hover:border-[#FF1493] hover:shadow-[0_0_15px_rgba(255,20,147,0.3)] transition-all"
             >
               Get in Touch
             </Link>
           </div>
+        </motion.div>
+
+        {/* Minimal Scroll Down Indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 1 }}
+          className="absolute bottom-2 left-1/2 -translate-x-1/2 hidden md:flex items-center gap-2 font-mono text-[10px] text-[#B3B3B3] tracking-widest uppercase pointer-events-none"
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-[#FF1493] animate-ping" />
+          <span>Scroll to Discover</span>
         </motion.div>
       </section>
 
@@ -101,56 +123,56 @@ export default function HomePage() {
       <TechStack />
 
       {/* 3. Wide Selected Works Showcase */}
-      <section id="projects-preview" className="relative py-32 border-t border-white/5 overflow-hidden">
+      <section id="projects-preview" className="relative py-32 border-t border-[rgba(255,20,147,0.20)] overflow-hidden">
         <div className="max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 w-full">
           
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-16">
             <div>
-              <span className="text-xs font-mono text-accent-blue tracking-widest uppercase block mb-3">
+              <span className="text-xs font-mono text-[#FF69B4] tracking-widest uppercase block mb-3">
                 // Selected Works
               </span>
               <h2 className="text-3xl sm:text-5xl font-display font-bold text-white tracking-tight">
-                Featured Projects.
+                Featured Projects<span className="text-[#FF1493]">.</span>
               </h2>
             </div>
             <Link
               to="/projects"
-              className="inline-flex items-center gap-2 text-xs font-mono text-content-secondary hover:text-white transition-colors group"
+              className="inline-flex items-center gap-2 text-xs font-mono text-[#B3B3B3] hover:text-[#FF1493] transition-colors group"
             >
               <span>View All Projects Archive</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
-          {/* Wide Project Rows */}
-          <div className="divide-y divide-white/5">
+          {/* Wide Project Rows with Pink Hover Illumination */}
+          <div className="divide-y divide-[rgba(255,20,147,0.15)]">
             {featuredProjects.map((project) => (
               <Link
                 key={project.id}
                 to="/projects"
-                className="group py-10 first:pt-0 flex flex-col lg:flex-row lg:items-baseline justify-between gap-6 transition-all"
+                className="group py-10 first:pt-0 flex flex-col lg:flex-row lg:items-baseline justify-between gap-6 transition-all hover:bg-[#111111]/40 px-4 -mx-4 rounded-2xl"
               >
                 <div className="lg:w-4/12 flex items-baseline gap-6">
-                  <span className="font-mono text-xs text-accent-blue font-bold">
+                  <span className="font-mono text-xs text-[#FF1493] font-bold">
                     {project.number}
                   </span>
                   <div>
-                    <h3 className="text-2xl sm:text-3xl font-display font-semibold text-white group-hover:text-accent-blue transition-colors">
+                    <h3 className="text-2xl sm:text-3xl font-display font-semibold text-white group-hover:text-[#FF69B4] transition-colors">
                       {project.title}
                     </h3>
-                    <span className="text-xs font-mono text-content-muted block mt-1">
+                    <span className="text-xs font-mono text-[#B3B3B3] block mt-1">
                       {project.badge}
                     </span>
                   </div>
                 </div>
 
                 <div className="lg:w-6/12">
-                  <p className="text-sm sm:text-base text-content-secondary leading-relaxed">
+                  <p className="text-sm sm:text-base text-[#B3B3B3] leading-relaxed group-hover:text-white transition-colors">
                     {project.tagline}
                   </p>
                   <div className="flex flex-wrap gap-2 mt-3">
                     {project.tags.map((t) => (
-                      <span key={t} className="text-xs font-mono text-content-muted">
+                      <span key={t} className="text-xs font-mono text-[#737373] group-hover:text-[#B3B3B3] transition-colors">
                         #{t}
                       </span>
                     ))}
@@ -158,7 +180,7 @@ export default function HomePage() {
                 </div>
 
                 <div className="lg:w-2/12 flex lg:justify-end items-center">
-                  <span className="inline-flex items-center gap-2 text-xs font-mono text-content-muted group-hover:text-accent-blue transition-colors">
+                  <span className="inline-flex items-center gap-2 text-xs font-mono text-[#B3B3B3] group-hover:text-[#FF1493] transition-colors">
                     <span>Inspect</span>
                     <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                   </span>
