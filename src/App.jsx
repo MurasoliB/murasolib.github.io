@@ -4,7 +4,6 @@ import About from './components/About';
 import TechStack from './components/TechStack';
 import Projects from './components/Projects';
 import ExperienceEducation from './components/ExperienceEducation';
-import DigitalFrontier from './components/DigitalFrontier';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import CustomCursor from './components/CustomCursor';
@@ -39,10 +38,7 @@ export default function App() {
         {/* 4. Modern Academic & Development Journey Timeline */}
         <ExperienceEducation />
 
-        {/* 5. Interactive 3D Digital Frontier (Three.js) */}
-        <DigitalFrontier />
-
-        {/* 6. Validated Contact Section */}
+        {/* 5. Validated Contact Section */}
         <Contact />
       </main>
 
