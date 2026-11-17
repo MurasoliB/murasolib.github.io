@@ -5,10 +5,9 @@ import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { Github, Linkedin } from './Icons';
 import { personalInfo } from '../data/portfolioData';
 
-const navItems = [
-  { name: 'Home', href: '/' },
+const navLinks = [
   { name: 'About', href: '/#about' },
-  { name: 'Skills', href: '/#skills' },
+  { name: 'Stack', href: '/#stack' },
   { name: 'Projects', href: '/projects' },
   { name: 'Journey', href: '/#journey' },
   { name: 'Contact', href: '/#contact' },
@@ -16,217 +15,151 @@ const navItems = [
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
 
-  const isProjectsPage = location.pathname === '/projects';
+  const isProjects = location.pathname === '/projects';
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
-
-      if (isProjectsPage) {
-        setActiveSection('projects');
-        return;
-      }
-
-      if (window.scrollY < 80) {
-        setActiveSection('home');
-        return;
-      }
-
-      const sections = ['about', 'skills', 'projects-preview', 'journey', 'contact'];
-      const scrollPos = window.scrollY + 200;
-
-      for (const section of sections) {
-        const el = document.getElementById(section);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPos >= top && scrollPos < top + height) {
-            setActiveSection(section === 'projects-preview' ? 'projects' : section);
-            break;
-          }
-        }
-      }
+      setScrolled(window.scrollY > 30);
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [isProjectsPage]);
-
-  // Prevent background scroll when mobile menu is open
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-  }, [mobileMenuOpen]);
+  }, []);
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled || isProjectsPage
-            ? 'py-3.5 bg-background/85 backdrop-blur-xl border-b border-border-subtle shadow-glass'
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled || isProjects
+            ? 'py-4 bg-background/80 backdrop-blur-xl border-b border-white/5'
             : 'py-6 bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between">
-          {/* Brand Monogram Logo */}
+        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
+          {/* Minimal Monogram */}
           <Link
             to="/"
-            className="group flex items-center gap-3 relative focus:outline-none"
-            aria-label="Murasoli Balaji Home"
+            className="flex items-center gap-3 group focus:outline-none"
+            aria-label="Home"
           >
-            <div className="w-10 h-10 rounded-xl bg-surface-card border border-white/10 flex items-center justify-center font-display font-extrabold text-base tracking-wider text-white group-hover:border-accent-blue/60 group-hover:shadow-glow-blue transition-all duration-300">
-              <span className="text-gradient-dual">{personalInfo.monogram}</span>
-            </div>
-            <div className="hidden sm:flex flex-col text-left">
-              <span className="text-sm font-semibold tracking-wide text-white group-hover:text-accent-blue transition-colors">
-                {personalInfo.name}
-              </span>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-content-muted">
-                Portfolio
-              </span>
-            </div>
+            <span className="font-mono text-sm font-semibold tracking-wider text-white group-hover:text-accent-blue transition-colors">
+              {personalInfo.monogram}
+            </span>
+            <span className="hidden sm:inline text-xs text-content-muted font-mono tracking-widest uppercase">
+              / Murasoli Balaji
+            </span>
           </Link>
 
-          {/* Desktop Nav Items */}
-          <nav className="hidden md:flex items-center gap-1 bg-surface-glass border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-md">
-            {navItems.map((item) => {
-              const isActive = isProjectsPage
-                ? item.name === 'Projects'
-                : activeSection.toLowerCase() === item.name.toLowerCase();
+          {/* Desktop Links */}
+          <nav className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => {
+              const active = isProjects
+                ? link.name === 'Projects'
+                : false;
 
               return (
                 <Link
-                  key={item.name}
-                  to={item.href}
-                  className={`relative px-4 py-1.5 text-xs font-medium tracking-wide transition-colors duration-200 rounded-full ${
-                    isActive ? 'text-white font-semibold' : 'text-content-secondary hover:text-white'
+                  key={link.name}
+                  to={link.href}
+                  className={`text-xs font-mono tracking-wider transition-colors duration-200 ${
+                    active
+                      ? 'text-accent-blue font-medium'
+                      : 'text-content-secondary hover:text-white'
                   }`}
                 >
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeNavIndicator"
-                      className="absolute inset-0 bg-accent-blue/15 border border-accent-blue/30 rounded-full shadow-glow-blue"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  <span className="relative z-10">{item.name}</span>
+                  {link.name}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right Action Icons / CTAs */}
-          <div className="hidden md:flex items-center gap-3">
+          {/* Right Socials & Contact */}
+          <div className="hidden md:flex items-center gap-4">
             <a
               href={personalInfo.github}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="GitHub Profile"
-              className="p-2.5 rounded-xl bg-surface-glass border border-white/10 text-content-secondary hover:text-white hover:border-accent-blue/50 hover:shadow-glow-blue transition-all"
+              aria-label="GitHub"
+              className="text-content-muted hover:text-white transition-colors"
             >
               <Github className="w-4 h-4" />
             </a>
-
             <a
               href={personalInfo.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="LinkedIn Profile"
-              className="p-2.5 rounded-xl bg-surface-glass border border-white/10 text-content-secondary hover:text-white hover:border-accent-blue/50 hover:shadow-glow-blue transition-all"
+              aria-label="LinkedIn"
+              className="text-content-muted hover:text-white transition-colors"
             >
               <Linkedin className="w-4 h-4" />
             </a>
-
             <Link
               to="/#contact"
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-accent-blue/10 border border-accent-blue/30 text-accent-blue hover:bg-accent-blue hover:text-white hover:shadow-glow-blue transition-all duration-300"
+              className="text-xs font-mono text-white px-3.5 py-1.5 rounded-full border border-white/10 hover:border-accent-blue/50 hover:bg-accent-blue/5 transition-all"
             >
-              <span>Connect</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
+              Get in Touch
             </Link>
           </div>
 
-          {/* Mobile Menu Toggle Button */}
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle navigation menu"
-            className="md:hidden p-2.5 rounded-xl bg-surface-card border border-white/10 text-white focus:outline-none"
+            aria-label="Toggle menu"
+            className="md:hidden p-2 text-white focus:outline-none"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </header>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-40 bg-background/95 backdrop-blur-2xl md:hidden pt-24 px-8 pb-10 flex flex-col justify-between"
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 bg-background/95 backdrop-blur-2xl md:hidden pt-28 px-8 pb-10 flex flex-col justify-between"
           >
-            <div className="flex flex-col gap-3">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-content-muted mb-2">
-                Navigation
-              </span>
-              {navItems.map((item, idx) => (
-                <motion.div
-                  key={item.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.05 }}
+            <div className="flex flex-col gap-6">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  to={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-2xl font-display font-medium text-white hover:text-accent-blue flex items-center justify-between"
                 >
-                  <Link
-                    to={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-2xl font-display font-bold py-2 border-b border-white/5 flex items-center justify-between text-content-primary hover:text-accent-blue"
-                  >
-                    <span>{item.name}</span>
-                    <ArrowUpRight className="w-4 h-4 text-content-muted" />
-                  </Link>
-                </motion.div>
+                  <span>{link.name}</span>
+                  <ArrowUpRight className="w-4 h-4 text-content-muted" />
+                </Link>
               ))}
             </div>
 
-            <div className="pt-6 border-t border-white/10 flex flex-col gap-4">
-              <div className="flex items-center gap-3">
+            <div className="pt-6 border-t border-white/10 flex items-center justify-between">
+              <div className="flex gap-4">
                 <a
                   href={personalInfo.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-surface border border-white/10 text-sm font-medium text-white"
+                  className="text-content-secondary hover:text-white"
                 >
-                  <Github className="w-4 h-4" />
-                  <span>GitHub</span>
+                  <Github className="w-5 h-5" />
                 </a>
                 <a
                   href={personalInfo.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-surface border border-white/10 text-sm font-medium text-white"
+                  className="text-content-secondary hover:text-white"
                 >
-                  <Linkedin className="w-4 h-4" />
-                  <span>LinkedIn</span>
+                  <Linkedin className="w-5 h-5" />
                 </a>
               </div>
-
-              <Link
-                to="/#contact"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center py-3.5 rounded-xl bg-accent-blue font-semibold text-white text-sm shadow-glow-blue"
-              >
-                Let's Connect
-              </Link>
+              <span className="text-xs font-mono text-content-muted">
+                {personalInfo.location}
+              </span>
             </div>
           </motion.div>
         )}
