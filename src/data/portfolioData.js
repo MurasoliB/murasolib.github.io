@@ -42,7 +42,7 @@ export const featuredProjects = [
       "Contextual dialogue memory for chained operations",
       "Modular skill architecture for custom capabilities"
     ],
-    github: "https://github.com/murasolib",
+    github: "https://github.com/MurasoliB/Ultron-The-AI-Assistant",
     badge: "AI & Automation"
   },
   {
