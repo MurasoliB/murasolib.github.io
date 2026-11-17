@@ -35,7 +35,7 @@ export const featuredProjects = [
     description:
       "A personal AI assistant engineered for natural speech interaction, desktop automation, and multi-step task execution with conversational memory.",
     tags: ["Python", "Artificial Intelligence", "NLP", "Speech Recognition", "Automation"],
-    image: "/assets/images/ultron-preview.jpg",
+    image: "/assets/images/ultron-agent-preview.jpg",
     features: [
       "Real-time voice processing and speech feedback",
       "Automated system tasks and application controls",
