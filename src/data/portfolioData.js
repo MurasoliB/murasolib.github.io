@@ -53,7 +53,7 @@ export const featuredProjects = [
     description:
       "A geospatial simulation platform integrating digital elevation models (DEM) and hydrodynamic equations to predict wavefront propagation and evaluate flood hazards.",
     tags: ["Python", "GIS", "Hydrodynamics", "Simulation", "Data Visualization"],
-    image: "/assets/images/hydrobreak-preview.png",
+    image: "/assets/images/flood-simulation-preview.jpg",
     flowchart: "/assets/images/flood-flowchart.png",
     features: [
       "2D hydrodynamic routing for dynamic inundation wavefronts",
