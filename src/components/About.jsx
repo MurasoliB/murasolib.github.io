@@ -69,6 +69,10 @@ export default function About() {
                 <span className="text-white font-medium">Diploma in Computer Engineering</span>
               </div>
               <div className="py-4 flex items-center justify-between gap-4">
+                <span className="text-white/40 uppercase tracking-widest">Experience</span>
+                <span className="text-[#FF69B4] font-medium">4+ Years of Tech Experience</span>
+              </div>
+              <div className="py-4 flex items-center justify-between gap-4">
                 <span className="text-white/40 uppercase tracking-widest">Institution</span>
                 <span className="text-white font-medium">{personalInfo.educationInstitute}</span>
               </div>

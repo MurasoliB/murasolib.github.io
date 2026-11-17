@@ -6,6 +6,7 @@ export const personalInfo = {
   location: "Tamil Nadu, India",
   educationInstitute: "Kongu Engineering College",
   educationDegree: "B.Tech in Information Technology",
+  experience: "4+ Years of Tech Experience",
   aboutHeading: "Curiosity Drives Innovation.",
   aboutDescription:
     "Information Technology undergraduate at Kongu Engineering College. I focus on the intersection of artificial intelligence and systems engineering — architecting full-stack applications, exploring autonomous agents, and building computational simulations.",
