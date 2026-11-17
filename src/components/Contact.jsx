@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Copy, Check, Send, Mail, Loader2, AlertCircle } from 'lucide-react';
+import { Copy, Check, Send, Mail, Loader2, ExternalLink } from 'lucide-react';
 import { Github, Linkedin } from './Icons';
 import confetti from 'canvas-confetti';
 import { personalInfo } from '../data/portfolioData';
@@ -8,8 +8,22 @@ import { personalInfo } from '../data/portfolioData';
 export default function Contact() {
   const [copied, setCopied] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState('idle'); // 'idle' | 'submitting' | 'success' | 'error'
-  const [errorMessage, setErrorMessage] = useState('');
+  const [status, setStatus] = useState('idle'); // 'idle' | 'submitting' | 'success' | 'activation_needed'
+
+  useEffect(() => {
+    // Check if redirected back after FormSubmit confirmation
+    if (window.location.search.includes('submitted=true') || window.location.hash.includes('submitted=true')) {
+      setStatus('success');
+      try {
+        confetti({
+          particleCount: 50,
+          spread: 60,
+          colors: ['#FF1493', '#FF69B4', '#FFFFFF'],
+          origin: { y: 0.85 },
+        });
+      } catch (_) {}
+    }
+  }, []);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(personalInfo.email);
@@ -17,19 +31,28 @@ export default function Contact() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const openWebGmail = () => {
+    const subject = encodeURIComponent(formData.name ? `Portfolio Inquiry from ${formData.name}` : 'Portfolio Inquiry');
+    const body = encodeURIComponent(
+      formData.message
+        ? `From: ${formData.name} (${formData.email})\n\n${formData.message}`
+        : 'Hi Murasoli,\n\nI came across your portfolio and wanted to connect regarding...'
+    );
+    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${personalInfo.email}&su=${subject}&body=${body}`, '_blank');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) return;
 
     setStatus('submitting');
-    setErrorMessage('');
 
     try {
       const response = await fetch(`https://formsubmit.co/ajax/${personalInfo.email}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
         body: JSON.stringify({
           name: formData.name,
@@ -49,17 +72,17 @@ export default function Contact() {
             particleCount: 50,
             spread: 60,
             colors: ['#FF1493', '#FF69B4', '#FFFFFF'],
-            origin: { y: 0.85 }
+            origin: { y: 0.85 },
           });
         } catch (_) {}
         setFormData({ name: '', email: '', message: '' });
       } else {
-        throw new Error(result.message || 'Failed to dispatch message');
+        // FormSubmit requires the one-time activation click on first use
+        setStatus('activation_needed');
       }
-    } catch (err) {
-      // In case of ad-blocker or network refusal, fallback to structured mailto
-      setStatus('error');
-      setErrorMessage('Could not send directly via form. You can reach out directly via email.');
+    } catch (_) {
+      // If blocked by adblocker / CORS, show one-time activation / web gmail options
+      setStatus('activation_needed');
     }
   };
 
@@ -101,6 +124,8 @@ export default function Contact() {
 
             <div className="space-y-4 font-mono text-xs">
               <span className="text-white/40 uppercase tracking-widest block">Direct Channel</span>
+              
+              {/* One-click copy email button */}
               <button
                 onClick={handleCopy}
                 className="group flex items-center justify-between w-full p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#FF1493] transition-all text-left cursor-pointer"
@@ -116,6 +141,15 @@ export default function Contact() {
                 ) : (
                   <Copy className="w-4 h-4 text-[#B3B3B3] group-hover:text-[#FF1493] shrink-0" />
                 )}
+              </button>
+
+              {/* Compose in Web Gmail (Bypasses desktop mail apps like Outlook) */}
+              <button
+                onClick={openWebGmail}
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/20 text-[#B3B3B3] hover:text-white transition-all text-xs font-mono cursor-pointer"
+              >
+                <span>Compose in Gmail (Browser)</span>
+                <ExternalLink className="w-3.5 h-3.5 text-[#FF1493]" />
               </button>
             </div>
 
@@ -147,22 +181,22 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Right Column: Seamless In-Browser Form */}
+          {/* Right Column: In-Browser Message Form */}
           <div className="lg:col-span-7">
             {status === 'success' ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="p-8 sm:p-12 rounded-2xl bg-white/[0.03] border border-[#FF1493]/30 text-center space-y-4 font-mono"
+                className="p-8 sm:p-12 rounded-2xl bg-white/[0.03] border border-[#FF1493]/40 text-center space-y-4 font-mono"
               >
                 <div className="w-12 h-12 rounded-full bg-[#FF1493]/10 border border-[#FF1493] flex items-center justify-center mx-auto text-[#FF1493]">
                   <Check className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl sm:text-2xl text-white font-display font-bold">
-                  Message Dispatched Successfully
+                  Message Dispatched Successfully!
                 </h3>
                 <p className="text-sm text-[#B3B3B3] max-w-md mx-auto leading-relaxed">
-                  Thank you for reaching out! Your message was sent directly to my inbox and I will reply as soon as possible.
+                  Thank you for reaching out. Your note has been delivered directly to my inbox and I will get back to you shortly.
                 </p>
                 <button
                   onClick={() => setStatus('idle')}
@@ -170,6 +204,45 @@ export default function Contact() {
                 >
                   Send Another Note
                 </button>
+              </motion.div>
+            ) : status === 'activation_needed' ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="p-8 sm:p-10 rounded-2xl bg-white/[0.03] border border-[#FF1493]/30 space-y-5 font-mono text-xs"
+              >
+                <div className="flex items-center gap-2 text-[#FF69B4] uppercase tracking-wider font-semibold">
+                  <span>// One-Time Activation Required</span>
+                </div>
+                <p className="text-white/80 leading-relaxed text-sm">
+                  To prevent spam, FormSubmit sends a 1-click activation link to <strong className="text-white">{personalInfo.email}</strong> on the first use.
+                </p>
+                <div className="space-y-3 pt-2">
+                  {/* Standard POST triggers FormSubmit's confirmation email to your inbox */}
+                  <form action={`https://formsubmit.co/${personalInfo.email}`} method="POST">
+                    <input type="hidden" name="name" value={formData.name} />
+                    <input type="hidden" name="email" value={formData.email} />
+                    <input type="hidden" name="message" value={formData.message} />
+                    <input type="hidden" name="_captcha" value="false" />
+                    <input type="hidden" name="_next" value="https://murasolib.github.io/?submitted=true#contact" />
+                    <button
+                      type="submit"
+                      className="w-full py-3.5 px-6 rounded-full bg-[#FF1493] hover:bg-[#FF4FBF] text-white font-semibold uppercase tracking-wider text-xs transition-colors cursor-pointer"
+                    >
+                      Click to Activate & Dispatch Form
+                    </button>
+                  </form>
+
+                  {/* Or open in Web Gmail */}
+                  <button
+                    type="button"
+                    onClick={openWebGmail}
+                    className="w-full py-3.5 px-6 rounded-full border border-white/20 hover:border-white text-white font-semibold uppercase tracking-wider text-xs transition-colors cursor-pointer flex items-center justify-center gap-2"
+                  >
+                    <span>Send via Web Gmail Directly</span>
+                    <ExternalLink className="w-3.5 h-3.5 text-[#FF1493]" />
+                  </button>
+                </div>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -216,13 +289,6 @@ export default function Contact() {
                     className="w-full px-4 py-3.5 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:border-[#FF1493] transition-colors resize-none"
                   />
                 </div>
-
-                {status === 'error' && (
-                  <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-xs font-mono text-red-300 flex items-center gap-3">
-                    <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
-                    <span>{errorMessage}</span>
-                  </div>
-                )}
 
                 <button
                   type="submit"
