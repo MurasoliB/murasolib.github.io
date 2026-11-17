@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Copy, Check, ArrowUpRight, Send, Mail } from 'lucide-react';
+import { Copy, Check, Send, Mail } from 'lucide-react';
 import { Github, Linkedin } from './Icons';
 import confetti from 'canvas-confetti';
 import { personalInfo } from '../data/portfolioData';
@@ -21,9 +21,9 @@ export default function Contact() {
 
     try {
       confetti({
-        particleCount: 50,
-        spread: 60,
-        colors: ['#FF1493', '#FF4FBF', '#FF69B4', '#FFFFFF'],
+        particleCount: 40,
+        spread: 50,
+        colors: ['#FF1493', '#FF69B4', '#FFFFFF'],
         origin: { y: 0.85 }
       });
     } catch (_) {}
@@ -36,39 +36,46 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="relative py-32 md:py-40 border-t border-[rgba(255,20,147,0.20)] overflow-hidden w-full">
-      {/* Pink Glow Overlay */}
-      <div className="absolute top-1/2 right-1/4 w-[500px] h-[500px] bg-gradient-radial from-[#FF1493]/15 via-[#FF4FBF]/5 to-transparent rounded-full blur-[150px] pointer-events-none" />
-
+    <section id="contact" className="relative py-28 md:py-44 border-t border-white/10 overflow-hidden w-full">
       <div className="max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 w-full relative z-10">
         
         {/* Section Header */}
-        <div className="mb-16">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="w-8 h-[2px] bg-[#FF1493]" />
-            <span className="text-xs font-mono text-[#FF69B4] tracking-widest uppercase">
-              // Connection
-            </span>
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-display font-bold text-white tracking-tight">
-            Have an Idea? <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF69B4] to-[#FF1493]">Let's Build It</span><span className="text-[#FF1493]">.</span>
-          </h2>
-          <p className="text-[#B3B3B3] text-base mt-2 max-w-xl">
-            Whether you have a technical query, project collaboration, or engineering role in mind, reach out directly.
-          </p>
+        <div className="flex items-center gap-3 mb-10">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#FF1493]" />
+          <span className="text-xs font-mono text-[#FF69B4] tracking-widest uppercase">
+            // Connection & Inquiries
+          </span>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+        {/* Monumental Aesthetic Typography */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-16 md:mb-24"
+        >
+          <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-black tracking-tighter leading-[0.9] text-white uppercase select-none">
+            LET'S BUILD<br />
+            SOMETHING<br />
+            <span>MEANING</span><span className="text-[#FF1493]">FUL.</span>
+          </h2>
+        </motion.div>
+
+        {/* Minimal Grid Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 pt-10 border-t border-white/10">
           
-          {/* Left: Direct Information in Charcoal Cards with Pink Accents */}
-          <div className="lg:col-span-5 flex flex-col justify-between space-y-10">
-            <div className="p-8 rounded-2xl bg-[#111111] border border-[rgba(255,20,147,0.20)] hover:border-[#FF1493] transition-colors">
-              <span className="text-xs font-mono text-[#FF69B4] uppercase tracking-wider block mb-3">
-                Direct Email
-              </span>
+          {/* Left Column: Direct Inquiries */}
+          <div className="lg:col-span-5 space-y-8">
+            <p className="text-base sm:text-lg text-[#B3B3B3] leading-relaxed max-w-md font-light">
+              Whether you are architecting an autonomous intelligence pipeline, computational simulation, or ambitious full-stack product, my inbox is open.
+            </p>
+
+            <div className="space-y-4 font-mono text-xs">
+              <span className="text-white/40 uppercase tracking-widest block">Direct Channel</span>
               <button
                 onClick={handleCopy}
-                className="group flex items-center justify-between w-full p-4 rounded-xl bg-[#050505] border border-[rgba(255,20,147,0.25)] hover:border-[#FF1493] transition-all text-left"
+                className="group flex items-center justify-between w-full p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#FF1493] transition-all text-left cursor-pointer"
               >
                 <div className="flex items-center gap-3 overflow-hidden">
                   <Mail className="w-4 h-4 text-[#FF1493] shrink-0" />
@@ -84,101 +91,89 @@ export default function Contact() {
               </button>
             </div>
 
-            <div className="p-8 rounded-2xl bg-[#111111] border border-[rgba(255,20,147,0.20)] space-y-4">
-              <span className="text-xs font-mono text-[#FF69B4] uppercase tracking-wider block mb-2">
-                Professional Networks
+            {/* Social Network Links */}
+            <div className="pt-6 border-t border-white/10 flex flex-wrap items-center gap-6 font-mono text-xs uppercase tracking-wider">
+              <a
+                href={personalInfo.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2 text-[#B3B3B3] hover:text-white transition-colors"
+              >
+                <Github className="w-4 h-4 text-[#FF1493]" />
+                <span className="border-b border-transparent group-hover:border-white pb-0.5">GitHub ↗</span>
+              </a>
+
+              <a
+                href={personalInfo.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2 text-[#B3B3B3] hover:text-white transition-colors"
+              >
+                <Linkedin className="w-4 h-4 text-[#FF1493]" />
+                <span className="border-b border-transparent group-hover:border-white pb-0.5">LinkedIn ↗</span>
+              </a>
+
+              <span className="text-white/30 ml-auto hidden sm:inline">
+                {personalInfo.location}
               </span>
-              <div className="grid grid-cols-2 gap-4">
-                <a
-                  href={personalInfo.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3.5 rounded-xl bg-[#050505] border border-[rgba(255,20,147,0.25)] text-white hover:border-[#FF1493] hover:shadow-[0_0_15px_rgba(255,20,147,0.3)] transition-all group"
-                >
-                  <div className="flex items-center gap-2">
-                    <Github className="w-4 h-4 text-[#B3B3B3] group-hover:text-[#FF1493]" />
-                    <span className="text-xs font-mono font-medium">GitHub</span>
-                  </div>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-[#B3B3B3] group-hover:text-[#FF1493]" />
-                </a>
-
-                <a
-                  href={personalInfo.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3.5 rounded-xl bg-[#050505] border border-[rgba(255,20,147,0.25)] text-white hover:border-[#FF1493] hover:shadow-[0_0_15px_rgba(255,20,147,0.3)] transition-all group"
-                >
-                  <div className="flex items-center gap-2">
-                    <Linkedin className="w-4 h-4 text-[#FF1493]" />
-                    <span className="text-xs font-mono font-medium">LinkedIn</span>
-                  </div>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-[#B3B3B3] group-hover:text-[#FF1493]" />
-                </a>
-              </div>
-            </div>
-
-            <div className="pt-8 border-t border-[rgba(255,20,147,0.20)] font-mono text-xs text-[#B3B3B3]">
-              {personalInfo.educationInstitute} · {personalInfo.location}
             </div>
           </div>
 
-          {/* Right: Contact Form */}
+          {/* Right Column: Minimal Clean Form (No Heavy Box Card) */}
           <div className="lg:col-span-7">
-            <div className="p-8 sm:p-10 rounded-2xl bg-[#111111] border border-[rgba(255,20,147,0.20)]">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-xs font-mono text-[#B3B3B3] uppercase mb-2">
-                      Name <span className="text-[#FF1493]">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="Alex Hunter"
-                      className="w-full px-5 py-3.5 bg-[#050505] border border-[rgba(255,20,147,0.25)] rounded-xl text-sm text-white placeholder-[#737373] focus:outline-none focus:border-[#FF1493] focus:ring-1 focus:ring-[#FF1493] focus:shadow-[0_0_15px_rgba(255,20,147,0.3)] transition-all"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-mono text-[#B3B3B3] uppercase mb-2">
-                      Email <span className="text-[#FF1493]">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder="alex@domain.com"
-                      className="w-full px-5 py-3.5 bg-[#050505] border border-[rgba(255,20,147,0.25)] rounded-xl text-sm text-white placeholder-[#737373] focus:outline-none focus:border-[#FF1493] focus:ring-1 focus:ring-[#FF1493] focus:shadow-[0_0_15px_rgba(255,20,147,0.3)] transition-all"
-                    />
-                  </div>
-                </div>
-
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-xs font-mono text-[#B3B3B3] uppercase mb-2">
-                    Message <span className="text-[#FF1493]">*</span>
+                  <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
+                    Name
                   </label>
-                  <textarea
-                    rows={5}
+                  <input
+                    type="text"
                     required
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Tell me about your project, idea, or questions..."
-                    className="w-full px-5 py-3.5 bg-[#050505] border border-[rgba(255,20,147,0.25)] rounded-xl text-sm text-white placeholder-[#737373] focus:outline-none focus:border-[#FF1493] focus:ring-1 focus:ring-[#FF1493] focus:shadow-[0_0_15px_rgba(255,20,147,0.3)] transition-all resize-none"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="Your name"
+                    className="w-full px-4 py-3.5 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:border-[#FF1493] transition-colors"
                   />
                 </div>
 
-                <button
-                  type="submit"
-                  className="w-full py-4 bg-[#FF1493] hover:bg-[#FF4FBF] text-white font-mono font-semibold text-xs tracking-widest uppercase rounded-xl shadow-[0_0_25px_rgba(255,20,147,0.45)] hover:shadow-[0_0_35px_rgba(255,20,147,0.7)] transition-all duration-300 flex items-center justify-center gap-2"
-                >
-                  <Send className="w-4 h-4" />
-                  <span>Send Transmission</span>
-                </button>
-              </form>
-            </div>
+                <div>
+                  <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="name@email.com"
+                    className="w-full px-4 py-3.5 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:border-[#FF1493] transition-colors"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
+                  Message
+                </label>
+                <textarea
+                  rows="4"
+                  required
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  placeholder="Tell me about the project, idea, or problem..."
+                  className="w-full px-4 py-3.5 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:border-[#FF1493] transition-colors resize-none"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-4 px-8 rounded-full bg-[#FF1493] hover:bg-[#FF4FBF] text-white font-mono text-xs font-semibold tracking-widest uppercase transition-all duration-300 shadow-[0_0_20px_rgba(255,20,147,0.4)] flex items-center justify-center gap-2 group cursor-pointer"
+              >
+                <span>Send Message</span>
+                <Send className="w-3.5 h-3.5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              </button>
+            </form>
           </div>
 
         </div>
