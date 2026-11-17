@@ -72,7 +72,7 @@ export const featuredProjects = [
     description:
       "A performance tracking and continuous assessment engine built with Java JDBC and MySQL, ensuring ACID compliance and automated GPA computation.",
     tags: ["Java", "JDBC", "MySQL", "Database Architecture", "Enterprise"],
-    image: "/assets/images/tree-portrait.png",
+    image: "/assets/images/academic-eval-preview.jpg",
     features: [
       "Normalized 3NF relational schema with transactional integrity",
       "Automated continuous assessment calculation engine",
@@ -90,7 +90,8 @@ export const featuredProjects = [
     description:
       "A centralized platform streamlining campus club registrations, activity approvals, event scheduling, and administrative tracking.",
     tags: ["React", "Node.js", "MySQL / MongoDB", "REST APIs", "Full-Stack"],
-    image: "/assets/images/clubhub-architecture.png",
+    image: "/assets/images/clubhub-preview.jpg",
+    flowchart: "/assets/images/clubhub-architecture.png",
     features: [
       "Multi-tier approval workflows from coordinators to faculty",
       "Event discovery, slot booking, and attendee logging",
