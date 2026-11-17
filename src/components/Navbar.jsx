@@ -23,6 +23,11 @@ export default function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
 
+      if (window.scrollY < 80) {
+        setActiveSection('home');
+        return;
+      }
+
       // Determine active section based on scroll position
       const sections = navItems.map((item) => item.href.substring(1));
       const scrollPos = window.scrollY + 200;

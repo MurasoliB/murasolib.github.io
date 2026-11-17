@@ -1,6 +1,5 @@
 import React from 'react';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
 import About from './components/About';
 import TechStack from './components/TechStack';
 import Projects from './components/Projects';
@@ -17,7 +16,7 @@ export default function App() {
       {/* Precision Custom Cursor */}
       <CustomCursor />
 
-      {/* Ambient Atmospheric Lighting & Grid Mesh */}
+      {/* Full-Screen Scroll-Driven Frame Animation Background */}
       <BackgroundMesh />
 
       {/* Floating Glass Navigation */}
@@ -25,25 +24,25 @@ export default function App() {
 
       {/* Main Content Sections */}
       <main className="relative z-10 flex flex-col">
-        {/* 1. Cinematic Hero */}
-        <Hero />
+        {/* Top Scroll Anchor */}
+        <div id="home" className="h-16" />
 
-        {/* 2. Editorial About & Philosophy */}
+        {/* 1. Editorial About & Philosophy */}
         <About />
 
-        {/* 3. Interactive Technology Stack */}
+        {/* 2. Interactive Technology Stack */}
         <TechStack />
 
-        {/* 4. Large Visual Featured Projects */}
+        {/* 3. Large Visual Featured Projects */}
         <Projects />
 
-        {/* 5. Modern Academic & Development Journey Timeline */}
+        {/* 4. Modern Academic & Development Journey Timeline */}
         <ExperienceEducation />
 
-        {/* 6. Interactive 3D Digital Frontier (Three.js) */}
+        {/* 5. Interactive 3D Digital Frontier (Three.js) */}
         <DigitalFrontier />
 
-        {/* 7. Validated Contact Section */}
+        {/* 6. Validated Contact Section */}
         <Contact />
       </main>
 

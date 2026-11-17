@@ -28,7 +28,7 @@ const pillars = [
 
 export default function About() {
   return (
-    <section id="about" className="relative py-28 bg-surface/50 border-t border-border-subtle overflow-hidden">
+    <section id="about" className="relative py-20 bg-surface/30 backdrop-blur-xs overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         
         {/* Section Heading Tag */}

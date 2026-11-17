@@ -8,10 +8,10 @@ export default function BackgroundMesh() {
   const imagesRef = useRef([]);
   const [loaded, setLoaded] = useState(false);
 
-  // useScroll with no parameters tracks the entire document scroll (0 at top, 1 at bottom)
+  // useScroll tracks document scroll from 0 (top) to 1 (bottom)
   const { scrollYProgress } = useScroll();
 
-  // Preload all 25 frames for zero-lag background scrubbing
+  // Preload all 25 frames for instant response without network stalls
   useEffect(() => {
     let isMounted = true;
     const loadedImages = [];
@@ -49,7 +49,7 @@ export default function BackgroundMesh() {
     let currentFrame = 0;
     let targetFrame = 0;
 
-    // Helper to draw image cover across full viewport
+    // Helper to draw image cover across full viewport preserving center
     const drawCover = (img, alpha = 1) => {
       if (!img || !img.complete || img.naturalWidth === 0) return;
       const cw = canvas.width;
@@ -78,9 +78,9 @@ export default function BackgroundMesh() {
     };
 
     const render = () => {
-      // Smooth lerp equation for Apple-like inertia
+      // Smooth physics lerp
       const diff = targetFrame - currentFrame;
-      currentFrame += diff * 0.1;
+      currentFrame += diff * 0.12;
 
       const floorIdx = Math.floor(currentFrame);
       const ceilIdx = Math.min(TOTAL_FRAMES - 1, floorIdx + 1);
@@ -93,7 +93,7 @@ export default function BackgroundMesh() {
         ctx.globalAlpha = 1;
         drawCover(baseImg, 1);
 
-        // Sub-frame cross-fading for seamless continuity
+        // Sub-frame cross-fading for unbroken fluid continuity
         if (blend > 0.005 && ceilIdx !== floorIdx && images[ceilIdx]?.complete) {
           drawCover(images[ceilIdx], blend);
         }
@@ -129,10 +129,10 @@ export default function BackgroundMesh() {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* Full-Screen Scroll-Driven Frame Animation Canvas */}
+      {/* Full-Screen Scroll-Driven Frame Animation Canvas - Crisp & Highly Visible */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full object-cover filter grayscale contrast-125 brightness-75 opacity-35 transition-opacity duration-1000"
+        className="absolute inset-0 w-full h-full object-cover filter grayscale contrast-110 brightness-100 opacity-90 transition-opacity duration-700"
       />
 
       {/* Fallback image before frames finish loading */}
@@ -140,23 +140,17 @@ export default function BackgroundMesh() {
         <img
           src="/assets/frames/ezgif-frame-001.jpg"
           alt=""
-          className="absolute inset-0 w-full h-full object-cover filter grayscale contrast-125 brightness-75 opacity-35"
+          className="absolute inset-0 w-full h-full object-cover filter grayscale contrast-110 brightness-100 opacity-90"
         />
       )}
 
-      {/* Cinematic Deep Dark Overlay & Vignette for Readability */}
-      <div className="absolute inset-0 bg-background/70 backdrop-blur-[2px]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/80" />
-      <div className="absolute inset-0 bg-radial-gradient from-transparent via-background/40 to-background/90" />
+      {/* Subtle, minimal vignette to ensure foreground contrast without obscuring the animation */}
+      <div className="absolute inset-0 bg-background/20 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-background/60 pointer-events-none" />
 
-      {/* Ambient Atmospheric Glow Orbs */}
-      <div className="absolute top-[-15%] left-[-10%] w-[65vw] h-[65vw] rounded-full bg-gradient-radial from-accent-blue/[0.08] via-accent-violet/[0.03] to-transparent blur-[140px]" />
-      <div className="absolute top-[40%] right-[-15%] w-[55vw] h-[55vw] rounded-full bg-gradient-radial from-accent-violet/[0.06] via-accent-blue/[0.02] to-transparent blur-[150px]" />
-      <div className="absolute bottom-[-10%] left-[20%] w-[50vw] h-[50vw] rounded-full bg-gradient-radial from-accent-blue/[0.05] to-transparent blur-[120px]" />
-
-      {/* Subtle Grid Texture */}
+      {/* Subtle Grid Lines */}
       <div
-        className="absolute inset-0 opacity-[0.03]"
+        className="absolute inset-0 opacity-[0.02] pointer-events-none"
         style={{
           backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px)`,
           backgroundSize: '48px 48px',
