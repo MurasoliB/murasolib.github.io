@@ -7,7 +7,13 @@ import { personalInfo } from '../data/portfolioData';
 
 export default function Contact() {
   const [copied, setCopied] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    inquiryType: 'Hiring / Job Opportunity',
+    message: '',
+  });
   const [status, setStatus] = useState('idle'); // 'idle' | 'submitting' | 'success' | 'activation_needed'
 
   useEffect(() => {
@@ -32,11 +38,10 @@ export default function Contact() {
   };
 
   const openWebGmail = () => {
-    const subject = encodeURIComponent(formData.name ? `Portfolio Inquiry from ${formData.name}` : 'Portfolio Inquiry');
+    const org = formData.company ? ` [${formData.company}]` : '';
+    const subject = encodeURIComponent(`Portfolio Inquiry: ${formData.inquiryType}${org} - ${formData.name || 'Contact'}`);
     const body = encodeURIComponent(
-      formData.message
-        ? `From: ${formData.name} (${formData.email})\n\n${formData.message}`
-        : 'Hi Murasoli,\n\nI came across your portfolio and wanted to connect regarding...'
+      `Name: ${formData.name}\nEmail: ${formData.email}\nCompany/Organization: ${formData.company || 'Not Specified (Individual)'}\nInquiry Type: ${formData.inquiryType}\n\nMessage:\n${formData.message}`
     );
     window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${personalInfo.email}&su=${subject}&body=${body}`, '_blank');
   };
@@ -48,6 +53,7 @@ export default function Contact() {
     setStatus('submitting');
 
     try {
+      const subjectTag = formData.company ? `[${formData.company}]` : `[${formData.inquiryType}]`;
       const response = await fetch(`https://formsubmit.co/ajax/${personalInfo.email}`, {
         method: 'POST',
         headers: {
@@ -55,10 +61,12 @@ export default function Contact() {
           Accept: 'application/json',
         },
         body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
-          _subject: `Portfolio Message from ${formData.name}`,
+          Name: formData.name,
+          Email: formData.email,
+          'Company / Organization': formData.company || 'Individual / Personal',
+          'Inquiry Type': formData.inquiryType,
+          Message: formData.message,
+          _subject: `Portfolio Message: ${subjectTag} from ${formData.name}`,
           _template: 'table',
         }),
       });
@@ -75,7 +83,13 @@ export default function Contact() {
             origin: { y: 0.85 },
           });
         } catch (_) {}
-        setFormData({ name: '', email: '', message: '' });
+        setFormData({
+          name: '',
+          email: '',
+          company: '',
+          inquiryType: 'Hiring / Job Opportunity',
+          message: '',
+        });
       } else {
         // FormSubmit requires the one-time activation click on first use
         setStatus('activation_needed');
@@ -222,6 +236,8 @@ export default function Contact() {
                   <form action={`https://formsubmit.co/${personalInfo.email}`} method="POST">
                     <input type="hidden" name="name" value={formData.name || 'Portfolio Activation Test'} />
                     <input type="hidden" name="email" value={formData.email || 'balajimurasoli@gmail.com'} />
+                    <input type="hidden" name="Company / Organization" value={formData.company || 'Not Specified (Individual)'} />
+                    <input type="hidden" name="Inquiry Type" value={formData.inquiryType} />
                     <input type="hidden" name="message" value={formData.message || 'One-time activation request from your portfolio contact form.'} />
                     <input type="hidden" name="_captcha" value="false" />
                     <input type="hidden" name="_next" value="https://murasolib.github.io/?submitted=true#contact" />
@@ -278,9 +294,47 @@ export default function Contact() {
                       required
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder="name@email.com"
+                      placeholder="name@company.com"
                       className="w-full px-4 py-3.5 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:border-[#FF1493] transition-colors"
                     />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
+                      Company / Organization <span className="text-white/30 text-[10px]">(Optional)</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.company}
+                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                      placeholder="e.g. Google, Startup, or Individual"
+                      className="w-full px-4 py-3.5 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:border-[#FF1493] transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
+                      Inquiry Type
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={formData.inquiryType}
+                        onChange={(e) => setFormData({ ...formData, inquiryType: e.target.value })}
+                        className="w-full px-4 py-3.5 bg-[#0D0D0D] border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#FF1493] transition-colors cursor-pointer appearance-none"
+                      >
+                        <option value="Hiring / Job Opportunity" className="bg-[#111111] text-white">💼 Hiring / Job Opportunity</option>
+                        <option value="Project / Contract Work" className="bg-[#111111] text-white">🚀 Project / Contract Work</option>
+                        <option value="Tech Collaboration" className="bg-[#111111] text-white">🤝 Tech Collaboration</option>
+                        <option value="General Inquiry" className="bg-[#111111] text-white">💬 General Inquiry</option>
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[#FF1493]">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -293,7 +347,7 @@ export default function Contact() {
                     required
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Tell me about the project, idea, or problem..."
+                    placeholder="Tell me about the role, project, idea, or problem..."
                     className="w-full px-4 py-3.5 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:border-[#FF1493] transition-colors resize-none"
                   />
                 </div>
