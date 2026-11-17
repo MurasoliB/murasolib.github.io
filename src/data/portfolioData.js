@@ -109,6 +109,12 @@ export const journeyTimeline = [
     detail: "Studying core computer science, advanced algorithms, database systems, and machine learning while engineering production-grade software."
   },
   {
+    period: "Past",
+    role: "Diploma in Computer Engineering",
+    organization: "Technical Education",
+    detail: "Established core engineering foundations across C/C++ programming, computer hardware, operating systems, networking, and applied software development."
+  },
+  {
     period: "Focus",
     role: "Intelligent Systems & AI",
     organization: "Independent Exploration",
