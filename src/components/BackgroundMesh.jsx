@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useScroll, useSpring } from 'framer-motion';
+import { useScroll } from 'framer-motion';
 
 const TOTAL_FRAMES = 25;
 
@@ -8,16 +8,10 @@ export default function BackgroundMesh() {
   const imagesRef = useRef([]);
   const [loaded, setLoaded] = useState(false);
 
-  // useScroll tracks document scroll; useSpring provides butter-smooth momentum & physics damping
+  // useScroll tracks document scroll from 0 (top) to 1 (bottom)
   const { scrollYProgress } = useScroll();
-  const smoothProgress = useSpring(scrollYProgress, {
-    damping: 30,
-    stiffness: 90,
-    mass: 0.5,
-    restDelta: 0.0001,
-  });
 
-  // Preload and asynchronously decode all 25 frames for zero-jank instant response
+  // Preload all 25 frames for instant response without network stalls
   useEffect(() => {
     let isMounted = true;
     const loadedImages = [];
@@ -28,18 +22,10 @@ export default function BackgroundMesh() {
       const frameNum = String(i).padStart(3, '0');
       img.src = `/assets/frames/ezgif-frame-${frameNum}.jpg`;
 
-      const onImageReady = () => {
+      img.onload = () => {
         count++;
         if (count === TOTAL_FRAMES && isMounted) {
           setLoaded(true);
-        }
-      };
-
-      img.onload = () => {
-        if ('decode' in img) {
-          img.decode().catch(() => {}).finally(onImageReady);
-        } else {
-          onImageReady();
         }
       };
       loadedImages.push(img);
@@ -92,12 +78,9 @@ export default function BackgroundMesh() {
     };
 
     const render = () => {
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-
-      // Physics lerp towards spring-damped target frame
+      // Smooth physics lerp
       const diff = targetFrame - currentFrame;
-      currentFrame += diff * 0.1;
+      currentFrame += diff * 0.12;
 
       const floorIdx = Math.floor(currentFrame);
       const ceilIdx = Math.min(TOTAL_FRAMES - 1, floorIdx + 1);
@@ -121,8 +104,8 @@ export default function BackgroundMesh() {
 
     animId = requestAnimationFrame(render);
 
-    // Subscribe to spring-smoothed scroll progress
-    const unsubscribeScroll = smoothProgress.on('change', (latest) => {
+    // Subscribe to full page scroll progress
+    const unsubscribeScroll = scrollYProgress.on('change', (latest) => {
       targetFrame = Math.max(0, Math.min(TOTAL_FRAMES - 1, latest * (TOTAL_FRAMES - 1)));
     });
 
