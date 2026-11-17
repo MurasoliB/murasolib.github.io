@@ -54,7 +54,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
           {/* Modal Body */}
           <div className="p-6 sm:p-8 max-h-[70vh] overflow-y-auto space-y-8">
             {/* Visual Media Showcase */}
-            <div className="rounded-2xl overflow-hidden border border-[rgba(255,20,147,0.20)] bg-[#050505] relative aspect-video max-h-[380px]">
+            <div className="rounded-2xl overflow-hidden border border-white/10 bg-[#050505] relative aspect-video max-h-[260px] sm:max-h-[300px]">
               <img
                 src={project.image}
                 alt={project.title}

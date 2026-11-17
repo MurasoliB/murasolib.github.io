@@ -47,94 +47,112 @@ export default function ProjectsPage() {
           </p>
         </div>
 
-        {/* Projects Showcase Cards with Charcoal Background & Pink Borders */}
-        <div className="space-y-28 mb-36">
-          {featuredProjects.map((project) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="group p-8 sm:p-12 rounded-3xl bg-[#111111] border border-[rgba(255,20,147,0.20)] hover:border-[#FF1493] hover:shadow-[0_0_35px_rgba(255,20,147,0.25)] transition-all duration-500"
-            >
-              {/* Top Meta Line */}
-              <div className="flex items-center justify-between text-xs font-mono text-[#B3B3B3] mb-4">
-                <span className="text-[#FF1493] font-bold">{project.number}</span>
-                <span className="px-3 py-1 rounded-full bg-[#050505] border border-[rgba(255,20,147,0.25)] text-[#FF69B4]">
-                  {project.badge}
-                </span>
-              </div>
+        {/* Projects Showcase: Sleek 2-Column Balanced Layout (No Giant Images) */}
+        <div className="space-y-16 sm:space-y-20 mb-36">
+          {featuredProjects.map((project, index) => {
+            const isReversed = index % 2 === 1;
 
-              {/* Title & Tagline */}
-              <h2 className="text-3xl sm:text-5xl font-display font-bold text-white mb-2 group-hover:text-[#FF69B4] transition-colors">
-                {project.title}
-              </h2>
-              <p className="text-sm sm:text-base font-mono text-[#B3B3B3] mb-8">
-                {project.tagline}
-              </p>
-
-              {/* Visual Preview with Pink Rim / Glow on Hover */}
-              <div
-                onClick={() => setSelectedProject(project)}
-                className="relative aspect-[21/9] sm:aspect-[16/8] rounded-2xl overflow-hidden bg-[#050505] border border-[rgba(255,20,147,0.25)] hover:border-[#FF1493] transition-all cursor-pointer mb-10 group/img"
+            return (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.05 }}
+                className="group p-6 sm:p-10 md:p-12 rounded-3xl bg-white/[0.02] border border-white/10 hover:border-[#FF1493]/50 hover:bg-white/[0.03] transition-all duration-300"
               >
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover filter grayscale contrast-110 brightness-95 group-hover/img:scale-[1.02] transition-transform duration-700 ease-out"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent opacity-85" />
-                <div className="absolute inset-0 bg-[#FF1493]/0 group-hover/img:bg-[#FF1493]/5 transition-colors duration-300" />
-                
-                <div className="absolute bottom-6 right-6 opacity-0 group-hover/img:opacity-100 transition-opacity">
-                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#050505]/90 backdrop-blur-md text-xs font-mono text-white border border-[#FF1493] shadow-[0_0_15px_rgba(255,20,147,0.5)]">
-                    <span>Inspect Architecture</span>
-                    <ArrowUpRight className="w-4 h-4 text-[#FF1493]" />
-                  </span>
-                </div>
-              </div>
-
-              {/* Description & Technical Tags */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                <div className="lg:col-span-8">
-                  <p className="text-base sm:text-lg text-[#B3B3B3] leading-relaxed mb-6 font-light">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs font-mono px-3.5 py-1.5 rounded-full bg-[#050505] text-[#B3B3B3] border border-[rgba(255,20,147,0.2)]"
-                      >
-                        #{tag}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                  
+                  {/* Text Details (7 cols) */}
+                  <div className={`space-y-5 ${isReversed ? 'lg:col-span-7 lg:order-2' : 'lg:col-span-7 lg:order-1'}`}>
+                    {/* Top Meta Line */}
+                    <div className="flex items-center gap-3 font-mono text-xs">
+                      <span className="text-[#FF1493] font-bold tracking-widest">{project.number}</span>
+                      <span className="text-white/20">/</span>
+                      <span className="px-3 py-1 rounded-full bg-white/[0.03] border border-white/10 text-[#FF69B4] text-[11px] uppercase tracking-wider">
+                        {project.badge}
                       </span>
-                    ))}
-                  </div>
-                </div>
+                    </div>
 
-                <div className="lg:col-span-4 flex lg:justify-end gap-4">
-                  <button
-                    onClick={() => setSelectedProject(project)}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#050505] border border-[rgba(255,20,147,0.3)] hover:border-[#FF1493] hover:text-[#FF69B4] text-white text-xs font-mono transition-all"
-                  >
-                    <Info className="w-3.5 h-3.5 text-[#FF1493]" />
-                    <span>Deep Dive</span>
-                  </button>
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#FF1493] hover:bg-[#FF4FBF] text-white text-xs font-mono font-medium shadow-[0_0_15px_rgba(255,20,147,0.4)] transition-all"
-                  >
-                    <Github className="w-3.5 h-3.5" />
-                    <span>GitHub</span>
-                  </a>
+                    {/* Title & Tagline */}
+                    <div>
+                      <h2
+                        onClick={() => setSelectedProject(project)}
+                        className="text-2xl sm:text-4xl font-display font-bold text-white tracking-tight hover:text-[#FF69B4] transition-colors cursor-pointer"
+                      >
+                        {project.title}
+                      </h2>
+                      <p className="text-xs sm:text-sm font-mono text-[#FF69B4]/80 mt-1 uppercase tracking-wider">
+                        {project.tagline}
+                      </p>
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-sm sm:text-base text-[#B3B3B3] leading-relaxed font-light">
+                      {project.description}
+                    </p>
+
+                    {/* Tech Tags */}
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-[11px] font-mono px-3 py-1 rounded-lg bg-white/[0.03] text-white/70 border border-white/10"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex flex-wrap items-center gap-3 pt-3">
+                      <button
+                        onClick={() => setSelectedProject(project)}
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.04] border border-white/15 hover:border-[#FF1493] hover:text-[#FF69B4] text-white text-xs font-mono transition-all cursor-pointer"
+                      >
+                        <Info className="w-3.5 h-3.5 text-[#FF1493]" />
+                        <span>System Details</span>
+                      </button>
+
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#FF1493] hover:bg-[#FF4FBF] text-white text-xs font-mono font-medium shadow-[0_0_15px_rgba(255,20,147,0.35)] transition-all"
+                      >
+                        <Github className="w-3.5 h-3.5" />
+                        <span>GitHub</span>
+                        <ArrowUpRight className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Controlled, Compact Image Preview (5 cols) */}
+                  <div className={`${isReversed ? 'lg:col-span-5 lg:order-1' : 'lg:col-span-5 lg:order-2'}`}>
+                    <div
+                      onClick={() => setSelectedProject(project)}
+                      className="group/img relative aspect-[16/10] max-h-[300px] w-full rounded-2xl overflow-hidden bg-[#0A0A0A] border border-white/10 hover:border-[#FF1493] transition-all cursor-pointer shadow-lg"
+                    >
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover filter grayscale contrast-110 brightness-95 group-hover/img:scale-105 group-hover/img:filter-none transition-all duration-500 ease-out"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/80 via-transparent to-transparent opacity-60 group-hover/img:opacity-20 transition-opacity" />
+                      <div className="absolute bottom-4 right-4 opacity-0 group-hover/img:opacity-100 transition-opacity">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#050505]/90 backdrop-blur-md text-[11px] font-mono text-white border border-[#FF1493]">
+                          <span>Expand</span>
+                          <ArrowUpRight className="w-3 h-3 text-[#FF1493]" />
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Footer Contact Link */}
