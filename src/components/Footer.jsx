@@ -9,7 +9,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-background border-t border-border-subtle py-16 overflow-hidden">
+    <footer className="relative bg-background/80 backdrop-blur-xs border-t border-border-subtle py-16 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         
         {/* Main Footer Row */}

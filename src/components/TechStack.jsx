@@ -66,7 +66,7 @@ export default function TechStack() {
       : techStackCategories.filter((c) => c.title === selectedCategory);
 
   return (
-    <section id="skills" className="relative py-28 bg-background overflow-hidden">
+    <section id="skills" className="relative py-28 bg-background/40 backdrop-blur-xs overflow-hidden">
       {/* Background glow accents */}
       <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-accent-blue/5 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-1/4 left-1/4 w-[350px] h-[350px] bg-accent-violet/5 rounded-full blur-[120px] pointer-events-none" />

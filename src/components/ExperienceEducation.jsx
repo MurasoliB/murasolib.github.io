@@ -5,7 +5,7 @@ import { educationTimeline } from '../data/portfolioData';
 
 export default function ExperienceEducation() {
   return (
-    <section id="journey" className="relative py-28 bg-background overflow-hidden">
+    <section id="journey" className="relative py-28 bg-background/40 backdrop-blur-xs overflow-hidden">
       {/* Background radial accent */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent-blue/[0.03] rounded-full blur-[180px] pointer-events-none" />
 

@@ -224,7 +224,7 @@ export default function DigitalFrontier() {
   }, []);
 
   return (
-    <section id="frontier" className="relative py-28 bg-surface overflow-hidden border-t border-b border-border-subtle">
+    <section id="frontier" className="relative py-28 bg-surface/50 backdrop-blur-xs overflow-hidden border-t border-b border-border-subtle">
       {/* Background Ambient Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-accent-blue/10 via-accent-violet/5 to-transparent rounded-full pointer-events-none blur-3xl" />
 
