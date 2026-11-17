@@ -1,10 +1,15 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowDown, ArrowUpRight, Sparkles, Terminal, Code2, Cpu } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, Sparkles } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
+
+const TOTAL_FRAMES = 25;
 
 export default function Hero() {
   const containerRef = useRef(null);
+  const canvasRef = useRef(null);
+  const imagesRef = useRef([]);
+  const [framesLoaded, setFramesLoaded] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -13,7 +18,125 @@ export default function Hero() {
 
   const portraitY = useTransform(scrollYProgress, [0, 1], ['0%', '15%']);
   const textY = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
+
+  // Preload all 25 frames and handle high-DPI smooth canvas rendering
+  useEffect(() => {
+    let isMounted = true;
+    const loadedImages = [];
+    let count = 0;
+
+    for (let i = 1; i <= TOTAL_FRAMES; i++) {
+      const img = new Image();
+      const frameNum = String(i).padStart(3, '0');
+      img.src = `/assets/frames/ezgif-frame-${frameNum}.jpg`;
+
+      img.onload = () => {
+        count++;
+        if (count === TOTAL_FRAMES && isMounted) {
+          setFramesLoaded(true);
+        }
+      };
+      loadedImages.push(img);
+    }
+    imagesRef.current = loadedImages;
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Smooth scroll interpolation & sub-frame cross-fade rendering
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d', { alpha: false });
+    if (!ctx) return;
+
+    let animId;
+    let currentFrame = 0;
+    let targetFrame = 0;
+
+    // Helper to draw image cover (centered crop, preserving 16:9 geometry)
+    const drawCover = (img, alpha = 1) => {
+      if (!img || !img.complete || img.naturalWidth === 0) return;
+      const cw = canvas.width;
+      const ch = canvas.height;
+      const iw = img.naturalWidth;
+      const ih = img.naturalHeight;
+
+      const imgRatio = iw / ih;
+      const canvasRatio = cw / ch;
+
+      let sw, sh, sx, sy;
+      if (imgRatio > canvasRatio) {
+        sh = ih;
+        sw = ih * canvasRatio;
+        sx = (iw - sw) / 2;
+        sy = 0;
+      } else {
+        sw = iw;
+        sh = iw / canvasRatio;
+        sx = 0;
+        sy = (ih - sh) / 2;
+      }
+
+      ctx.globalAlpha = alpha;
+      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cw, ch);
+    };
+
+    // Render loop with lerping and cross-fade
+    const render = () => {
+      // Smooth physics lerp
+      const diff = targetFrame - currentFrame;
+      currentFrame += diff * 0.12;
+
+      const floorIdx = Math.floor(currentFrame);
+      const ceilIdx = Math.min(TOTAL_FRAMES - 1, floorIdx + 1);
+      const blend = currentFrame - floorIdx;
+
+      const images = imagesRef.current;
+      const baseImg = images[floorIdx] || images[0];
+
+      if (baseImg && baseImg.complete) {
+        ctx.globalAlpha = 1;
+        drawCover(baseImg, 1);
+
+        // Sub-frame cross-fade for seamless buttery smoothness
+        if (blend > 0.005 && ceilIdx !== floorIdx && images[ceilIdx]?.complete) {
+          drawCover(images[ceilIdx], blend);
+        }
+      }
+
+      animId = requestAnimationFrame(render);
+    };
+
+    animId = requestAnimationFrame(render);
+
+    // Subscribe to Framer Motion scroll progress
+    const unsubscribeScroll = scrollYProgress.on('change', (latest) => {
+      targetFrame = Math.max(0, Math.min(TOTAL_FRAMES - 1, latest * (TOTAL_FRAMES - 1)));
+    });
+
+    // Auto-resize canvas for retina sharpness
+    const updateCanvasSize = () => {
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+    };
+
+    updateCanvasSize();
+    window.addEventListener('resize', updateCanvasSize);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      unsubscribeScroll();
+      window.removeEventListener('resize', updateCanvasSize);
+    };
+  }, []);
 
   return (
     <section
@@ -144,7 +267,7 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Right Column: High-End Cinematic Portrait */}
+          {/* Right Column: High-End Cinematic Portrait with Smooth Scroll Animation */}
           <motion.div
             style={{ y: portraitY, opacity }}
             className="lg:col-span-5 flex justify-center lg:justify-end order-1 lg:order-2"
@@ -161,29 +284,36 @@ export default function Hero() {
               {/* Main Portrait Card Container */}
               <div className="relative rounded-3xl overflow-hidden glass-panel border border-white/10 shadow-2xl bg-surface-card">
                 
-                {/* The Genuine Black-and-White Cinematic Portrait */}
+                {/* Smooth Scroll Animation Canvas */}
                 <div className="relative aspect-[4/5] overflow-hidden bg-surface">
-                  <img
-                    src={personalInfo.heroPortrait}
-                    alt="Murasoli Balaji - Developer Portrait"
-                    className="w-full h-full object-cover object-center filter grayscale contrast-110 brightness-95 group-hover:scale-[1.03] transition-transform duration-700 ease-out"
-                    loading="eager"
+                  <canvas
+                    ref={canvasRef}
+                    className="w-full h-full object-cover object-center filter grayscale contrast-110 brightness-95 group-hover:scale-[1.02] transition-transform duration-500 ease-out cursor-default"
                   />
 
+                  {/* Fallback image while frames initialize */}
+                  {!framesLoaded && (
+                    <img
+                      src="/assets/frames/ezgif-frame-001.jpg"
+                      alt="Murasoli Balaji"
+                      className="absolute inset-0 w-full h-full object-cover object-center filter grayscale contrast-110 brightness-95 pointer-events-none"
+                    />
+                  )}
+
                   {/* Editorial Film-Grain Vignette & Lighting Gradients */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-80" />
-                  <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background/90" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-80 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background/90 pointer-events-none" />
                   <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-3xl pointer-events-none" />
 
                   {/* Ambient Portrait Overlay Details */}
-                  <div className="absolute top-4 left-4 z-10">
+                  <div className="absolute top-4 left-4 z-10 pointer-events-none">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-mono text-content-primary">
                       <span className="w-1.5 h-1.5 rounded-full bg-accent-blue" />
                       EDITORIAL CAPTURE
                     </span>
                   </div>
 
-                  <div className="absolute bottom-5 left-5 right-5 z-10 flex items-center justify-between">
+                  <div className="absolute bottom-5 left-5 right-5 z-10 flex items-center justify-between pointer-events-none">
                     <div>
                       <p className="text-xs font-mono text-content-muted">LOCATION</p>
                       <p className="text-sm font-semibold text-white tracking-wide">
