@@ -23,7 +23,7 @@ export const skillsList = [
   { category: "Web & Mobile", items: ["React", "Node.js", "Tailwind CSS", "Flutter", "REST APIs"] },
   { category: "Databases", items: ["MySQL", "MongoDB", "Java JDBC", "Schema Design"] },
   { category: "AI & Computing", items: ["Artificial Intelligence", "NLP & Voice", "GIS Modeling", "Data Structures"] },
-  { category: "Tooling", items: ["Git", "GitHub", "Vite", "Linux", "VS Code"] },
+  { category: "Tooling", items: ["Git", "GitHub", "Docker", "Blender", "Postman", "Figma", "Vite", "VS Code"] },
 ];
 
 export const featuredProjects = [

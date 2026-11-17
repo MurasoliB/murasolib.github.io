@@ -25,7 +25,7 @@ const techGroups = [
   {
     category: 'TOOLING',
     number: '05',
-    skills: ['Git', 'GitHub', 'Vite', 'Linux', 'VS Code'],
+    skills: ['Git', 'GitHub', 'Docker', 'Blender', 'Postman', 'Figma', 'Vite', 'VS Code'],
   },
 ];
 
