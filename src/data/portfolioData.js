@@ -61,7 +61,7 @@ export const featuredProjects = [
       "Critical hazard zoning and evacuation route mapping",
       "Scenario analytics dashboard"
     ],
-    github: "https://github.com/murasolib",
+    github: "https://github.com/MurasoliB/Flood-Simulation-GIS",
     badge: "GIS & Simulation"
   },
   {
