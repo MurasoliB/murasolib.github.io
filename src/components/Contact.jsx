@@ -300,41 +300,51 @@ export default function Contact() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
-                      Company / Organization <span className="text-white/30 text-[10px]">(Optional)</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.company}
-                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                      placeholder="e.g. Google, Startup, or Individual"
-                      className="w-full px-4 py-3.5 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:border-[#FF1493] transition-colors"
-                    />
-                  </div>
+                {/* Row 2: Company & Organization */}
+                <div>
+                  <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
+                    Company / Organization <span className="text-white/30 text-[10px]">(Optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.company}
+                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                    placeholder="e.g. Google, Tech Startup, or Independent"
+                    className="w-full px-4 py-3.5 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:border-[#FF1493] transition-colors font-mono text-xs"
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
-                      Inquiry Type
-                    </label>
-                    <div className="relative">
-                      <select
-                        value={formData.inquiryType}
-                        onChange={(e) => setFormData({ ...formData, inquiryType: e.target.value })}
-                        className="w-full px-4 py-3.5 bg-[#0D0D0D] border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-[#FF1493] transition-colors cursor-pointer appearance-none"
-                      >
-                        <option value="Hiring / Job Opportunity" className="bg-[#111111] text-white">💼 Hiring / Job Opportunity</option>
-                        <option value="Project / Contract Work" className="bg-[#111111] text-white">🚀 Project / Contract Work</option>
-                        <option value="Tech Collaboration" className="bg-[#111111] text-white">🤝 Tech Collaboration</option>
-                        <option value="General Inquiry" className="bg-[#111111] text-white">💬 General Inquiry</option>
-                      </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[#FF1493]">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </div>
-                    </div>
+                {/* Row 3: Aesthetic Typographic Pills for Inquiry Type (No Emojis) */}
+                <div className="space-y-2">
+                  <label className="block text-xs font-mono text-white/50 uppercase tracking-wider">
+                    Inquiry Type
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                    {[
+                      { id: 'Hiring / Job Opportunity', label: 'Hiring / Role' },
+                      { id: 'Project / Contract Work', label: 'Project / Contract' },
+                      { id: 'Tech Collaboration', label: 'Collaboration' },
+                      { id: 'General Inquiry', label: 'General Note' },
+                    ].map((item) => {
+                      const isActive = formData.inquiryType === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => setFormData({ ...formData, inquiryType: item.id })}
+                          className={`py-3 px-3 rounded-xl text-xs font-mono tracking-wider uppercase transition-all duration-200 border cursor-pointer text-center select-none ${
+                            isActive
+                              ? 'bg-[#FF1493]/15 border-[#FF1493] text-white shadow-[0_0_15px_rgba(255,20,147,0.25)] font-semibold'
+                              : 'bg-white/[0.02] border-white/10 text-white/50 hover:text-white hover:border-white/25 hover:bg-white/[0.04]'
+                          }`}
+                        >
+                          <span className={isActive ? 'text-[#FF69B4] mr-1' : 'text-white/25 mr-1'}>
+                            {isActive ? '●' : '○'}
+                          </span>
+                          <span>{item.label}</span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
