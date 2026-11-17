@@ -98,7 +98,7 @@ export const featuredProjects = [
       "Digital activity records replacing manual paperwork",
       "Engagement telemetry and participation tracking"
     ],
-    github: "https://github.com/murasolib",
+    github: "https://github.com/MurasoliB/Centralised-Clubs-Cells",
     badge: "Full-Stack"
   }
 ];
