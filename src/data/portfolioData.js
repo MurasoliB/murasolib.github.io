@@ -136,6 +136,25 @@ export const featuredProjects = [
     ],
     github: "https://github.com/MurasoliB/Oral-Cancer-Prediction-Using-Artificial-Intelligence",
     badge: "Medical AI & Vision"
+  },
+  {
+    id: "cold-chain-logistics",
+    number: "07",
+    title: "Global Cold Chain Vaccine Audit",
+    tagline: "Enterprise Java 25 & MongoDB Atlas telemetry and GxP compliance engine",
+    subtitle: "Enterprise Java 25 & MongoDB Atlas telemetry and GxP compliance engine",
+    description:
+      "A mission-critical enterprise audit platform engineered in Java 25 and MongoDB Atlas for pharmaceutical cold-chain verification. Features real-time IoT temperature telemetry stream ingestion, continuous excursion detection, Cold Chain Integrity Index (CCII) scoring, and multi-threaded batch compliance grading.",
+    tags: ["Java 25", "MongoDB Atlas", "Concurrency", "Multithreading", "GxP Compliance", "Maven"],
+    image: "/assets/images/cold-chain-logistics-preview.jpg",
+    features: [
+      "Multi-threaded batch audit engine using Java Callable workers and ExecutorService",
+      "Continuous IoT temperature telemetry ingestion with excursion and degree-hour interval analysis",
+      "Mathematical Cold Chain Integrity Index (CCII) evaluation with automated GxP grading",
+      "MongoDB Atlas cloud database integration with compound indexing and ACID transactional integrity"
+    ],
+    github: "https://github.com/MurasoliB/Global-Cold-Chain-Logistics-Vaccine-Temperature-Audit-System",
+    badge: "Enterprise Java & Cloud"
   }
 ];
 

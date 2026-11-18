@@ -125,7 +125,7 @@ export default function Projects() {
                   </h3>
 
                   <p className="text-sm font-medium text-content-secondary mb-4 italic">
-                    {project.subtitle}
+                    {project.subtitle || project.tagline}
                   </p>
 
                   <p className="text-content-secondary text-sm sm:text-base leading-relaxed mb-6">
