@@ -6,7 +6,7 @@ import confetti from 'canvas-confetti';
 import { personalInfo } from '../data/portfolioData';
 
 export default function Contact() {
-  const [copied, setCopied] = useState(false);
+  const [copiedKey, setCopiedKey] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -31,10 +31,10 @@ export default function Contact() {
     }
   }, []);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(personalInfo.email);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopy = (emailToCopy, key) => {
+    navigator.clipboard.writeText(emailToCopy);
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 2000);
   };
 
   const openWebGmail = () => {
@@ -44,6 +44,16 @@ export default function Contact() {
       `Name: ${formData.name}\nEmail: ${formData.email}\nCompany/Organization: ${formData.company || 'Not Specified (Individual)'}\nInquiry Type: ${formData.inquiryType}\n\nMessage:\n${formData.message}`
     );
     window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${personalInfo.email}&su=${subject}&body=${body}`, '_blank');
+  };
+
+  const openWebOutlook = () => {
+    const org = formData.company ? ` [${formData.company}]` : '';
+    const subject = encodeURIComponent(`Portfolio Inquiry: ${formData.inquiryType}${org} - ${formData.name || 'Contact'}`);
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\nCompany/Organization: ${formData.company || 'Not Specified (Individual)'}\nInquiry Type: ${formData.inquiryType}\n\nMessage:\n${formData.message}`
+    );
+    const targetEmail = personalInfo.outlookEmail || personalInfo.email;
+    window.open(`https://outlook.live.com/mail/0/deeplink/compose?to=${targetEmail}&subject=${subject}&body=${body}`, '_blank');
   };
 
   const handleSubmit = async (e) => {
@@ -136,35 +146,83 @@ export default function Contact() {
               Whether you are architecting an autonomous intelligence pipeline, computational simulation, or ambitious full-stack product, my inbox is open.
             </p>
 
-            <div className="space-y-4 font-mono text-xs">
-              <span className="text-white/40 uppercase tracking-widest block">Direct Channel</span>
+            <div className="space-y-3.5 font-mono text-xs">
+              <span className="text-white/40 uppercase tracking-widest block">Direct Channels</span>
               
-              {/* One-click copy email button */}
+              {/* Primary Email (Gmail) */}
               <button
-                onClick={handleCopy}
-                className="group flex items-center justify-between w-full p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#FF1493] transition-all text-left cursor-pointer"
+                type="button"
+                onClick={() => handleCopy(personalInfo.email, 'gmail')}
+                className="group flex items-center justify-between w-full p-3.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#FF1493] transition-all text-left cursor-pointer"
               >
                 <div className="flex items-center gap-3 overflow-hidden">
-                  <Mail className="w-4 h-4 text-[#FF1493] shrink-0" />
-                  <span className="text-sm sm:text-base font-mono text-white truncate group-hover:text-[#FF69B4]">
-                    {personalInfo.email}
-                  </span>
+                  <div className="w-8 h-8 rounded-lg bg-[#FF1493]/10 border border-[#FF1493]/30 flex items-center justify-center shrink-0">
+                    <Mail className="w-4 h-4 text-[#FF1493]" />
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-sm font-mono text-white truncate group-hover:text-[#FF69B4]">
+                      {personalInfo.email}
+                    </span>
+                    <span className="text-[10px] text-white/40 tracking-wider uppercase font-mono">
+                      Primary · Gmail
+                    </span>
+                  </div>
                 </div>
-                {copied ? (
-                  <Check className="w-4 h-4 text-[#FF69B4] shrink-0" />
+                {copiedKey === 'gmail' ? (
+                  <Check className="w-4 h-4 text-[#FF69B4] shrink-0 ml-2" />
                 ) : (
-                  <Copy className="w-4 h-4 text-[#B3B3B3] group-hover:text-[#FF1493] shrink-0" />
+                  <Copy className="w-4 h-4 text-[#B3B3B3] group-hover:text-[#FF1493] shrink-0 ml-2" />
                 )}
               </button>
 
-              {/* Compose in Web Gmail (Bypasses desktop mail apps like Outlook) */}
-              <button
-                onClick={openWebGmail}
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/20 text-[#B3B3B3] hover:text-white transition-all text-xs font-mono cursor-pointer"
-              >
-                <span>Compose in Gmail (Browser)</span>
-                <ExternalLink className="w-3.5 h-3.5 text-[#FF1493]" />
-              </button>
+              {/* Secondary Email (Outlook) */}
+              {personalInfo.outlookEmail && (
+                <button
+                  type="button"
+                  onClick={() => handleCopy(personalInfo.outlookEmail, 'outlook')}
+                  className="group flex items-center justify-between w-full p-3.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#0078D4] transition-all text-left cursor-pointer"
+                >
+                  <div className="flex items-center gap-3 overflow-hidden">
+                    <div className="w-8 h-8 rounded-lg bg-[#0078D4]/10 border border-[#0078D4]/30 flex items-center justify-center shrink-0">
+                      <Mail className="w-4 h-4 text-[#0078D4]" />
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-sm font-mono text-white truncate group-hover:text-[#60A5FA]">
+                        {personalInfo.outlookEmail}
+                      </span>
+                      <span className="text-[10px] text-white/40 tracking-wider uppercase font-mono">
+                        Direct · Outlook
+                      </span>
+                    </div>
+                  </div>
+                  {copiedKey === 'outlook' ? (
+                    <Check className="w-4 h-4 text-[#60A5FA] shrink-0 ml-2" />
+                  ) : (
+                    <Copy className="w-4 h-4 text-[#B3B3B3] group-hover:text-[#0078D4] shrink-0 ml-2" />
+                  )}
+                </button>
+              )}
+
+              {/* Quick Web Compose Action Buttons */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                <button
+                  type="button"
+                  onClick={openWebGmail}
+                  className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] hover:border-[#FF1493]/40 text-[#B3B3B3] hover:text-white transition-all text-xs font-mono cursor-pointer"
+                >
+                  <span>Compose in Gmail</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-[#FF1493]" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={openWebOutlook}
+                  className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] hover:border-[#0078D4]/40 text-[#B3B3B3] hover:text-white transition-all text-xs font-mono cursor-pointer"
+                >
+                  <span>Compose in Outlook</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-[#0078D4]" />
+                </button>
+              </div>
             </div>
 
             {/* Social Network Links */}

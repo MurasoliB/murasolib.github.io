@@ -14,6 +14,7 @@ export const personalInfo = {
     "Great software combines mathematical precision with intuitive design. Every system should be resilient, scalable, and built with purpose.",
   availability: "Available for innovative projects & collaborations",
   email: "balajimurasoli@gmail.com",
+  outlookEmail: "balajimurasoli@outlook.com",
   github: "https://github.com/murasolib",
   linkedin: "https://linkedin.com/in/murasolibalaji",
 };
