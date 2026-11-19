@@ -437,17 +437,6 @@ export default function Contact() {
                     </>
                   )}
                 </button>
-
-                {/* Direct 1-click activation link */}
-                <div className="pt-2 text-center">
-                  <button
-                    type="button"
-                    onClick={() => setStatus('activation_needed')}
-                    className="text-xs font-mono text-white/40 hover:text-[#FF69B4] transition-colors cursor-pointer"
-                  >
-                    // First time using this? Click here to activate FormSubmit
-                  </button>
-                </div>
               </form>
             )}
           </div>
