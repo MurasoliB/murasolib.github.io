@@ -104,13 +104,17 @@ export default function Hero() {
               transition={{ duration: 0.7, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-wrap items-center gap-4 mb-10"
             >
-              <a
-                href="#projects"
-                className="group relative inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-accent-blue text-white font-semibold text-sm shadow-glow-blue hover:bg-blue-500 transition-all duration-300"
+              <button
+                type="button"
+                onClick={() => {
+                  document.getElementById('projects-preview')?.scrollIntoView({ behavior: 'smooth' });
+                  if (window.location.hash) window.history.replaceState(null, '', window.location.pathname);
+                }}
+                className="group relative inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-accent-blue text-white font-semibold text-sm shadow-glow-blue hover:bg-blue-500 transition-all duration-300 cursor-pointer"
               >
                 <span>Explore My Work</span>
                 <ArrowDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
-              </a>
+              </button>
 
               <a
                 href={personalInfo.resumePdf}
@@ -122,13 +126,17 @@ export default function Hero() {
                 <span>Download Resume</span>
               </a>
 
-              <a
-                href="#contact"
-                className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-surface-glass border border-white/10 hover:border-accent-blue/40 text-content-primary hover:text-white font-semibold text-sm backdrop-blur-md transition-all duration-300 hover:shadow-glass"
+              <button
+                type="button"
+                onClick={() => {
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                  if (window.location.hash) window.history.replaceState(null, '', window.location.pathname);
+                }}
+                className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-surface-glass border border-white/10 hover:border-accent-blue/40 text-content-primary hover:text-white font-semibold text-sm backdrop-blur-md transition-all duration-300 hover:shadow-glass cursor-pointer"
               >
                 <span>Let's Connect</span>
                 <ArrowUpRight className="w-4 h-4 text-accent-blue group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
+              </button>
             </motion.div>
 
             {/* Quick Tech Highlights Badge Strip */}

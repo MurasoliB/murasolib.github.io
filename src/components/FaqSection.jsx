@@ -229,13 +229,17 @@ const faqItems = [
           If you have a project idea, technical problem, or engineering opportunity, feel free to reach out directly via the in-browser contact form or send an email:
         </p>
         <div className="flex flex-wrap items-center gap-4 pt-1 font-mono text-xs">
-          <a
-            href="#contact"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#FF1493] text-white font-semibold hover:bg-[#FF4FBF] shadow-[0_0_20px_rgba(255,20,147,0.4)] transition-all"
+          <button
+            type="button"
+            onClick={() => {
+              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+              if (window.location.hash) window.history.replaceState(null, '', window.location.pathname);
+            }}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#FF1493] text-white font-semibold hover:bg-[#FF4FBF] shadow-[0_0_20px_rgba(255,20,147,0.4)] transition-all cursor-pointer"
           >
             <span>Open Contact Form</span>
             <ArrowRight className="w-3.5 h-3.5" />
-          </a>
+          </button>
           <a
             href={`mailto:${personalInfo.email}`}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/[0.03] border border-white/15 text-white hover:border-[#FF1493] hover:text-[#FF69B4] transition-all"

@@ -1,25 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { Github, Linkedin } from './Icons';
 import { personalInfo } from '../data/portfolioData';
 
 const navLinks = [
-  { name: 'About', href: '/#about' },
-  { name: 'Stack', href: '/#stack' },
-  { name: 'Projects', href: '/projects' },
-  { name: 'Journey', href: '/#journey' },
-  { name: 'FAQ', href: '/#faq' },
-  { name: 'Contact', href: '/#contact' },
+  { name: 'About', targetId: 'about' },
+  { name: 'Stack', targetId: 'stack' },
+  { name: 'Projects', path: '/projects' },
+  { name: 'Journey', targetId: 'journey' },
+  { name: 'FAQ', targetId: 'faq' },
+  { name: 'Contact', targetId: 'contact' },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isProjects = location.pathname === '/projects';
+
+  const handleNavClick = (e, item) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+
+    if (item.path) {
+      navigate(item.path);
+      return;
+    }
+
+    if (location.pathname !== '/') {
+      navigate('/', { state: { scrollTo: item.targetId } });
+    } else {
+      const element = document.getElementById(item.targetId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+      if (window.location.hash) {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,10 +85,10 @@ export default function Navbar() {
                 : false;
 
               return (
-                <Link
+                <button
                   key={link.name}
-                  to={link.href}
-                  className="relative group text-xs font-mono tracking-widest uppercase transition-colors duration-200 py-1"
+                  onClick={(e) => handleNavClick(e, link)}
+                  className="relative group text-xs font-mono tracking-widest uppercase transition-colors duration-200 py-1 cursor-pointer bg-transparent border-none"
                 >
                   <span className={active ? 'text-[#FF1493] font-semibold' : 'text-[#FFFFFF] group-hover:text-[#FF69B4]'}>
                     {link.name}
@@ -81,7 +104,7 @@ export default function Navbar() {
                   ) : (
                     <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#FF1493] transition-all duration-300 group-hover:w-full shadow-[0_0_8px_#FF1493]" />
                   )}
-                </Link>
+                </button>
               );
             })}
           </nav>
@@ -106,12 +129,12 @@ export default function Navbar() {
             >
               <Linkedin className="w-4 h-4" />
             </a>
-            <Link
-              to="/#contact"
-              className="text-xs font-mono font-semibold text-white px-5 py-2 rounded-full bg-[#FF1493] hover:bg-[#FF4FBF] shadow-[0_0_20px_rgba(255,20,147,0.45)] hover:shadow-[0_0_25px_rgba(255,20,147,0.7)] transition-all duration-300"
+            <button
+              onClick={(e) => handleNavClick(e, { targetId: 'contact' })}
+              className="text-xs font-mono font-semibold text-white px-5 py-2 rounded-full bg-[#FF1493] hover:bg-[#FF4FBF] shadow-[0_0_20px_rgba(255,20,147,0.45)] hover:shadow-[0_0_25px_rgba(255,20,147,0.7)] transition-all duration-300 cursor-pointer"
             >
               Get in Touch
-            </Link>
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -137,15 +160,14 @@ export default function Navbar() {
           >
             <div className="flex flex-col gap-6">
               {navLinks.map((link) => (
-                <Link
+                <button
                   key={link.name}
-                  to={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-2xl font-display font-medium text-white hover:text-[#FF1493] flex items-center justify-between transition-colors"
+                  onClick={(e) => handleNavClick(e, link)}
+                  className="text-2xl font-display font-medium text-white hover:text-[#FF1493] flex items-center justify-between transition-colors text-left cursor-pointer bg-transparent border-none"
                 >
                   <span>{link.name}</span>
                   <ArrowUpRight className="w-4 h-4 text-[#FF1493]" />
-                </Link>
+                </button>
               ))}
             </div>
 

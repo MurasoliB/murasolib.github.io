@@ -13,13 +13,18 @@ export default function HomePage() {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.hash) {
-      const element = document.getElementById(location.hash.substring(1));
+    const targetId = location.state?.scrollTo || (location.hash ? location.hash.substring(1) : null);
+    if (targetId) {
+      const element = document.getElementById(targetId);
       if (element) {
         setTimeout(() => {
           element.scrollIntoView({ behavior: 'smooth' });
         }, 100);
       }
+    }
+    // Remove any # symbol from the URL bar immediately
+    if (window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname);
     }
   }, [location]);
 
@@ -106,12 +111,16 @@ export default function HomePage() {
               <span>Download Resume</span>
             </a>
 
-            <Link
-              to="/#contact"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#111111] border border-[rgba(255,20,147,0.3)] text-white hover:border-[#FF1493] hover:shadow-[0_0_15px_rgba(255,20,147,0.3)] transition-all"
+            <button
+              type="button"
+              onClick={() => {
+                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                if (window.location.hash) window.history.replaceState(null, '', window.location.pathname);
+              }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#111111] border border-[rgba(255,20,147,0.3)] text-white hover:border-[#FF1493] hover:shadow-[0_0_15px_rgba(255,20,147,0.3)] transition-all cursor-pointer"
             >
               Get in Touch
-            </Link>
+            </button>
           </div>
         </motion.div>
 
@@ -216,16 +225,24 @@ export default function HomePage() {
                 More Projects<span className="text-[#FF1493]">.</span>
               </h2>
               <p className="text-xs sm:text-sm font-mono text-[#B3B3B3] mt-2 max-w-2xl">
-                Additional production systems. Key featured projects above: <a href="#projects-preview" className="text-[#FF69B4] hover:underline">ULTRON AI Assistant</a>, <a href="#projects-preview" className="text-[#FF69B4] hover:underline">Flood Simulation &amp; GIS</a>, <a href="#projects-preview" className="text-[#FF69B4] hover:underline">OralVision AI</a>, and <a href="#projects-preview" className="text-[#FF69B4] hover:underline">NL Student Search</a>.
+                Additional production systems. Key featured projects above:{' '}
+                <button type="button" onClick={() => document.getElementById('projects-preview')?.scrollIntoView({ behavior: 'smooth' })} className="text-[#FF69B4] hover:underline cursor-pointer bg-transparent border-none p-0 inline">ULTRON AI Assistant</button>,{' '}
+                <button type="button" onClick={() => document.getElementById('projects-preview')?.scrollIntoView({ behavior: 'smooth' })} className="text-[#FF69B4] hover:underline cursor-pointer bg-transparent border-none p-0 inline">Flood Simulation &amp; GIS</button>,{' '}
+                <button type="button" onClick={() => document.getElementById('projects-preview')?.scrollIntoView({ behavior: 'smooth' })} className="text-[#FF69B4] hover:underline cursor-pointer bg-transparent border-none p-0 inline">OralVision AI</button>, and{' '}
+                <button type="button" onClick={() => document.getElementById('projects-preview')?.scrollIntoView({ behavior: 'smooth' })} className="text-[#FF69B4] hover:underline cursor-pointer bg-transparent border-none p-0 inline">NL Student Search</button>.
               </p>
             </div>
-            <a
-              href="#projects-preview"
-              className="inline-flex items-center gap-1.5 text-xs font-mono text-[#FF69B4] hover:text-white transition-colors shrink-0"
+            <button
+              type="button"
+              onClick={() => {
+                document.getElementById('projects-preview')?.scrollIntoView({ behavior: 'smooth' });
+                if (window.location.hash) window.history.replaceState(null, '', window.location.pathname);
+              }}
+              className="inline-flex items-center gap-1.5 text-xs font-mono text-[#FF69B4] hover:text-white transition-colors shrink-0 cursor-pointer bg-transparent border-none"
             >
               <span>↑ Jump to Featured Projects</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
+            </button>
           </div>
 
           {/* More Project Rows - Same Design System & Card Structure */}

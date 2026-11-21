@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight, Info } from 'lucide-react';
 import { Github } from '../components/Icons';
 import { featuredProjects, moreProjects, personalInfo } from '../data/portfolioData';
@@ -8,6 +8,7 @@ import ProjectModal from '../components/ProjectModal';
 
 export default function ProjectsPage() {
   const [selectedProject, setSelectedProject] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -283,9 +284,13 @@ export default function ProjectsPage() {
           <span className="text-[#B3B3B3]">
             Have questions about system implementations?
           </span>
-          <Link to="/#contact" className="text-[#FF1493] hover:text-[#FF69B4] transition-colors">
+          <button
+            type="button"
+            onClick={() => navigate('/', { state: { scrollTo: 'contact' } })}
+            className="text-[#FF1493] hover:text-[#FF69B4] transition-colors cursor-pointer bg-transparent border-none"
+          >
             Get in Touch →
-          </Link>
+          </button>
         </div>
 
       </div>
