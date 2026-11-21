@@ -77,7 +77,10 @@ export default function Projects() {
                     <div className="relative aspect-[16/10] overflow-hidden bg-surface-card">
                       <img
                         src={project.image}
-                        alt={project.title}
+                        alt={`${project.title} - ${project.tagline}`}
+                        width="1376"
+                        height="768"
+                        decoding="async"
                         className="w-full h-full object-cover object-center filter grayscale contrast-110 brightness-95 group-hover:scale-105 transition-transform duration-700 ease-out"
                         loading="lazy"
                       />

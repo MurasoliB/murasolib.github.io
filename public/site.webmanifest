@@ -1,0 +1,21 @@
+{
+  "name": "Murasoli Balaji | Full Stack Developer & AI Portfolio",
+  "short_name": "Murasoli Balaji",
+  "description": "Explore the developer portfolio of Murasoli Balaji — IT Undergraduate at Kongu Engineering College, Full Stack Developer, and AI Enthusiast.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

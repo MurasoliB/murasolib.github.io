@@ -20,7 +20,7 @@ export default function About() {
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[#FF1493]" />
               <span className="text-xs font-mono text-[#FF69B4] tracking-widest uppercase">
-                // Profile & Philosophy
+                // Profile &amp; Background
               </span>
             </motion.div>
 
@@ -31,7 +31,7 @@ export default function About() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-3xl sm:text-5xl md:text-6xl font-display font-bold tracking-tight text-white leading-tight"
             >
-              Curiosity <span className="text-[#FF69B4]">Drives</span> Innovation<span className="text-[#FF1493]">.</span>
+              About <span className="text-[#FF69B4]">Murasoli</span> Balaji<span className="text-[#FF1493]">.</span>
             </motion.h2>
           </div>
 
@@ -45,7 +45,10 @@ export default function About() {
               className="space-y-6 text-[#B3B3B3] text-lg sm:text-xl md:text-2xl leading-relaxed font-light"
             >
               <p className="text-white">
-                Information Technology undergraduate at <span className="text-[#FF69B4] font-medium">{personalInfo.educationInstitute}</span>. I focus on the intersection of <span className="text-white font-medium border-b border-[#FF1493]">artificial intelligence</span> and systems engineering — architecting full-stack applications, exploring autonomous agents, and building computational simulations.
+                Information Technology undergraduate at <span className="text-[#FF69B4] font-medium">{personalInfo.educationInstitute}</span>, Tamil Nadu, India. I specialize in <span className="text-white font-medium border-b border-[#FF1493]">full-stack development</span>, artificial intelligence, and systems engineering — architecting resilient web applications, exploring autonomous agents, and building computational simulations.
+              </p>
+              <p className="text-[#B3B3B3] text-base sm:text-lg">
+                With a foundational Diploma in Computer Engineering and ongoing B.Tech studies, my focus bridges core computer science principles with hands-on software development across Java, Python, React, and modern database architectures.
               </p>
               <p className="text-[#B3B3B3] text-base sm:text-lg">
                 {personalInfo.philosophy}

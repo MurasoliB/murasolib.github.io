@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirecting · Murasoli Balaji Portfolio</title>
+    <meta name="robots" content="noindex, follow" />
+    <script>
+      // Single Page Application routing redirect for GitHub Pages
+      (function() {
+        var path = window.location.pathname;
+        var query = window.location.search;
+        var hash = window.location.hash;
+        
+        // If visiting /projects or other deep paths, redirect to SPA hash route
+        if (path && path !== '/') {
+          var cleanPath = path.replace(/^\/+/, '');
+          window.location.replace('/#/' + cleanPath + (query || '') + (hash || ''));
+        } else {
+          window.location.replace('/');
+        }
+      })();
+    </script>
+    <meta http-equiv="refresh" content="0; url=/" />
+  </head>
+  <body style="background:#050505;color:#ffffff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
+    <p>Redirecting to <a href="/" style="color:#FF1493;">Murasoli Balaji Portfolio</a>...</p>
+  </body>
+</html>

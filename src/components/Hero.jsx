@@ -166,6 +166,9 @@ export default function Hero() {
                   <img
                     src={personalInfo.heroPortrait}
                     alt="Murasoli Balaji - Developer Portrait"
+                    width="1672"
+                    height="941"
+                    decoding="async"
                     className="w-full h-full object-cover object-center filter grayscale contrast-110 brightness-95 group-hover:scale-[1.03] transition-transform duration-700 ease-out"
                     loading="eager"
                   />

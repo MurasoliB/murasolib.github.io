@@ -330,10 +330,12 @@ export default function Contact() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
+                    <label htmlFor="contact-name" className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
                       Name
                     </label>
                     <input
+                      id="contact-name"
+                      name="name"
                       type="text"
                       required
                       value={formData.name}
@@ -344,10 +346,12 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
+                    <label htmlFor="contact-email" className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
                       Email
                     </label>
                     <input
+                      id="contact-email"
+                      name="email"
                       type="email"
                       required
                       value={formData.email}
@@ -360,10 +364,12 @@ export default function Contact() {
 
                 {/* Row 2: Company & Organization */}
                 <div>
-                  <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
+                  <label htmlFor="contact-company" className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
                     Company / Organization <span className="text-white/30 text-[10px]">(Optional)</span>
                   </label>
                   <input
+                    id="contact-company"
+                    name="company"
                     type="text"
                     value={formData.company}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
@@ -407,10 +413,12 @@ export default function Contact() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
+                  <label htmlFor="contact-message" className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
                     Message
                   </label>
                   <textarea
+                    id="contact-message"
+                    name="message"
                     rows="4"
                     required
                     value={formData.message}

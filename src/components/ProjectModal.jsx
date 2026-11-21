@@ -139,7 +139,11 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                   <div className="rounded-2xl overflow-hidden border border-white/15 bg-[#050505] relative aspect-[16/10] shadow-2xl">
                     <img
                       src={project.image}
-                      alt={project.title}
+                      alt={`${project.title} - Architectural and Implementation Overview`}
+                      width="1376"
+                      height="768"
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover filter contrast-105 brightness-95"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/70 via-transparent to-transparent opacity-40" />
@@ -172,7 +176,9 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                   <div className="overflow-x-auto rounded-xl bg-[#050505] p-4 sm:p-6 border border-white/5">
                     <img
                       src={project.flowchart}
-                      alt="Technical Architecture Flowchart"
+                      alt={`${project.title} - Technical Architecture and Data Flowchart`}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full max-w-5xl h-auto filter invert opacity-95 mx-auto rounded-lg"
                     />
                   </div>

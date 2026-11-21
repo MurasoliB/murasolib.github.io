@@ -5,6 +5,7 @@ import { ArrowRight, ArrowUpRight, ArrowDown } from 'lucide-react';
 import About from '../components/About';
 import TechStack from '../components/TechStack';
 import ExperienceEducation from '../components/ExperienceEducation';
+import FaqSection from '../components/FaqSection';
 import Contact from '../components/Contact';
 import { featuredProjects, personalInfo } from '../data/portfolioData';
 
@@ -79,10 +80,10 @@ export default function HomePage() {
         >
           <div className="max-w-xl">
             <p className="text-base sm:text-xl text-white font-light leading-relaxed">
-              IT Undergrad <span className="text-[#FF69B4]">·</span> AI & Full-Stack Builder.
+              Full Stack Developer <span className="text-[#FF69B4]">·</span> AI &amp; Software Development
             </p>
             <p className="text-xs sm:text-sm font-mono text-[#B3B3B3] mt-1">
-              Building intelligent systems at <span className="text-[#FF69B4]">{personalInfo.educationInstitute}</span> · {personalInfo.location}
+              IT Undergraduate at <span className="text-[#FF69B4]">{personalInfo.educationInstitute}</span> · {personalInfo.location}
             </p>
           </div>
 
@@ -195,7 +196,10 @@ export default function HomePage() {
       {/* 4. Milestones */}
       <ExperienceEducation />
 
-      {/* 5. Contact */}
+      {/* 5. Frequently Asked Questions & AI Knowledge Graph */}
+      <FaqSection />
+
+      {/* 6. Contact */}
       <Contact />
     </div>
   );

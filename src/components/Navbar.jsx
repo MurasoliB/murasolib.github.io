@@ -10,6 +10,7 @@ const navLinks = [
   { name: 'Stack', href: '/#stack' },
   { name: 'Projects', href: '/projects' },
   { name: 'Journey', href: '/#journey' },
+  { name: 'FAQ', href: '/#faq' },
   { name: 'Contact', href: '/#contact' },
 ];
 

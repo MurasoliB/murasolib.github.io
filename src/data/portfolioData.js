@@ -1,7 +1,7 @@
 export const personalInfo = {
   name: "Murasoli Balaji",
   monogram: "MB",
-  headline: "IT Undergrad · AI & Full-Stack Builder",
+  headline: "Full Stack Developer · AI Enthusiast · Software Developer",
   subheadline: "Building intelligent systems and robust digital experiences.",
   location: "Tamil Nadu, India",
   educationInstitute: "Kongu Engineering College",
@@ -16,7 +16,7 @@ export const personalInfo = {
   email: "balajimurasoli@gmail.com",
   outlookEmail: "balajimurasoli@outlook.com",
   github: "https://github.com/murasolib",
-  linkedin: "https://linkedin.com/in/murasolibalaji",
+  linkedin: "https://www.linkedin.com/in/murasolibalaji",
 };
 
 export const skillsList = [
