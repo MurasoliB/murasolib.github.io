@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import CustomCursor from './components/CustomCursor';
 import BackgroundMesh from './components/BackgroundMesh';
+import PortfolioAIChatbot from './components/PortfolioAIChatbot';
 import HomePage from './pages/HomePage';
 import ProjectsPage from './pages/ProjectsPage';
 
@@ -28,6 +29,9 @@ export default function App() {
             <Route path="*" element={<HomePage />} />
           </Routes>
         </main>
+
+        {/* Floating Google Gemini AI Chatbot */}
+        <PortfolioAIChatbot />
 
         {/* Polished Editorial Footer */}
         <Footer />
