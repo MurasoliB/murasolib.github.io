@@ -92,7 +92,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 sm:gap-5 font-mono text-xs md:pr-24 lg:pr-28">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-5 font-mono text-xs md:pr-10 lg:pr-12">
             <Link
               to="/projects"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FF1493] text-white font-semibold hover:bg-[#FF4FBF] shadow-[0_0_25px_rgba(255,20,147,0.45)] hover:shadow-[0_0_35px_rgba(255,20,147,0.7)] transition-all duration-300 group"

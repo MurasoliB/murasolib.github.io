@@ -280,7 +280,7 @@ export default function ProjectsPage() {
         </div>
 
         {/* Footer Contact Link */}
-        <div className="pt-14 border-t border-[rgba(255,20,147,0.20)] flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono text-xs md:pr-24 lg:pr-28">
+        <div className="pt-14 border-t border-[rgba(255,20,147,0.20)] flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono text-xs md:pr-10 lg:pr-12">
           <span className="text-[#B3B3B3]">
             Have questions about system implementations?
           </span>
