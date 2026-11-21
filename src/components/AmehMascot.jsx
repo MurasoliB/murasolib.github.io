@@ -83,8 +83,12 @@ export default function AmehMascot({
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Compute eye parameters based on emotion
+  // Compute eye parameters based on emotion & hover interaction
   const eyeState = useMemo(() => {
+    // When pointer hovers over mascot, beam with bright happy smiling eyes
+    if (isHovered) {
+      return { type: 'arc', glow: 1, color: '#FF4FBF', scale: 1.2 };
+    }
     if (emotion === 'SLEEP') {
       return { type: 'closed', glow: 0.25, color: '#FF1493', scale: 0.9 };
     }
@@ -104,7 +108,7 @@ export default function AmehMascot({
       return { type: 'talking', glow: 0.85 + (talkTick % 2) * 0.2, color: '#FF1493', scale: 1 };
     }
     return { type: 'normal', glow: 0.75, color: '#FF1493', scale: 1 };
-  }, [emotion, isBlinking, talkTick]);
+  }, [emotion, isBlinking, talkTick, isHovered]);
 
   // Dynamic Eye Coordinates with cursor tracking
   const eyeOffsetX = (emotion === 'SLEEP' || emotion === 'THINKING') ? 0 : (mousePos.eyeX || 0);
@@ -145,7 +149,13 @@ export default function AmehMascot({
       <motion.div
         animate={
           isFloating
-            ? locomotion === 'FLY'
+            ? isHovered
+              ? {
+                  y: [-12, -2, -12],
+                  rotate: [mousePos.tiltZ || 0, (mousePos.tiltZ || 0) + 3, mousePos.tiltZ || 0],
+                  scale: [1.02, 1.06, 1.02]
+                }
+            : locomotion === 'FLY'
               ? {
                   y: isTurbo ? [-15, 3, -15] : [-10, 2, -10],
                   rotate: facingLeft
@@ -166,7 +176,9 @@ export default function AmehMascot({
         }
         transition={{
           duration:
-            locomotion === 'FLY'
+            isHovered
+              ? 0.8
+              : locomotion === 'FLY'
               ? isTurbo ? 0.65 : 1.15
               : locomotion === 'WALK'
               ? 0.55
@@ -642,25 +654,49 @@ export default function AmehMascot({
               <ellipse cx="30" cy="87" rx="4" ry="2" transform="rotate(35 30 87)" fill="#FFFFFF" fillOpacity="0.6" />
             </motion.g>
 
-            {/* Right Arm Nub with Walk Swing Animation */}
-            <motion.g
-              animate={
-                locomotion === 'WALK'
-                  ? { rotate: [-30, -22, -48, -30] }
-                  : locomotion === 'FLY'
-                  ? { rotate: -42 }
-                  : {}
-              }
-              transition={{
-                duration: 0.52,
-                repeat: locomotion === 'WALK' ? Infinity : 0,
-                ease: 'easeInOut'
-              }}
-              style={{ transformOrigin: '88px 89px' }}
-            >
-              <ellipse cx="88" cy="89" rx="8" ry="5.5" transform="rotate(-35 88 89)" fill="url(#ceramic-body)" stroke="#B6ADCA" strokeWidth="0.8" />
-              <ellipse cx="86" cy="87" rx="4" ry="2" transform="rotate(-35 86 87)" fill="#FFFFFF" fillOpacity="0.6" />
-            </motion.g>
+            {/* Right Arm: Enthusiastic Friendly Wave when Hovered / Sleek Arm when Flying */}
+            {isHovered ? (
+              <motion.g
+                id="waving-arm-group"
+                animate={{
+                  rotate: [-16, 22, -16, 22, -16]
+                }}
+                transition={{
+                  duration: 0.55,
+                  repeat: Infinity,
+                  ease: 'easeInOut'
+                }}
+                style={{ transformOrigin: '82px 78px' }}
+              >
+                {/* Raised Bicep / Shoulder Joint */}
+                <ellipse cx="85" cy="76" rx="7.5" ry="5.2" transform="rotate(-38 85 76)" fill="url(#ceramic-body)" stroke="#B6ADCA" strokeWidth="0.8" />
+                {/* Waving Forearm & Hand Pod */}
+                <ellipse cx="94" cy="65" rx="7" ry="5.6" transform="rotate(22 94 65)" fill="url(#ceramic-body)" stroke="#B6ADCA" strokeWidth="0.8" />
+                <ellipse cx="93" cy="63.5" rx="3.8" ry="2.2" transform="rotate(22 93 63.5)" fill="#FFFFFF" fillOpacity="0.75" />
+                {/* Cute Glowing Pink Hand Sensor / Energy Palm */}
+                <circle cx="95.5" cy="64" r="1.8" fill="#FF1493" filter="url(#neon-pink-eye-filter)" />
+                <circle cx="95.5" cy="64" r="0.9" fill="#FFFFFF" />
+              </motion.g>
+            ) : (
+              <motion.g
+                animate={
+                  locomotion === 'WALK'
+                    ? { rotate: [-30, -22, -48, -30] }
+                    : locomotion === 'FLY'
+                    ? { rotate: -42 }
+                    : {}
+                }
+                transition={{
+                  duration: 0.52,
+                  repeat: locomotion === 'WALK' ? Infinity : 0,
+                  ease: 'easeInOut'
+                }}
+                style={{ transformOrigin: '88px 89px' }}
+              >
+                <ellipse cx="88" cy="89" rx="8" ry="5.5" transform="rotate(-35 88 89)" fill="url(#ceramic-body)" stroke="#B6ADCA" strokeWidth="0.8" />
+                <ellipse cx="86" cy="87" rx="4" ry="2" transform="rotate(-35 86 87)" fill="#FFFFFF" fillOpacity="0.6" />
+              </motion.g>
+            )}
 
             {/* Neck Joint Ring */}
             <ellipse cx="60" cy="73.5" rx="15" ry="3.5" fill="url(#metal-dark)" stroke="#171220" strokeWidth="0.8" />
@@ -852,6 +888,37 @@ export default function AmehMascot({
                     <circle cx="73" cy="48" r="2.2" fill="#FFFFFF" />
                   </g>
                 </>
+              )}
+
+              {/* CUTE GLOWING NEON-PINK SMILE (Appears when mouse points at mascot or happy) */}
+              {(isHovered || emotion === 'HAPPY' || emotion === 'EXCITED') && (
+                <motion.g
+                  id="mascot-smile"
+                  initial={{ opacity: 0, scale: 0.6 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {/* Glowing Outer Pink Smile Arc */}
+                  <path
+                    d="M 53 58 Q 60 64.5 67 58"
+                    stroke="#FF1493"
+                    strokeWidth="3.2"
+                    strokeLinecap="round"
+                    fill="none"
+                    filter="url(#neon-pink-eye-filter)"
+                  />
+                  {/* Inner Pure White Core */}
+                  <path
+                    d="M 53 58 Q 60 64.5 67 58"
+                    stroke="#FFFFFF"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+                  {/* Cute subtle pink blush dots on cheeks */}
+                  <circle cx="41" cy="55" r="3" fill="#FF1493" opacity="0.35" filter="url(#neon-pink-eye-filter)" />
+                  <circle cx="79" cy="55" r="3" fill="#FF1493" opacity="0.35" filter="url(#neon-pink-eye-filter)" />
+                </motion.g>
               )}
             </g>
           </g>

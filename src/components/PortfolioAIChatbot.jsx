@@ -584,8 +584,14 @@ export default function PortfolioAIChatbot() {
               pointerEvents: 'auto'
             }}
             className="font-sans antialiased"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            onMouseEnter={() => {
+              setIsHovered(true);
+              setMascotEmotion('HAPPY');
+            }}
+            onMouseLeave={() => {
+              setIsHovered(false);
+              setMascotEmotion('IDLE');
+            }}
           >
             <div className="relative cursor-pointer group">
               {/* The Living Roaming Mascot - Always Flying with Dynamic Jetpack Thrusters */}
