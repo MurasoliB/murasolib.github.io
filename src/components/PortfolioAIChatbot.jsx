@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Minus, X, RotateCcw } from 'lucide-react';
 import AmehMascot from './AmehMascot';
 import { sendChatMessage } from '../services/geminiService';
@@ -19,39 +19,7 @@ const QUICK_PROMPTS = [
   { label: 'Contact Information', query: 'How can I contact Murasoli Balaji or view his profiles?' }
 ];
 
-// Safe zones: mascot avoids top nav (80px), edges (20px margin)
 const MASCOT_SIZE = 100;
-const MARGIN = 20;
-const NAV_HEIGHT = 80;
-
-/**
- * Pick a random safe position within the viewport.
- * Keeps the mascot away from the navbar and edges.
- */
-function getRandomSafePosition() {
-  const vw = typeof window !== 'undefined' ? window.innerWidth : 1200;
-  const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
-
-  const minX = MARGIN;
-  const maxX = vw - MASCOT_SIZE - MARGIN;
-  const minY = NAV_HEIGHT + MARGIN;
-  const maxY = vh - MASCOT_SIZE - MARGIN;
-
-  return {
-    x: minX + Math.random() * Math.max(0, maxX - minX),
-    y: minY + Math.random() * Math.max(0, maxY - minY)
-  };
-}
-
-/** Home position: bottom-right safe corner */
-function getHomePosition() {
-  const vw = typeof window !== 'undefined' ? window.innerWidth : 1200;
-  const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
-  return {
-    x: vw - MASCOT_SIZE - 24,
-    y: vh - MASCOT_SIZE - 24
-  };
-}
 
 /**
  * Lightweight helper to safely render simple markdown: bold, links, bullets, and linebreaks
@@ -127,113 +95,13 @@ export default function PortfolioAIChatbot() {
   // Living Mascot Emotion State
   const [mascotEmotion, setMascotEmotion] = useState('IDLE');
 
-  // Roaming position state
-  const [roamPos, setRoamPos] = useState(getHomePosition);
-  const [isHovered, setIsHovered] = useState(false);
-
-  // Locomotion & Direction state - Always in FLY mode with dynamic jetpack thrust
-  const [facingLeft, setFacingLeft] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false);
-  const scrollTimeoutRef = useRef(null);
-
-  // Spring-based smooth position interpolation
-  const springX = useSpring(useMotionValue(roamPos.x), { stiffness: 35, damping: 18, mass: 1.2 });
-  const springY = useSpring(useMotionValue(roamPos.y), { stiffness: 35, damping: 18, mass: 1.2 });
-
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
-  const mascotPosRef = useRef(roamPos); // Track current position for distance calc
 
   // Auto-scroll to latest message
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
-
-  // ================================================================
-  // SCROLL DETECTION -> TURBO JETPACK AFTERBURNER BURST
-  // When scrolling, jetpack fires hyper-charged turbo thrust flames!
-  // ================================================================
-  useEffect(() => {
-    if (isOpen) return;
-
-    const handleScroll = () => {
-      setIsScrolling(true);
-
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-
-      scrollTimeoutRef.current = setTimeout(() => {
-        setIsScrolling(false);
-      }, 700);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
-    };
-  }, [isOpen]);
-
-  // ================================================================
-  // AUTONOMOUS ROAMING ENGINE — ALWAYS FLYING
-  // Glides gracefully across the viewport with continuous jetpack thrust.
-  // Turns to face its flight heading.
-  // ================================================================
-  useEffect(() => {
-    if (isOpen) return; // Don't roam while chat is open
-
-    let roamTimer;
-
-    const scheduleNextRoam = () => {
-      const delay = 5000 + Math.random() * 4000; // 5–9 seconds
-      roamTimer = setTimeout(() => {
-        if (isHovered || mascotEmotion === 'SLEEP' || mascotEmotion === 'EXCITED') {
-          scheduleNextRoam(); // Skip this tick, try again later
-          return;
-        }
-
-        const newPos = getRandomSafePosition();
-        const movingLeft = newPos.x < mascotPosRef.current.x;
-        setFacingLeft(movingLeft);
-
-        setRoamPos(newPos);
-        mascotPosRef.current = newPos;
-
-        scheduleNextRoam();
-      }, delay);
-    };
-
-    scheduleNextRoam();
-
-    return () => {
-      clearTimeout(roamTimer);
-    };
-  }, [isOpen, isHovered, mascotEmotion]);
-
-  // Sync spring values when roamPos changes
-  useEffect(() => {
-    springX.set(roamPos.x);
-    springY.set(roamPos.y);
-  }, [roamPos.x, roamPos.y, springX, springY]);
-
-  // Recalculate home position and safe bounds on resize
-  useEffect(() => {
-    const handleResize = () => {
-      if (isOpen) return;
-      // Clamp current position to new viewport
-      setRoamPos((prev) => {
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-        return {
-          x: Math.min(Math.max(prev.x, MARGIN), vw - MASCOT_SIZE - MARGIN),
-          y: Math.min(Math.max(prev.y, NAV_HEIGHT + MARGIN), vh - MASCOT_SIZE - MARGIN)
-        };
-      });
-    };
-    window.addEventListener('resize', handleResize, { passive: true });
-    return () => window.removeEventListener('resize', handleResize);
-  }, [isOpen]);
 
   // Listen for global trigger to open AMEH AI from Navbar or other components
   useEffect(() => {
@@ -242,7 +110,7 @@ export default function PortfolioAIChatbot() {
       setTimeout(() => {
         setIsOpen(true);
         setMascotEmotion('HAPPY');
-      }, 250);
+      }, 200);
     };
     window.addEventListener('open-ameh-ai', handleOpen);
     return () => window.removeEventListener('open-ameh-ai', handleOpen);
@@ -255,7 +123,7 @@ export default function PortfolioAIChatbot() {
     }
   }, [isOpen, messages, isLoading]);
 
-  // Inactivity & Mouse Distance Tracking for Living Mascot
+  // Inactivity tracking for Mascot Sleep state
   useEffect(() => {
     let inactivityTimer;
 
@@ -268,32 +136,15 @@ export default function PortfolioAIChatbot() {
         if (!isOpen && !isLoading) {
           setMascotEmotion('SLEEP');
         }
-      }, 40000); // 40 seconds of inactivity -> SLEEP
+      }, 45000); // 45s inactivity -> SLEEP
     };
 
-    const handleMouseMove = (e) => {
-      resetInactivity();
-      if (isOpen || isLoading) return;
-
-      // Check distance from current roaming position
-      const curPos = mascotPosRef.current;
-      const mascotCenterX = curPos.x + MASCOT_SIZE / 2;
-      const mascotCenterY = curPos.y + MASCOT_SIZE / 2;
-      const dist = Math.hypot(e.clientX - mascotCenterX, e.clientY - mascotCenterY);
-
-      if (dist < 180 && mascotEmotion === 'IDLE') {
-        setMascotEmotion('CURIOUS');
-      } else if (dist >= 250 && mascotEmotion === 'CURIOUS') {
-        setMascotEmotion('IDLE');
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('mousemove', resetInactivity, { passive: true });
     window.addEventListener('keydown', resetInactivity, { passive: true });
     resetInactivity();
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mousemove', resetInactivity);
       window.removeEventListener('keydown', resetInactivity);
       clearTimeout(inactivityTimer);
     };
@@ -301,19 +152,15 @@ export default function PortfolioAIChatbot() {
 
   const handleMascotClick = useCallback(() => {
     setMascotEmotion('EXCITED');
-    // Fly home before opening chat
-    setRoamPos(getHomePosition());
     setTimeout(() => {
       setIsOpen(true);
       setMascotEmotion('HAPPY');
-    }, 350);
+    }, 250);
   }, []);
 
   const handleCloseChat = () => {
     setIsOpen(false);
     setMascotEmotion('IDLE');
-    // Resume roaming from home
-    setRoamPos(getHomePosition());
   };
 
   const handleSendMessage = async (textToSend) => {
@@ -406,7 +253,7 @@ export default function PortfolioAIChatbot() {
               initial={{ opacity: 0, y: 35, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 25, scale: 0.9 }}
-              transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col w-[calc(100vw-28px)] sm:w-[390px] h-[530px] max-h-[85vh] rounded-[24px] bg-[#0A090E]/95 backdrop-blur-2xl border border-[#FF1493]/70 shadow-[0_0_35px_rgba(255,20,147,0.35),0_15px_40px_rgba(0,0,0,0.8),inset_0_0_15px_rgba(255,20,147,0.06)] overflow-hidden"
             >
               {/* Header with Living Mascot Avatar */}
@@ -566,8 +413,8 @@ export default function PortfolioAIChatbot() {
       </div>
 
       {/* ============================================================== */}
-      {/* ROAMING LIVING MASCOT — Autonomous viewport wanderer            */}
-      {/* Uses spring physics for smooth organic movement transitions     */}
+      {/* FIXED 3D LIVING MASCOT — Anchored in bottom-right corner       */}
+      {/* 60fps smooth float, no viewport wandering, zero lag             */}
       {/* ============================================================== */}
       <AnimatePresence>
         {!isOpen && (
@@ -575,38 +422,20 @@ export default function PortfolioAIChatbot() {
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: 'easeOut' }}
-            style={{
-              position: 'fixed',
-              left: springX,
-              top: springY,
-              zIndex: 45,
-              pointerEvents: 'auto'
-            }}
-            className="font-sans antialiased"
-            onMouseEnter={() => {
-              setIsHovered(true);
-              setMascotEmotion('HAPPY');
-            }}
-            onMouseLeave={() => {
-              setIsHovered(false);
-              setMascotEmotion('IDLE');
-            }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-45 font-sans antialiased pointer-events-auto select-none"
           >
             <div className="relative cursor-pointer group">
-              {/* The Living Roaming Mascot - Always Flying with Dynamic Jetpack Thrusters */}
+              {/* The Living 3D Mascot */}
               <AmehMascot
                 size={MASCOT_SIZE}
                 isFloating={true}
                 emotion={mascotEmotion}
-                locomotion="FLY"
-                isTurbo={isScrolling}
-                facingLeft={facingLeft}
                 onClick={handleMascotClick}
-                className="drop-shadow-[0_0_22px_rgba(255,20,147,0.35)] transition-transform group-hover:scale-105"
+                className="drop-shadow-[0_8px_25px_rgba(255,20,147,0.35)] transition-transform group-hover:scale-105"
               />
 
-              {/* Floating Status Pill */}
+              {/* Status Pill Badge */}
               <div
                 onClick={handleMascotClick}
                 className="absolute -bottom-1 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#0A090E]/95 border border-[#FF1493]/70 shadow-[0_0_10px_rgba(255,20,147,0.5)] cursor-pointer select-none whitespace-nowrap"
