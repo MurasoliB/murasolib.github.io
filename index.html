@@ -331,57 +331,114 @@
     </script>
   </head>
   <body class="bg-background text-content-primary antialiased selection:bg-accent-blue/30 selection:text-white overflow-x-hidden min-h-screen">
-    <!-- Accessible Pre-rendered Fallback Container for Search Engine & AI Retrieval Crawlers -->
-    <noscript>
-      <header>
-        <h1>Murasoli Balaji | Full Stack Developer | AI &amp; Software Development</h1>
-        <p>IT Undergraduate at Kongu Engineering College, Tamil Nadu, India</p>
+    <!-- Accessible Pre-rendered DOM Content for Headless Browsers, Search Engines & AI Crawlers (Replaced seamlessly when React hydrates) -->
+    <div id="root">
+      <header style="max-width:1200px;margin:0 auto;padding:2rem;">
+        <h1 style="font-size:2.5rem;font-weight:bold;">Murasoli Balaji | Full Stack Developer | AI &amp; Software Development</h1>
+        <p style="font-size:1.25rem;color:#FF69B4;">IT Undergraduate at Kongu Engineering College, Tamil Nadu, India</p>
+        <p>Building intelligent systems, autonomous voice assistants, hydrodynamic simulations, and full-stack web applications.</p>
       </header>
-      <main>
-        <section>
+
+      <main style="max-width:1200px;margin:0 auto;padding:2rem;">
+        <section id="about-info">
           <h2>About Murasoli Balaji</h2>
           <p>
-            Murasoli Balaji is an Information Technology undergraduate at Kongu Engineering College, Tamil Nadu, India. He specializes in full-stack web development, artificial intelligence, software engineering, and database systems.
+            Murasoli Balaji is an Information Technology undergraduate at Kongu Engineering College (Perundurai, Erode, Tamil Nadu, India). He specializes in full-stack web development, artificial intelligence, software engineering, and database systems.
           </p>
           <p>
-            Technical skills include Java, Python, JavaScript, HTML, CSS, React, Node.js, SQL, MySQL, MongoDB, Git, GitHub, Machine Learning, and GIS Modeling.
+            With a foundational Diploma in Computer Engineering and ongoing B.Tech studies, he bridges core computer science principles with hands-on software development across Java, Python, React, Node.js, and modern database architectures.
           </p>
         </section>
-        <section>
-          <h2>Featured Software &amp; AI Projects</h2>
+
+        <section id="technical-skills">
+          <h2>Technical Arsenal &amp; Disciplines</h2>
           <ul>
-            <li>
-              <strong>ULTRON AI Assistant:</strong> Personal voice-driven autonomous assistant and desktop automation engineered with Python. Repository: https://github.com/MurasoliB/Ultron-The-AI-Assistant
-            </li>
-            <li>
-              <strong>Flood Simulation &amp; GIS:</strong> Geospatial hydrodynamic modeling platform using digital elevation models for flood inundation mapping. Repository: https://github.com/MurasoliB/Flood-Simulation-GIS
-            </li>
-            <li>
-              <strong>Oral Cancer Prediction using AI:</strong> Diagnostic deep learning computer vision system using convolutional neural networks. Repository: https://github.com/MurasoliB/Oral-Cancer-Prediction-Using-Artificial-Intelligence
-            </li>
-            <li>
-              <strong>Student Search via Natural Language:</strong> Intelligent NL-to-SQL student query platform powered by Groq API. Repository: https://github.com/MurasoliB/Student-Details-Search-Using-Natural-Language-Query
-            </li>
-            <li>
-              <strong>Global Cold Chain Vaccine Audit:</strong> Enterprise Java 25 and MongoDB Atlas telemetry and GxP compliance engine. Repository: https://github.com/MurasoliB/Global-Cold-Chain-Logistics-Vaccine-Temperature-Audit-System
-            </li>
-            <li>
-              <strong>Student Academic Evaluation:</strong> Enterprise Java JDBC and MySQL relational evaluation system. Repository: https://github.com/MurasoliB/Student_Evaluation_Using_Java_JDBC
-            </li>
-            <li>
-              <strong>Centralised Clubs &amp; Cells:</strong> Campus workflow and club management platform built with React and Node.js. Repository: https://github.com/MurasoliB/Centralised-Clubs-Cells
-            </li>
+            <li><strong>Programming Languages:</strong> Java, Python, JavaScript, C / C++, SQL</li>
+            <li><strong>Web &amp; Mobile:</strong> React, Node.js, Tailwind CSS, Flutter, REST APIs</li>
+            <li><strong>Databases:</strong> MySQL, MongoDB Atlas, Java JDBC, Schema Design</li>
+            <li><strong>AI &amp; Computing:</strong> Artificial Intelligence, Machine Learning, Deep Learning, NLP &amp; Voice, Computer Vision, GIS Modeling, Data Structures and Algorithms</li>
+            <li><strong>Tooling:</strong> Git, GitHub, Docker, Vite, Postman, Linux, VS Code</li>
           </ul>
         </section>
-        <section>
+
+        <section id="featured-projects">
+          <h2>Featured Software &amp; AI Projects</h2>
+          <div>
+            <h3>1. ULTRON AI Assistant</h3>
+            <p>Voice-driven autonomous agent &amp; desktop workflow automation engineered in Python with speech recognition, audio synthesis, system controls, and conversational dialogue memory.</p>
+            <p>GitHub Repository: <a href="https://github.com/MurasoliB/Ultron-The-AI-Assistant">https://github.com/MurasoliB/Ultron-The-AI-Assistant</a></p>
+          </div>
+
+          <div>
+            <h3>2. Flood Simulation &amp; GIS</h3>
+            <p>Geospatial simulation platform integrating Digital Elevation Models (DEM) and 2D hydrodynamic wave propagation equations to predict water inundation wavefronts and evaluate flood hazards in Python.</p>
+            <p>GitHub Repository: <a href="https://github.com/MurasoliB/Flood-Simulation-GIS">https://github.com/MurasoliB/Flood-Simulation-GIS</a></p>
+          </div>
+
+          <div>
+            <h3>3. Student Academic Evaluation</h3>
+            <p>Enterprise Java JDBC and normalized 3NF MySQL relational assessment engine with automated GPA computation, ACID transactional integrity, and role-based privilege segregation.</p>
+            <p>GitHub Repository: <a href="https://github.com/MurasoliB/Student_Evaluation_Using_Java_JDBC">https://github.com/MurasoliB/Student_Evaluation_Using_Java_JDBC</a></p>
+          </div>
+
+          <div>
+            <h3>4. Centralised Clubs &amp; Cells</h3>
+            <p>Campus activity and club workflow management platform engineered with React, Node.js, and relational database workflows for club activities, multi-tier approvals, and slot scheduling.</p>
+            <p>GitHub Repository: <a href="https://github.com/MurasoliB/Centralised-Clubs-Cells">https://github.com/MurasoliB/Centralised-Clubs-Cells</a></p>
+          </div>
+
+          <div>
+            <h3>5. Student Search via Natural Language</h3>
+            <p>Intelligent academic query platform utilizing the Groq API for ultra-fast LPU inference, converting conversational natural language requests into structured database lookups and real-time student record filtering.</p>
+            <p>GitHub Repository: <a href="https://github.com/MurasoliB/Student-Details-Search-Using-Natural-Language-Query">https://github.com/MurasoliB/Student-Details-Search-Using-Natural-Language-Query</a></p>
+          </div>
+
+          <div>
+            <h3>6. Oral Cancer Prediction using AI</h3>
+            <p>Diagnostic deep learning computer vision system trained on medical oral lesion imagery, utilizing convolutional neural networks for early-stage malignancy classification, lesion segmentation, and risk probability assessment.</p>
+            <p>GitHub Repository: <a href="https://github.com/MurasoliB/Oral-Cancer-Prediction-Using-Artificial-Intelligence">https://github.com/MurasoliB/Oral-Cancer-Prediction-Using-Artificial-Intelligence</a></p>
+          </div>
+
+          <div>
+            <h3>7. Global Cold Chain Vaccine Audit</h3>
+            <p>Mission-critical enterprise audit platform engineered in Java 25 and MongoDB Atlas for pharmaceutical cold-chain verification featuring real-time IoT temperature telemetry stream ingestion and GxP compliance grading.</p>
+            <p>GitHub Repository: <a href="https://github.com/MurasoliB/Global-Cold-Chain-Logistics-Vaccine-Temperature-Audit-System">https://github.com/MurasoliB/Global-Cold-Chain-Logistics-Vaccine-Temperature-Audit-System</a></p>
+          </div>
+        </section>
+
+        <section id="faq-section">
+          <h2>Frequently Asked Questions &amp; Knowledge Base</h2>
+          <dl>
+            <dt><strong>Who is Murasoli Balaji?</strong></dt>
+            <dd>Murasoli Balaji is an Information Technology undergraduate at Kongu Engineering College in Tamil Nadu, India. He is an aspiring full-stack developer, software engineer, and AI enthusiast.</dd>
+
+            <dt><strong>What is his academic background at Kongu Engineering College?</strong></dt>
+            <dd>He is pursuing a B.Tech in Information Technology at Kongu Engineering College, Perundurai, Tamil Nadu, India. He also holds a foundational Diploma in Computer Engineering.</dd>
+
+            <dt><strong>What programming languages and technologies does Murasoli Balaji use?</strong></dt>
+            <dd>Java, Python, JavaScript, React, Node.js, SQL, MySQL, MongoDB, Tailwind CSS, REST APIs, Git, GitHub, Artificial Intelligence, Machine Learning, and GIS spatial modeling.</dd>
+
+            <dt><strong>Where can I find his source code and professional profiles?</strong></dt>
+            <dd>
+              Portfolio: <a href="https://murasolib.github.io/">https://murasolib.github.io/</a><br />
+              GitHub: <a href="https://github.com/murasolib">https://github.com/murasolib</a><br />
+              LinkedIn: <a href="https://www.linkedin.com/in/murasolibalaji">https://www.linkedin.com/in/murasolibalaji</a>
+            </dd>
+
+            <dt><strong>Is Murasoli Balaji available for projects and collaborations?</strong></dt>
+            <dd>Yes, Murasoli is open to innovative full-stack development, applied AI engineering projects, technical collaborations, and student developer opportunities. Email: balajimurasoli@gmail.com.</dd>
+          </dl>
+        </section>
+
+        <section id="contact-details">
           <h2>Contact Murasoli Balaji</h2>
-          <p>Email: balajimurasoli@gmail.com | Location: Tamil Nadu, India</p>
-          <p>GitHub: https://github.com/murasolib | LinkedIn: https://www.linkedin.com/in/murasolibalaji</p>
+          <p>Email: <a href="mailto:balajimurasoli@gmail.com">balajimurasoli@gmail.com</a></p>
+          <p>Location: Tamil Nadu, India</p>
+          <p>GitHub: <a href="https://github.com/murasolib">https://github.com/murasolib</a></p>
+          <p>LinkedIn: <a href="https://www.linkedin.com/in/murasolibalaji">https://www.linkedin.com/in/murasolibalaji</a></p>
         </section>
       </main>
-    </noscript>
-
-    <div id="root"></div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
