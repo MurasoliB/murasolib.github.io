@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, ArrowDown, Download } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ArrowDown, Download, Mail } from 'lucide-react';
 import About from '../components/About';
 import TechStack from '../components/TechStack';
 import ExperienceEducation from '../components/ExperienceEducation';
@@ -117,9 +117,10 @@ export default function HomePage() {
                 document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
                 if (window.location.hash) window.history.replaceState(null, '', window.location.pathname);
               }}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#111111] border border-[rgba(255,20,147,0.3)] text-white hover:border-[#FF1493] hover:shadow-[0_0_15px_rgba(255,20,147,0.3)] transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-7 sm:px-8 py-3 rounded-full bg-[#111111] border border-[rgba(255,20,147,0.3)] text-white hover:border-[#FF1493] hover:text-[#FF69B4] hover:shadow-[0_0_15px_rgba(255,20,147,0.3)] transition-all duration-300 group cursor-pointer"
             >
-              Get in Touch
+              <Mail className="w-4 h-4 text-[#FF1493] group-hover:scale-110 transition-transform" />
+              <span>Get in Touch</span>
             </button>
           </div>
         </motion.div>
