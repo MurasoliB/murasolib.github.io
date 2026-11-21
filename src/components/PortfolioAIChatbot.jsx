@@ -19,7 +19,7 @@ const QUICK_PROMPTS = [
   { label: 'Contact Information', query: 'How can I contact Murasoli Balaji or view his profiles?' }
 ];
 
-const MASCOT_SIZE = 100;
+const MASCOT_SIZE = 88;
 
 /**
  * Lightweight helper to safely render simple markdown: bold, links, bullets, and linebreaks
@@ -246,7 +246,7 @@ export default function PortfolioAIChatbot() {
       {/* ============================================================== */}
       {/* CHAT PANEL (Fixed bottom-right)                                */}
       {/* ============================================================== */}
-      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 font-sans antialiased">
+      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[60] font-sans antialiased">
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -423,7 +423,7 @@ export default function PortfolioAIChatbot() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-45 font-sans antialiased pointer-events-auto select-none"
+            className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 font-sans antialiased pointer-events-auto select-none"
           >
             <div className="relative cursor-pointer group">
               {/* The Living 3D Mascot */}

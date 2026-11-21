@@ -28,7 +28,7 @@ export default function Footer() {
         </div>
 
         {/* Social Links & Back to Top */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-6 md:pr-24 lg:pr-28">
           <a
             href={personalInfo.github}
             target="_blank"

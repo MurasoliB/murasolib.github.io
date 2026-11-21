@@ -34,7 +34,7 @@ export default function HomePage() {
       {/* Full-Screen Hero Fold with Hot Pink Glow & Typography */}
       <section
         id="home"
-        className="relative min-h-screen flex flex-col justify-between pt-32 pb-14 max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 w-full overflow-hidden"
+        className="relative min-h-screen flex flex-col justify-between pt-32 pb-20 sm:pb-16 max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 w-full overflow-hidden"
       >
         {/* Subtle Animated Pink Radial Glow */}
         <div className="absolute top-1/3 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-[#FF1493]/15 via-[#FF4FBF]/5 to-transparent rounded-full blur-[140px] pointer-events-none" />
@@ -92,7 +92,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-5 font-mono text-xs">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-5 font-mono text-xs md:pr-24 lg:pr-28">
             <Link
               to="/projects"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FF1493] text-white font-semibold hover:bg-[#FF4FBF] shadow-[0_0_25px_rgba(255,20,147,0.45)] hover:shadow-[0_0_35px_rgba(255,20,147,0.7)] transition-all duration-300 group"
