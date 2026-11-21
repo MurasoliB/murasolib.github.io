@@ -61,9 +61,9 @@ export default function Footer() {
       </div>
 
       {/* Sub-bar Copyright & Institute */}
-      <div className="max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 mt-6 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-white/40">
+      <div className="max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 mt-6 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-white/40 md:pr-24 lg:pr-28">
         <span>© {new Date().getFullYear()} {personalInfo.name} · All rights reserved.</span>
-        <span>{personalInfo.educationInstitute}</span>
+        <span className="text-white/60 font-medium tracking-wide">{personalInfo.educationInstitute}</span>
       </div>
     </footer>
   );
