@@ -36,6 +36,7 @@ jobs:
       - name: Build Production Assets
         env:
           VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
+          VITE_GROQ_API_KEY: ${{ secrets.VITE_GROQ_API_KEY }}
         run: npm run build
 
       - name: Upload Pages Artifact
