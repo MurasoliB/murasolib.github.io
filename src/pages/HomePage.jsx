@@ -215,10 +215,17 @@ export default function HomePage() {
               <h2 className="text-2xl sm:text-4xl font-display font-bold text-white/90 tracking-tight">
                 More Projects<span className="text-[#FF1493]">.</span>
               </h2>
+              <p className="text-xs sm:text-sm font-mono text-[#B3B3B3] mt-2 max-w-2xl">
+                Additional production systems. Key featured projects above: <a href="#projects-preview" className="text-[#FF69B4] hover:underline">ULTRON AI Assistant</a>, <a href="#projects-preview" className="text-[#FF69B4] hover:underline">Flood Simulation &amp; GIS</a>, <a href="#projects-preview" className="text-[#FF69B4] hover:underline">OralVision AI</a>, and <a href="#projects-preview" className="text-[#FF69B4] hover:underline">NL Student Search</a>.
+              </p>
             </div>
-            <span className="text-xs font-mono text-[#B3B3B3]">
-              03 Additional Production Systems
-            </span>
+            <a
+              href="#projects-preview"
+              className="inline-flex items-center gap-1.5 text-xs font-mono text-[#FF69B4] hover:text-white transition-colors shrink-0"
+            >
+              <span>↑ Jump to Featured Projects</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
           </div>
 
           {/* More Project Rows - Same Design System & Card Structure */}
