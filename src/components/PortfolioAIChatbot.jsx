@@ -131,12 +131,10 @@ export default function PortfolioAIChatbot() {
   const [roamPos, setRoamPos] = useState(getHomePosition);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Locomotion & Direction state ('WALK' | 'FLY' | 'IDLE')
-  const [locomotion, setLocomotion] = useState('WALK');
+  // Locomotion & Direction state - Always in FLY mode with dynamic jetpack thrust
   const [facingLeft, setFacingLeft] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
   const scrollTimeoutRef = useRef(null);
-  const isMovingRef = useRef(false);
 
   // Spring-based smooth position interpolation
   const springX = useSpring(useMotionValue(roamPos.x), { stiffness: 35, damping: 18, mass: 1.2 });
@@ -152,16 +150,14 @@ export default function PortfolioAIChatbot() {
   };
 
   // ================================================================
-  // SCROLL DETECTION -> JETPACK FLIGHT MODE
-  // Whenever the user scrolls anywhere on the page, the mascot fires
-  // its jetpack thrusters and enters FLY mode with pink thrust flames!
+  // SCROLL DETECTION -> TURBO JETPACK AFTERBURNER BURST
+  // When scrolling, jetpack fires hyper-charged turbo thrust flames!
   // ================================================================
   useEffect(() => {
     if (isOpen) return;
 
     const handleScroll = () => {
       setIsScrolling(true);
-      setLocomotion('FLY');
 
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
@@ -169,8 +165,7 @@ export default function PortfolioAIChatbot() {
 
       scrollTimeoutRef.current = setTimeout(() => {
         setIsScrolling(false);
-        setLocomotion('WALK');
-      }, 750);
+      }, 700);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -181,20 +176,19 @@ export default function PortfolioAIChatbot() {
   }, [isOpen]);
 
   // ================================================================
-  // AUTONOMOUS ROAMING ENGINE
-  // Picks a new random safe position every 5–9 seconds.
-  // Walks around with animated legs and turns to face movement direction.
+  // AUTONOMOUS ROAMING ENGINE — ALWAYS FLYING
+  // Glides gracefully across the viewport with continuous jetpack thrust.
+  // Turns to face its flight heading.
   // ================================================================
   useEffect(() => {
     if (isOpen) return; // Don't roam while chat is open
 
     let roamTimer;
-    let walkTimer;
 
     const scheduleNextRoam = () => {
       const delay = 5000 + Math.random() * 4000; // 5–9 seconds
       roamTimer = setTimeout(() => {
-        if (isHovered || mascotEmotion === 'SLEEP' || mascotEmotion === 'EXCITED' || isScrolling) {
+        if (isHovered || mascotEmotion === 'SLEEP' || mascotEmotion === 'EXCITED') {
           scheduleNextRoam(); // Skip this tick, try again later
           return;
         }
@@ -203,18 +197,8 @@ export default function PortfolioAIChatbot() {
         const movingLeft = newPos.x < mascotPosRef.current.x;
         setFacingLeft(movingLeft);
 
-        isMovingRef.current = true;
-        if (!isScrolling) {
-          setLocomotion('WALK');
-        }
-
         setRoamPos(newPos);
         mascotPosRef.current = newPos;
-
-        // Allow settling after walk cycle
-        walkTimer = setTimeout(() => {
-          isMovingRef.current = false;
-        }, 2400);
 
         scheduleNextRoam();
       }, delay);
@@ -224,9 +208,8 @@ export default function PortfolioAIChatbot() {
 
     return () => {
       clearTimeout(roamTimer);
-      clearTimeout(walkTimer);
     };
-  }, [isOpen, isHovered, mascotEmotion, isScrolling]);
+  }, [isOpen, isHovered, mascotEmotion]);
 
   // Sync spring values when roamPos changes
   useEffect(() => {
@@ -605,12 +588,13 @@ export default function PortfolioAIChatbot() {
             onMouseLeave={() => setIsHovered(false)}
           >
             <div className="relative cursor-pointer group">
-              {/* The Living Roaming Mascot */}
+              {/* The Living Roaming Mascot - Always Flying with Dynamic Jetpack Thrusters */}
               <AmehMascot
                 size={MASCOT_SIZE}
                 isFloating={true}
                 emotion={mascotEmotion}
-                locomotion={locomotion}
+                locomotion="FLY"
+                isTurbo={isScrolling}
                 facingLeft={facingLeft}
                 onClick={handleMascotClick}
                 className="drop-shadow-[0_0_22px_rgba(255,20,147,0.35)] transition-transform group-hover:scale-105"

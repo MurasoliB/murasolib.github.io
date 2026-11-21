@@ -16,7 +16,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function AmehMascot({
   size = 110,
   emotion = 'IDLE', // 'IDLE' | 'CURIOUS' | 'HAPPY' | 'EXCITED' | 'THINKING' | 'LISTENING' | 'TALKING' | 'SLEEP'
-  locomotion = 'IDLE', // 'IDLE' | 'WALK' | 'FLY'
+  locomotion = 'FLY', // Default 'FLY': Always flying with active jetpack thrusters
+  isTurbo = false, // Extra thrust / flame surge when scrolling or boosting
   facingLeft = false,
   onClick,
   isFloating = true,
@@ -116,7 +117,7 @@ export default function AmehMascot({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={`relative select-none ${onClick ? 'cursor-pointer' : ''} ${className}`}
-      style={{ width: size, height: size * 1.08 }}
+      style={{ width: size, height: size * 1.25 }}
     >
       {/* Interactive Tooltip Bubble on Hover */}
       <AnimatePresence>
@@ -145,7 +146,13 @@ export default function AmehMascot({
         animate={
           isFloating
             ? locomotion === 'FLY'
-              ? { y: [-12, 2, -12], rotate: facingLeft ? [6, 12, 6] : [-6, -12, -6], scale: [1, 1.04, 1] }
+              ? {
+                  y: isTurbo ? [-15, 3, -15] : [-10, 2, -10],
+                  rotate: facingLeft
+                    ? isTurbo ? [8, 14, 8] : [4, 9, 4]
+                    : isTurbo ? [-8, -14, -8] : [-4, -9, -4],
+                  scale: isTurbo ? [1.02, 1.07, 1.02] : [1, 1.03, 1]
+                }
               : locomotion === 'WALK'
               ? { y: [-3, 1, -3], rotate: facingLeft ? [-1, 2, -1] : [1, -2, 1] }
               : emotion === 'EXCITED'
@@ -160,7 +167,7 @@ export default function AmehMascot({
         transition={{
           duration:
             locomotion === 'FLY'
-              ? 0.9
+              ? isTurbo ? 0.65 : 1.15
               : locomotion === 'WALK'
               ? 0.55
               : emotion === 'EXCITED'
@@ -179,7 +186,7 @@ export default function AmehMascot({
         className="w-full h-full relative"
       >
         <svg
-          viewBox="0 0 120 130"
+          viewBox="0 0 120 152"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           className="w-full h-full filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.65)]"
@@ -229,21 +236,37 @@ export default function AmehMascot({
               <stop offset="100%" stopColor="#0B090F" />
             </linearGradient>
 
-            {/* Jet Flame Linear Gradient */}
+            {/* Outer Plasma Aura Gradient */}
+            <linearGradient id="outer-plasma-grad" x1="0.5" y1="0" x2="0.5" y2="1">
+              <stop offset="0%" stopColor="#FF1493" stopOpacity="0.8" />
+              <stop offset="30%" stopColor="#FF69B4" stopOpacity="0.6" />
+              <stop offset="70%" stopColor="#FF1493" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#FF1493" stopOpacity="0" />
+            </linearGradient>
+
+            {/* Jet Flame Main Gradient */}
             <linearGradient id="jet-flame-grad" x1="0.5" y1="0" x2="0.5" y2="1">
               <stop offset="0%" stopColor="#FFFFFF" />
-              <stop offset="25%" stopColor="#FF85C8" />
-              <stop offset="65%" stopColor="#FF1493" />
+              <stop offset="15%" stopColor="#FFF0F8" />
+              <stop offset="40%" stopColor="#FF69B4" />
+              <stop offset="75%" stopColor="#FF1493" />
               <stop offset="100%" stopColor="#FF1493" stopOpacity="0" />
             </linearGradient>
 
             {/* Jet Flame Core Gradient */}
-            <radialGradient id="flame-core" cx="50%" cy="20%" r="70%">
+            <radialGradient id="flame-core" cx="50%" cy="15%" r="75%">
               <stop offset="0%" stopColor="#FFFFFF" />
-              <stop offset="40%" stopColor="#FFA6DC" />
-              <stop offset="80%" stopColor="#FF1493" />
+              <stop offset="35%" stopColor="#FFD2EC" />
+              <stop offset="70%" stopColor="#FF1493" />
               <stop offset="100%" stopColor="#FF1493" stopOpacity="0" />
             </radialGradient>
+
+            {/* Supersonic Shock Diamond Gradient */}
+            <linearGradient id="shock-diamond-grad" x1="0.5" y1="0" x2="0.5" y2="1">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="50%" stopColor="#FFD8EF" />
+              <stop offset="100%" stopColor="#FF1493" />
+            </linearGradient>
 
             {/* Eye Glow Radial Gradient */}
             <radialGradient id="pink-eye-glow" cx="50%" cy="50%" r="50%">
@@ -254,7 +277,7 @@ export default function AmehMascot({
             </radialGradient>
 
             {/* Neon Pink Shadow Filter */}
-            <filter id="neon-pink-eye-filter" x="-50%" y="-50%" width="200%" height="200%">
+            <filter id="neon-pink-eye-filter" x="-60%" y="-60%" width="220%" height="220%">
               <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur1" />
               <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur2" />
               <feMerge>
@@ -265,31 +288,53 @@ export default function AmehMascot({
             </filter>
 
             {/* Ambient Pink Glow Filter */}
-            <filter id="ambient-pink-halo" x="-30%" y="-30%" width="160%" height="160%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="8" />
+            <filter id="ambient-pink-halo" x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="9" />
+            </filter>
+
+            {/* Jet Flame Intense Heat Blur */}
+            <filter id="jet-flame-heat" x="-30%" y="-20%" width="160%" height="160%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="2.2" result="heatBlur" />
+              <feMerge>
+                <feMergeNode in="heatBlur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
             </filter>
           </defs>
 
           {/* ============================================================== */}
           {/* HOVER GLOW / SHADOW UNDERNEATH MASCOT                         */}
-          {/* Dynamic ground shadow: shrinks when flying, expands on land  */}
+          {/* Dynamic ground thrust heat blast discs                        */}
           {/* ============================================================== */}
+          {/* Left Thruster Ground Blast */}
           <ellipse
-            cx="60"
-            cy="123"
-            rx={locomotion === 'FLY' ? 14 : 24}
-            ry={locomotion === 'FLY' ? 2.5 : 4.5}
+            cx="36.5"
+            cy="147"
+            rx={isTurbo ? 16 : 10}
+            ry={isTurbo ? 3.5 : 2.2}
             fill="#FF1493"
-            fillOpacity={locomotion === 'FLY' ? 0.45 : 0.28}
+            fillOpacity={isTurbo ? 0.65 : 0.45}
             filter="url(#ambient-pink-halo)"
           />
+          {/* Right Thruster Ground Blast */}
+          <ellipse
+            cx="83.5"
+            cy="147"
+            rx={isTurbo ? 16 : 10}
+            ry={isTurbo ? 3.5 : 2.2}
+            fill="#FF1493"
+            fillOpacity={isTurbo ? 0.65 : 0.45}
+            filter="url(#ambient-pink-halo)"
+          />
+          {/* Central Ground Ambient Reflection */}
           <ellipse
             cx="60"
-            cy="123"
-            rx={locomotion === 'FLY' ? 8 : 16}
-            ry={locomotion === 'FLY' ? 1.5 : 3}
-            fill="#000000"
-            fillOpacity={locomotion === 'FLY' ? 0.2 : 0.45}
+            cy="146"
+            rx={isTurbo ? 30 : 20}
+            ry={isTurbo ? 4.5 : 3}
+            fill="#FF1493"
+            fillOpacity={isTurbo ? 0.4 : 0.25}
+            filter="url(#ambient-pink-halo)"
           />
 
           {/* ============================================================== */}
@@ -307,86 +352,206 @@ export default function AmehMascot({
             <rect x="30" y="78" width="13" height="24" rx="5.5" fill="url(#jetpack-body)" stroke="#9F95B5" strokeWidth="0.8" />
             <rect x="32" y="80" width="3" height="18" rx="1.5" fill="#FFFFFF" fillOpacity="0.55" />
             {/* Left Exhaust Nozzle */}
-            <path d="M 32 102 L 41 102 L 43 108 L 30 108 Z" fill="url(#nozzle-grad)" stroke="#14101E" strokeWidth="0.8" />
+            <path d="M 31 102 L 42 102 L 44 108 L 29 108 Z" fill="url(#nozzle-grad)" stroke="#14101E" strokeWidth="0.8" />
 
             {/* Right Thruster Pod */}
             <rect x="77" y="78" width="13" height="24" rx="5.5" fill="url(#jetpack-body)" stroke="#9F95B5" strokeWidth="0.8" />
             <rect x="79" y="80" width="3" height="18" rx="1.5" fill="#FFFFFF" fillOpacity="0.55" />
             {/* Right Exhaust Nozzle */}
-            <path d="M 79 102 L 88 102 L 90 108 L 77 108 Z" fill="url(#nozzle-grad)" stroke="#14101E" strokeWidth="0.8" />
+            <path d="M 78 102 L 89 102 L 91 108 L 76 108 Z" fill="url(#nozzle-grad)" stroke="#14101E" strokeWidth="0.8" />
 
             {/* ============================================================ */}
-            {/* JET THRUST FLAMES (Ignite dynamically when FLYING)          */}
+            {/* HYPER-CHARGED MULTI-STAGE JETPACK ROCKET FLAMES              */}
+            {/* Always active when mascot is floating                        */}
             {/* ============================================================ */}
-            {locomotion === 'FLY' && (
+            {(isFloating || locomotion === 'FLY') && (
               <g id="jetpack-flames">
-                {/* LEFT THRUSTER FLAME */}
-                <motion.g
-                  animate={{
-                    scaleY: [1, 1.25, 0.9, 1.2, 1],
-                    scaleX: [1, 0.92, 1.05, 0.95, 1]
-                  }}
-                  transition={{
-                    duration: 0.28,
-                    repeat: Infinity,
-                    ease: 'easeInOut'
-                  }}
-                  style={{ transformOrigin: '36.5px 108px' }}
-                >
-                  {/* Outer Magenta Fire Cone */}
-                  <path
-                    d="M 31 108 Q 36.5 131 36.5 135 Q 36.5 131 42 108 Z"
+                {/* -------------------------------------------------------- */}
+                {/* LEFT THRUSTER ADVANCED FLAME ASSEMBLY                    */}
+                {/* -------------------------------------------------------- */}
+                <g id="left-thruster-assembly">
+                  {/* Outer Wide Plasma Glow Cone */}
+                  <motion.path
+                    d={
+                      isTurbo
+                        ? "M 28 108 Q 36.5 148 36.5 152 Q 36.5 148 45 108 Z"
+                        : "M 29 108 Q 36.5 138 36.5 142 Q 36.5 138 44 108 Z"
+                    }
+                    fill="url(#outer-plasma-grad)"
+                    filter="url(#ambient-pink-halo)"
+                    animate={{
+                      scaleY: isTurbo ? [1.1, 1.45, 1.15, 1.4, 1.1] : [1, 1.25, 0.95, 1.2, 1],
+                      scaleX: [1, 0.94, 1.06, 0.96, 1],
+                      opacity: [0.75, 0.95, 0.8, 0.9, 0.75]
+                    }}
+                    transition={{ duration: isTurbo ? 0.18 : 0.26, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ transformOrigin: '36.5px 108px' }}
+                  />
+
+                  {/* Main Roaring Flame Body */}
+                  <motion.path
+                    d={
+                      isTurbo
+                        ? "M 30 108 Q 36.5 144 36.5 147 Q 36.5 144 43 108 Z"
+                        : "M 31 108 Q 36.5 134 36.5 137 Q 36.5 134 42 108 Z"
+                    }
                     fill="url(#jet-flame-grad)"
                     filter="url(#neon-pink-eye-filter)"
+                    animate={{
+                      scaleY: isTurbo ? [1.15, 1.4, 1.05, 1.35, 1.15] : [1, 1.25, 0.92, 1.18, 1],
+                      scaleX: [1, 0.92, 1.05, 0.95, 1]
+                    }}
+                    transition={{ duration: isTurbo ? 0.2 : 0.28, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ transformOrigin: '36.5px 108px' }}
                   />
-                  {/* Mid Hot Pink Core */}
-                  <path
-                    d="M 32.5 108 Q 36.5 125 36.5 128 Q 36.5 125 40.5 108 Z"
-                    fill="#FF1493"
-                  />
-                  {/* Inner White-hot Flame */}
-                  <path
-                    d="M 34 108 Q 36.5 119 36.5 121 Q 36.5 119 39 108 Z"
-                    fill="#FFFFFF"
-                  />
-                </motion.g>
 
-                {/* RIGHT THRUSTER FLAME */}
-                <motion.g
-                  animate={{
-                    scaleY: [1.2, 0.9, 1.25, 1, 1.2],
-                    scaleX: [0.95, 1.05, 0.92, 1, 0.95]
-                  }}
-                  transition={{
-                    duration: 0.28,
-                    repeat: Infinity,
-                    ease: 'easeInOut'
-                  }}
-                  style={{ transformOrigin: '83.5px 108px' }}
-                >
-                  {/* Outer Magenta Fire Cone */}
-                  <path
-                    d="M 78 108 Q 83.5 131 83.5 135 Q 83.5 131 89 108 Z"
+                  {/* Twin Turbulent Flame Licks (Crackling Jet Edge) */}
+                  <motion.path
+                    d="M 33 108 Q 35 126 36.5 132 Q 38 122 39 108 Z"
+                    fill="#FF4FA8"
+                    animate={{
+                      scaleY: [0.9, 1.3, 0.85, 1.25, 0.9],
+                      skewX: [-3, 3, -2, 2, -3]
+                    }}
+                    transition={{ duration: 0.16, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ transformOrigin: '36.5px 108px' }}
+                  />
+
+                  {/* Focused White-Hot Plasma Core */}
+                  <motion.path
+                    d={
+                      isTurbo
+                        ? "M 33.5 108 Q 36.5 128 36.5 131 Q 36.5 128 39.5 108 Z"
+                        : "M 34 108 Q 36.5 122 36.5 124 Q 36.5 122 39 108 Z"
+                    }
+                    fill="url(#flame-core)"
+                    animate={{
+                      scaleY: isTurbo ? [1.1, 1.35, 1.05, 1.3, 1.1] : [1, 1.2, 0.9, 1.15, 1],
+                      opacity: [0.9, 1, 0.85, 1, 0.9]
+                    }}
+                    transition={{ duration: 0.14, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ transformOrigin: '36.5px 108px' }}
+                  />
+
+                  {/* Supersonic Shock Diamonds (Mach Disks along exhaust stream) */}
+                  <g id="left-shock-diamonds">
+                    {/* Diamond 1 */}
+                    <polygon points="36.5,111 38.5,114 36.5,117 34.5,114" fill="#FFFFFF" opacity="0.95" />
+                    {/* Diamond 2 */}
+                    <polygon points="36.5,118 38.2,121.5 36.5,124.5 34.8,121.5" fill="#FFE2F3" opacity="0.88" />
+                    {/* Diamond 3 */}
+                    <polygon points="36.5,125 37.8,127.8 36.5,130.5 35.2,127.8" fill="#FF85C8" opacity="0.75" />
+                  </g>
+
+                  {/* Superheated White Throat Collar */}
+                  <ellipse cx="36.5" cy="108" rx="6.5" ry="1.6" fill="#FFFFFF" filter="url(#neon-pink-eye-filter)" />
+                  <ellipse cx="36.5" cy="108" rx="4" ry="1" fill="#FFFFFF" />
+                </g>
+
+                {/* -------------------------------------------------------- */}
+                {/* RIGHT THRUSTER ADVANCED FLAME ASSEMBLY                   */}
+                {/* -------------------------------------------------------- */}
+                <g id="right-thruster-assembly">
+                  {/* Outer Wide Plasma Glow Cone */}
+                  <motion.path
+                    d={
+                      isTurbo
+                        ? "M 75 108 Q 83.5 148 83.5 152 Q 83.5 148 92 108 Z"
+                        : "M 76 108 Q 83.5 138 83.5 142 Q 83.5 138 91 108 Z"
+                    }
+                    fill="url(#outer-plasma-grad)"
+                    filter="url(#ambient-pink-halo)"
+                    animate={{
+                      scaleY: isTurbo ? [1.15, 1.4, 1.1, 1.45, 1.15] : [1.2, 0.95, 1.25, 1, 1.2],
+                      scaleX: [0.95, 1.05, 0.94, 1, 0.95],
+                      opacity: [0.8, 0.95, 0.75, 0.92, 0.8]
+                    }}
+                    transition={{ duration: isTurbo ? 0.18 : 0.26, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ transformOrigin: '83.5px 108px' }}
+                  />
+
+                  {/* Main Roaring Flame Body */}
+                  <motion.path
+                    d={
+                      isTurbo
+                        ? "M 77 108 Q 83.5 144 83.5 147 Q 83.5 144 90 108 Z"
+                        : "M 78 108 Q 83.5 134 83.5 137 Q 83.5 134 89 108 Z"
+                    }
                     fill="url(#jet-flame-grad)"
                     filter="url(#neon-pink-eye-filter)"
+                    animate={{
+                      scaleY: isTurbo ? [1.2, 1.05, 1.4, 1.15, 1.2] : [1.22, 0.9, 1.25, 1, 1.22],
+                      scaleX: [0.94, 1.06, 0.92, 1, 0.94]
+                    }}
+                    transition={{ duration: isTurbo ? 0.2 : 0.28, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ transformOrigin: '83.5px 108px' }}
                   />
-                  {/* Mid Hot Pink Core */}
-                  <path
-                    d="M 79.5 108 Q 83.5 125 83.5 128 Q 83.5 125 87.5 108 Z"
-                    fill="#FF1493"
-                  />
-                  {/* Inner White-hot Flame */}
-                  <path
-                    d="M 81 108 Q 83.5 119 83.5 121 Q 83.5 119 86 108 Z"
-                    fill="#FFFFFF"
-                  />
-                </motion.g>
 
-                {/* Floating Thrust Sparks */}
-                <circle cx="36.5" cy="138" r="1.2" fill="#FF69B4" opacity="0.8" />
-                <circle cx="83.5" cy="139" r="1.3" fill="#FF1493" opacity="0.8" />
-                <circle cx="34" cy="142" r="0.8" fill="#FFFFFF" opacity="0.6" />
-                <circle cx="86" cy="143" r="0.8" fill="#FFFFFF" opacity="0.6" />
+                  {/* Twin Turbulent Flame Licks (Crackling Jet Edge) */}
+                  <motion.path
+                    d="M 80 108 Q 82 126 83.5 132 Q 85 122 86 108 Z"
+                    fill="#FF4FA8"
+                    animate={{
+                      scaleY: [1.25, 0.85, 1.3, 0.9, 1.25],
+                      skewX: [3, -3, 2, -2, 3]
+                    }}
+                    transition={{ duration: 0.16, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ transformOrigin: '83.5px 108px' }}
+                  />
+
+                  {/* Focused White-Hot Plasma Core */}
+                  <motion.path
+                    d={
+                      isTurbo
+                        ? "M 80.5 108 Q 83.5 128 83.5 131 Q 83.5 128 86.5 108 Z"
+                        : "M 81 108 Q 83.5 122 83.5 124 Q 83.5 122 86 108 Z"
+                    }
+                    fill="url(#flame-core)"
+                    animate={{
+                      scaleY: isTurbo ? [1.2, 1.05, 1.35, 1.1, 1.2] : [1.15, 0.9, 1.2, 1, 1.15],
+                      opacity: [0.9, 1, 0.85, 1, 0.9]
+                    }}
+                    transition={{ duration: 0.14, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ transformOrigin: '83.5px 108px' }}
+                  />
+
+                  {/* Supersonic Shock Diamonds (Mach Disks along exhaust stream) */}
+                  <g id="right-shock-diamonds">
+                    {/* Diamond 1 */}
+                    <polygon points="83.5,111 85.5,114 83.5,117 81.5,114" fill="#FFFFFF" opacity="0.95" />
+                    {/* Diamond 2 */}
+                    <polygon points="83.5,118 85.2,121.5 83.5,124.5 81.8,121.5" fill="#FFE2F3" opacity="0.88" />
+                    {/* Diamond 3 */}
+                    <polygon points="83.5,125 84.8,127.8 83.5,130.5 82.2,127.8" fill="#FF85C8" opacity="0.75" />
+                  </g>
+
+                  {/* Superheated White Throat Collar */}
+                  <ellipse cx="83.5" cy="108" rx="6.5" ry="1.6" fill="#FFFFFF" filter="url(#neon-pink-eye-filter)" />
+                  <ellipse cx="83.5" cy="108" rx="4" ry="1" fill="#FFFFFF" />
+                </g>
+
+                {/* -------------------------------------------------------- */}
+                {/* CASCADING HIGH-ENERGY PLASMA SPARKS & EMBERS             */}
+                {/* -------------------------------------------------------- */}
+                <g id="cascading-sparks">
+                  {/* Left Stream Embers */}
+                  <circle cx="36.5" cy="138" r="1.4" fill="#FFFFFF" filter="url(#neon-pink-eye-filter)" />
+                  <circle cx="34" cy="143" r="1.2" fill="#FF69B4" opacity="0.85" />
+                  <circle cx="38.5" cy="146" r="1.0" fill="#FF1493" opacity="0.9" />
+                  <circle cx="35" cy="150" r="0.8" fill="#FFFFFF" opacity="0.7" />
+
+                  {/* Right Stream Embers */}
+                  <circle cx="83.5" cy="138" r="1.4" fill="#FFFFFF" filter="url(#neon-pink-eye-filter)" />
+                  <circle cx="86" cy="143" r="1.2" fill="#FF69B4" opacity="0.85" />
+                  <circle cx="81.5" cy="146" r="1.0" fill="#FF1493" opacity="0.9" />
+                  <circle cx="84.5" cy="150" r="0.8" fill="#FFFFFF" opacity="0.7" />
+
+                  {/* Floating Drift Embers */}
+                  <circle cx="31" cy="141" r="0.7" fill="#FF85C8" opacity="0.6" />
+                  <circle cx="42" cy="145" r="0.9" fill="#FF1493" opacity="0.75" />
+                  <circle cx="78" cy="145" r="0.9" fill="#FF1493" opacity="0.75" />
+                  <circle cx="89" cy="141" r="0.7" fill="#FF85C8" opacity="0.6" />
+                </g>
               </g>
             )}
           </g>
