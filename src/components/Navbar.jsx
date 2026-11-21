@@ -12,6 +12,7 @@ const navLinks = [
   { name: 'Journey', targetId: 'journey' },
   { name: 'FAQ', targetId: 'faq' },
   { name: 'Contact', targetId: 'contact' },
+  { name: 'Explore AMEH AI', action: 'open-ameh-ai', isAi: true },
 ];
 
 export default function Navbar() {
@@ -25,6 +26,11 @@ export default function Navbar() {
   const handleNavClick = (e, item) => {
     e.preventDefault();
     setMobileMenuOpen(false);
+
+    if (item.action === 'open-ameh-ai') {
+      window.dispatchEvent(new CustomEvent('open-ameh-ai'));
+      return;
+    }
 
     if (item.path) {
       navigate(item.path);
@@ -78,7 +84,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Links with Pink Hover and Active Indicator */}
-          <nav className="hidden md:flex items-center gap-10">
+          <nav className="hidden md:flex items-center gap-6 lg:gap-8 xl:gap-9">
             {navLinks.map((link) => {
               const active = isProjects
                 ? link.name === 'Projects'
@@ -90,9 +96,19 @@ export default function Navbar() {
                   onClick={(e) => handleNavClick(e, link)}
                   className="relative group text-xs font-mono tracking-widest uppercase transition-colors duration-200 py-1 cursor-pointer bg-transparent border-none"
                 >
-                  <span className={active ? 'text-[#FF1493] font-semibold' : 'text-[#FFFFFF] group-hover:text-[#FF69B4]'}>
-                    {link.name}
-                  </span>
+                  {link.isAi ? (
+                    <span className="inline-flex items-center gap-1.5 text-[#FF1493] font-semibold group-hover:text-white transition-colors">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF1493] opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF1493] shadow-[0_0_8px_#FF1493]"></span>
+                      </span>
+                      {link.name}
+                    </span>
+                  ) : (
+                    <span className={active ? 'text-[#FF1493] font-semibold' : 'text-[#FFFFFF] group-hover:text-[#FF69B4]'}>
+                      {link.name}
+                    </span>
+                  )}
                   
                   {/* Smooth Animated Pink Underline */}
                   {active ? (
@@ -165,7 +181,15 @@ export default function Navbar() {
                   onClick={(e) => handleNavClick(e, link)}
                   className="text-2xl font-display font-medium text-white hover:text-[#FF1493] flex items-center justify-between transition-colors text-left cursor-pointer bg-transparent border-none"
                 >
-                  <span>{link.name}</span>
+                  <span className={link.isAi ? 'text-[#FF1493] flex items-center gap-2.5' : ''}>
+                    {link.isAi && (
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF1493] opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF1493] shadow-[0_0_8px_#FF1493]"></span>
+                      </span>
+                    )}
+                    {link.name}
+                  </span>
                   <ArrowUpRight className="w-4 h-4 text-[#FF1493]" />
                 </button>
               ))}

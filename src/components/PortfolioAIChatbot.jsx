@@ -104,6 +104,13 @@ export default function PortfolioAIChatbot() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Listen for global trigger to open AMEH AI from Navbar or other components
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener('open-ameh-ai', handleOpen);
+    return () => window.removeEventListener('open-ameh-ai', handleOpen);
+  }, []);
+
   useEffect(() => {
     if (isOpen) {
       scrollToBottom();
