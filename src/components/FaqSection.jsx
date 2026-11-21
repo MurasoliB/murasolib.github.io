@@ -259,24 +259,13 @@ export default function FaqSection() {
   return (
     <section
       id="faq"
-      className="relative py-28 md:py-36 border-t border-[rgba(255,20,147,0.20)] overflow-hidden w-full bg-[#050505]"
+      className="relative py-28 md:py-36 border-t border-[rgba(255,20,147,0.20)] overflow-hidden w-full"
       aria-label="Frequently Asked Questions & Personal Brand Knowledge"
     >
-      {/* Cinematic Desaturated Portrait Background with Vignette & Pink Neon Lighting */}
+      {/* Subtle Ambient Pink Glow (Transparent so BackgroundMesh canvas shines through) */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-        <img
-          src="/assets/images/about-portrait.png"
-          alt=""
-          role="presentation"
-          aria-hidden="true"
-          className="absolute right-0 top-1/2 -translate-y-1/2 w-[700px] lg:w-[900px] h-auto object-cover filter grayscale contrast-125 brightness-[0.14] opacity-40 mix-blend-screen"
-        />
-        {/* Soft Radial Ambient Pink Glow */}
-        <div className="absolute -top-24 right-1/4 w-[500px] h-[500px] bg-gradient-radial from-[#FF1493]/15 via-[#FF69B4]/5 to-transparent rounded-full blur-[160px]" />
-        <div className="absolute -bottom-24 left-1/4 w-[500px] h-[500px] bg-gradient-radial from-[#FF4FBF]/10 to-transparent rounded-full blur-[180px]" />
-        {/* Film Grain Vignette Dark Overlays for Ultra-Crisp Legibility */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/95 to-[#050505]/75" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505]" />
+        <div className="absolute -top-24 right-1/4 w-[500px] h-[500px] bg-gradient-radial from-[#FF1493]/10 via-[#FF69B4]/5 to-transparent rounded-full blur-[160px]" />
+        <div className="absolute -bottom-24 left-1/4 w-[500px] h-[500px] bg-gradient-radial from-[#FF4FBF]/8 to-transparent rounded-full blur-[180px]" />
       </div>
 
       <div className="max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 w-full relative z-10">
