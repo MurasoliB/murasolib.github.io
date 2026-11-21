@@ -15,6 +15,7 @@ export const personalInfo = {
   availability: "Available for innovative projects & collaborations",
   email: "balajimurasoli@gmail.com",
   outlookEmail: "balajimurasoli@outlook.com",
+  resumePdf: "/assets/Murasoli_Balaji_Resume.pdf",
   github: "https://github.com/murasolib",
   linkedin: "https://www.linkedin.com/in/murasolibalaji",
 };
@@ -27,6 +28,7 @@ export const skillsList = [
   { category: "Tooling", items: ["Git", "GitHub", "Docker", "Blender", "Postman", "Figma", "Vite", "VS Code"] },
 ];
 
+// Main 4 Featured Projects in exact required order
 export const featuredProjects = [
   {
     id: "ultron",
@@ -66,8 +68,48 @@ export const featuredProjects = [
     badge: "GIS & Simulation"
   },
   {
-    id: "academic-eval",
+    id: "oral-cancer-ai",
     number: "03",
+    title: "OralVision AI (Oral Cancer Prediction using AI)",
+    tagline: "Deep learning computer vision for histopathological screening & diagnosis",
+    description:
+      "A clinical-grade diagnostic deep learning system trained on medical oral lesion imagery, utilizing convolutional neural networks for early-stage malignancy classification, lesion segmentation, and risk probability assessment.",
+    tags: ["Python", "Deep Learning", "Computer Vision", "TensorFlow", "Medical AI", "CNN"],
+    image: "/assets/images/oral-cancer-ai-preview.jpg",
+    features: [
+      "Convolutional neural network architecture for high-accuracy lesion classification",
+      "Automated binary and multi-class histopathological malignancy screening",
+      "Grad-CAM visual explainability heatmaps highlighting diagnostic cellular regions",
+      "Probability confidence scoring for clinical decision support"
+    ],
+    github: "https://github.com/MurasoliB/Oral-Cancer-Prediction-Using-Artificial-Intelligence",
+    badge: "Medical AI & Vision"
+  },
+  {
+    id: "nl-student-search",
+    number: "04",
+    title: "Student Search via Natural Language",
+    tagline: "Groq API powered NL-to-SQL & semantic student retrieval engine",
+    description:
+      "An intelligent academic query platform utilizing the Groq API for ultra-fast LPU inference, converting conversational natural language requests into structured database lookups and real-time student record filtering.",
+    tags: ["Python", "Groq API", "NLP", "LLM", "SQL", "LPU Inference"],
+    image: "/assets/images/nl-student-search-preview.jpg",
+    features: [
+      "Natural language conversational query translation into structured database lookups",
+      "Sub-second LLM inference powered by Groq LPU processing architecture",
+      "Semantic filtering across student grades, departments, and academic metrics",
+      "Zero-syntax conversational interface eliminating manual SQL query writing"
+    ],
+    github: "https://github.com/MurasoliB/Student-Details-Search-Using-Natural-Language-Query",
+    badge: "NLP & Groq API"
+  }
+];
+
+// Remaining existing projects moved to separate More Projects section
+export const moreProjects = [
+  {
+    id: "academic-eval",
+    number: "05",
     title: "Student Academic Evaluation",
     tagline: "Enterprise Java JDBC & relational evaluation system",
     description:
@@ -85,7 +127,7 @@ export const featuredProjects = [
   },
   {
     id: "clubhub",
-    number: "04",
+    number: "06",
     title: "Centralised Clubs & Cells",
     tagline: "College student activity & workflow management platform",
     description:
@@ -101,42 +143,6 @@ export const featuredProjects = [
     ],
     github: "https://github.com/MurasoliB/Centralised-Clubs-Cells",
     badge: "Full-Stack"
-  },
-  {
-    id: "nl-student-search",
-    number: "05",
-    title: "Student Search via Natural Language",
-    tagline: "Groq API powered NL-to-SQL & semantic student retrieval engine",
-    description:
-      "An intelligent academic query platform utilizing the Groq API for ultra-fast LPU inference, converting conversational natural language requests into structured database lookups and real-time student record filtering.",
-    tags: ["Python", "Groq API", "NLP", "LLM", "SQL", "LPU Inference"],
-    image: "/assets/images/nl-student-search-preview.jpg",
-    features: [
-      "Natural language conversational query translation into structured database lookups",
-      "Sub-second LLM inference powered by Groq LPU processing architecture",
-      "Semantic filtering across student grades, departments, and academic metrics",
-      "Zero-syntax conversational interface eliminating manual SQL query writing"
-    ],
-    github: "https://github.com/MurasoliB/Student-Details-Search-Using-Natural-Language-Query",
-    badge: "NLP & Groq API"
-  },
-  {
-    id: "oral-cancer-ai",
-    number: "06",
-    title: "Oral Cancer Prediction using AI",
-    tagline: "Deep learning computer vision for histopathological screening & diagnosis",
-    description:
-      "A clinical-grade diagnostic deep learning system trained on medical oral lesion imagery, utilizing convolutional neural networks for early-stage malignancy classification, lesion segmentation, and risk probability assessment.",
-    tags: ["Python", "Deep Learning", "Computer Vision", "TensorFlow", "Medical AI", "CNN"],
-    image: "/assets/images/oral-cancer-ai-preview.jpg",
-    features: [
-      "Convolutional neural network architecture for high-accuracy lesion classification",
-      "Automated binary and multi-class histopathological malignancy screening",
-      "Grad-CAM visual explainability heatmaps highlighting diagnostic cellular regions",
-      "Probability confidence scoring for clinical decision support"
-    ],
-    github: "https://github.com/MurasoliB/Oral-Cancer-Prediction-Using-Artificial-Intelligence",
-    badge: "Medical AI & Vision"
   },
   {
     id: "cold-chain-logistics",
@@ -158,6 +164,8 @@ export const featuredProjects = [
     badge: "Enterprise Java & Cloud"
   }
 ];
+
+export const allProjects = [...featuredProjects, ...moreProjects];
 
 export const journeyTimeline = [
   {

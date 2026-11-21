@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowDown, ArrowUpRight, Sparkles } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, Sparkles, Download } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 
 export default function Hero() {
@@ -110,6 +110,16 @@ export default function Hero() {
               >
                 <span>Explore My Work</span>
                 <ArrowDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
+              </a>
+
+              <a
+                href={personalInfo.resumePdf}
+                download="Murasoli_Balaji_Resume.pdf"
+                className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-surface-glass border border-white/10 hover:border-[#FF1493]/40 text-content-primary hover:text-white font-semibold text-sm backdrop-blur-md transition-all duration-300 hover:shadow-glass"
+                aria-label="Download Resume"
+              >
+                <Download className="w-4 h-4 text-[#FF1493] group-hover:scale-110 transition-transform" />
+                <span>Download Resume</span>
               </a>
 
               <a

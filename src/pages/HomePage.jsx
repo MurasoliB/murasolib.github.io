@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, ArrowDown } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ArrowDown, Download } from 'lucide-react';
 import About from '../components/About';
 import TechStack from '../components/TechStack';
 import ExperienceEducation from '../components/ExperienceEducation';
 import FaqSection from '../components/FaqSection';
 import Contact from '../components/Contact';
-import { featuredProjects, personalInfo } from '../data/portfolioData';
+import { featuredProjects, moreProjects, personalInfo } from '../data/portfolioData';
 
 export default function HomePage() {
   const location = useLocation();
@@ -96,6 +96,16 @@ export default function HomePage() {
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
 
+            <a
+              href={personalInfo.resumePdf}
+              download="Murasoli_Balaji_Resume.pdf"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#111111] border border-[rgba(255,20,147,0.3)] text-white hover:border-[#FF1493] hover:text-[#FF69B4] hover:shadow-[0_0_15px_rgba(255,20,147,0.3)] transition-all duration-300 group"
+              aria-label="Download Resume"
+            >
+              <Download className="w-4 h-4 text-[#FF1493] group-hover:scale-110 transition-transform" />
+              <span>Download Resume</span>
+            </a>
+
             <Link
               to="/#contact"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#111111] border border-[rgba(255,20,147,0.3)] text-white hover:border-[#FF1493] hover:shadow-[0_0_15px_rgba(255,20,147,0.3)] transition-all"
@@ -174,6 +184,72 @@ export default function HomePage() {
                   <div className="flex flex-wrap gap-2 mt-3">
                     {project.tags.map((t) => (
                       <span key={t} className="text-xs font-mono text-[#737373] group-hover:text-[#B3B3B3] transition-colors">
+                        #{t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="lg:w-2/12 flex lg:justify-end items-center">
+                  <span className="inline-flex items-center gap-2 text-xs font-mono text-[#B3B3B3] group-hover:text-[#FF1493] transition-colors">
+                    <span>Inspect</span>
+                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* 3b. More Projects Section (Visually Secondary, Clean & Professional) */}
+      <section id="more-projects" className="relative py-24 border-t border-[rgba(255,20,147,0.15)] overflow-hidden">
+        <div className="max-w-[1600px] mx-auto px-6 sm:px-10 md:px-16 w-full">
+          
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-14">
+            <div>
+              <span className="text-xs font-mono text-white/50 tracking-widest uppercase block mb-2">
+                // System Archive &amp; Extended Works
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-display font-bold text-white/90 tracking-tight">
+                More Projects<span className="text-[#FF1493]">.</span>
+              </h2>
+            </div>
+            <span className="text-xs font-mono text-[#B3B3B3]">
+              03 Additional Production Systems
+            </span>
+          </div>
+
+          {/* More Project Rows - Same Design System & Card Structure */}
+          <div className="divide-y divide-[rgba(255,20,147,0.12)]">
+            {moreProjects.map((project) => (
+              <Link
+                key={project.id}
+                to="/projects"
+                className="group py-8 first:pt-0 flex flex-col lg:flex-row lg:items-baseline justify-between gap-6 transition-all hover:bg-[#111111]/30 px-4 -mx-4 rounded-2xl"
+              >
+                <div className="lg:w-4/12 flex items-baseline gap-6">
+                  <span className="font-mono text-xs text-[#FF1493]/70 group-hover:text-[#FF1493] font-semibold transition-colors">
+                    {project.number}
+                  </span>
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-display font-medium text-white/90 group-hover:text-[#FF69B4] transition-colors">
+                      {project.title}
+                    </h3>
+                    <span className="text-[11px] font-mono text-white/40 block mt-1">
+                      {project.badge}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="lg:w-6/12">
+                  <p className="text-sm text-[#B3B3B3] leading-relaxed group-hover:text-white transition-colors">
+                    {project.tagline}
+                  </p>
+                  <div className="flex flex-wrap gap-2 mt-2.5">
+                    {project.tags.map((t) => (
+                      <span key={t} className="text-[11px] font-mono text-[#737373] group-hover:text-[#B3B3B3] transition-colors">
                         #{t}
                       </span>
                     ))}
