@@ -131,6 +131,13 @@ export default function PortfolioAIChatbot() {
   const [roamPos, setRoamPos] = useState(getHomePosition);
   const [isHovered, setIsHovered] = useState(false);
 
+  // Locomotion & Direction state ('WALK' | 'FLY' | 'IDLE')
+  const [locomotion, setLocomotion] = useState('WALK');
+  const [facingLeft, setFacingLeft] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const scrollTimeoutRef = useRef(null);
+  const isMovingRef = useRef(false);
+
   // Spring-based smooth position interpolation
   const springX = useSpring(useMotionValue(roamPos.x), { stiffness: 35, damping: 18, mass: 1.2 });
   const springY = useSpring(useMotionValue(roamPos.y), { stiffness: 35, damping: 18, mass: 1.2 });
@@ -145,34 +152,81 @@ export default function PortfolioAIChatbot() {
   };
 
   // ================================================================
+  // SCROLL DETECTION -> JETPACK FLIGHT MODE
+  // Whenever the user scrolls anywhere on the page, the mascot fires
+  // its jetpack thrusters and enters FLY mode with pink thrust flames!
+  // ================================================================
+  useEffect(() => {
+    if (isOpen) return;
+
+    const handleScroll = () => {
+      setIsScrolling(true);
+      setLocomotion('FLY');
+
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsScrolling(false);
+        setLocomotion('WALK');
+      }, 750);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    };
+  }, [isOpen]);
+
+  // ================================================================
   // AUTONOMOUS ROAMING ENGINE
   // Picks a new random safe position every 5–9 seconds.
-  // Pauses when chat is open, hovered, or sleeping.
+  // Walks around with animated legs and turns to face movement direction.
   // ================================================================
   useEffect(() => {
     if (isOpen) return; // Don't roam while chat is open
 
     let roamTimer;
+    let walkTimer;
 
     const scheduleNextRoam = () => {
       const delay = 5000 + Math.random() * 4000; // 5–9 seconds
       roamTimer = setTimeout(() => {
-        if (isHovered || mascotEmotion === 'SLEEP' || mascotEmotion === 'EXCITED') {
+        if (isHovered || mascotEmotion === 'SLEEP' || mascotEmotion === 'EXCITED' || isScrolling) {
           scheduleNextRoam(); // Skip this tick, try again later
           return;
         }
 
         const newPos = getRandomSafePosition();
+        const movingLeft = newPos.x < mascotPosRef.current.x;
+        setFacingLeft(movingLeft);
+
+        isMovingRef.current = true;
+        if (!isScrolling) {
+          setLocomotion('WALK');
+        }
+
         setRoamPos(newPos);
         mascotPosRef.current = newPos;
+
+        // Allow settling after walk cycle
+        walkTimer = setTimeout(() => {
+          isMovingRef.current = false;
+        }, 2400);
+
         scheduleNextRoam();
       }, delay);
     };
 
     scheduleNextRoam();
 
-    return () => clearTimeout(roamTimer);
-  }, [isOpen, isHovered, mascotEmotion]);
+    return () => {
+      clearTimeout(roamTimer);
+      clearTimeout(walkTimer);
+    };
+  }, [isOpen, isHovered, mascotEmotion, isScrolling]);
 
   // Sync spring values when roamPos changes
   useEffect(() => {
@@ -556,6 +610,8 @@ export default function PortfolioAIChatbot() {
                 size={MASCOT_SIZE}
                 isFloating={true}
                 emotion={mascotEmotion}
+                locomotion={locomotion}
+                facingLeft={facingLeft}
                 onClick={handleMascotClick}
                 className="drop-shadow-[0_0_22px_rgba(255,20,147,0.35)] transition-transform group-hover:scale-105"
               />

@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
  * - 3D glossy ceramic rendering with vector lighting, visor reflection, and glowing neon-pink eyes
  * - Procedural eye-tracking following the visitor's cursor across the viewport
  * - Emotional states: IDLE, CURIOUS, HAPPY, EXCITED, THINKING, LISTENING, TALKING, SLEEP
+ * - Locomotion modes: IDLE (floating), WALK (walking with leg animation), FLY (jetpack with thrust flames)
  * - Natural organic floating, breathing bob, and responsive head tilts
  * - Interactive hover bubble ("Hey! I'm AMEH AI 👋") and click bounce
  * - Seamless integration with Chatbot states (Thinking while Gemini calls, Listening while typing)
@@ -15,6 +16,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function AmehMascot({
   size = 110,
   emotion = 'IDLE', // 'IDLE' | 'CURIOUS' | 'HAPPY' | 'EXCITED' | 'THINKING' | 'LISTENING' | 'TALKING' | 'SLEEP'
+  locomotion = 'IDLE', // 'IDLE' | 'WALK' | 'FLY'
+  facingLeft = false,
   onClick,
   isFloating = true,
   className = ""
@@ -141,7 +144,11 @@ export default function AmehMascot({
       <motion.div
         animate={
           isFloating
-            ? emotion === 'EXCITED'
+            ? locomotion === 'FLY'
+              ? { y: [-12, 2, -12], rotate: facingLeft ? [6, 12, 6] : [-6, -12, -6], scale: [1, 1.04, 1] }
+              : locomotion === 'WALK'
+              ? { y: [-3, 1, -3], rotate: facingLeft ? [-1, 2, -1] : [1, -2, 1] }
+              : emotion === 'EXCITED'
               ? { y: [-14, -2, -14], rotate: [-4, 4, -4], scale: [1, 1.06, 1] }
               : emotion === 'THINKING'
               ? { y: [-4, 4, -4], rotate: [-2, 2, -2] }
@@ -151,9 +158,23 @@ export default function AmehMascot({
             : {}
         }
         transition={{
-          duration: emotion === 'EXCITED' ? 1.2 : emotion === 'SLEEP' ? 6 : 4.5,
+          duration:
+            locomotion === 'FLY'
+              ? 0.9
+              : locomotion === 'WALK'
+              ? 0.55
+              : emotion === 'EXCITED'
+              ? 1.2
+              : emotion === 'SLEEP'
+              ? 6
+              : 4.5,
           repeat: Infinity,
           ease: 'easeInOut'
+        }}
+        style={{
+          transform: facingLeft ? 'scaleX(-1)' : 'scaleX(1)',
+          transformOrigin: 'center center',
+          transition: 'transform 0.28s ease-in-out'
         }}
         className="w-full h-full relative"
       >
@@ -193,6 +214,37 @@ export default function AmehMascot({
               <stop offset="100%" stopColor="#1C1824" />
             </linearGradient>
 
+            {/* Jetpack Metallic Shell Gradient */}
+            <linearGradient id="jetpack-body" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="35%" stopColor="#E2DEEB" />
+              <stop offset="70%" stopColor="#A8A0B8" />
+              <stop offset="100%" stopColor="#5D556C" />
+            </linearGradient>
+
+            {/* Jetpack Thruster Nozzle Gradient */}
+            <linearGradient id="nozzle-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#4A4257" />
+              <stop offset="70%" stopColor="#1F1B26" />
+              <stop offset="100%" stopColor="#0B090F" />
+            </linearGradient>
+
+            {/* Jet Flame Linear Gradient */}
+            <linearGradient id="jet-flame-grad" x1="0.5" y1="0" x2="0.5" y2="1">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="25%" stopColor="#FF85C8" />
+              <stop offset="65%" stopColor="#FF1493" />
+              <stop offset="100%" stopColor="#FF1493" stopOpacity="0" />
+            </linearGradient>
+
+            {/* Jet Flame Core Gradient */}
+            <radialGradient id="flame-core" cx="50%" cy="20%" r="70%">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="40%" stopColor="#FFA6DC" />
+              <stop offset="80%" stopColor="#FF1493" />
+              <stop offset="100%" stopColor="#FF1493" stopOpacity="0" />
+            </radialGradient>
+
             {/* Eye Glow Radial Gradient */}
             <radialGradient id="pink-eye-glow" cx="50%" cy="50%" r="50%">
               <stop offset="0%" stopColor="#FFFFFF" />
@@ -220,36 +272,168 @@ export default function AmehMascot({
 
           {/* ============================================================== */}
           {/* HOVER GLOW / SHADOW UNDERNEATH MASCOT                         */}
+          {/* Dynamic ground shadow: shrinks when flying, expands on land  */}
           {/* ============================================================== */}
           <ellipse
             cx="60"
             cy="123"
-            rx="24"
-            ry="4.5"
+            rx={locomotion === 'FLY' ? 14 : 24}
+            ry={locomotion === 'FLY' ? 2.5 : 4.5}
             fill="#FF1493"
-            fillOpacity="0.28"
+            fillOpacity={locomotion === 'FLY' ? 0.45 : 0.28}
             filter="url(#ambient-pink-halo)"
           />
           <ellipse
             cx="60"
             cy="123"
-            rx="16"
-            ry="3"
+            rx={locomotion === 'FLY' ? 8 : 16}
+            ry={locomotion === 'FLY' ? 1.5 : 3}
             fill="#000000"
-            fillOpacity="0.45"
+            fillOpacity={locomotion === 'FLY' ? 0.2 : 0.45}
           />
 
           {/* ============================================================== */}
-          {/* TORSO & ARMS & FEET (Matching Reference Character)            */}
+          {/* JETPACK BACKPACK & THRUST ENGINES (Mounted on Back)           */}
+          {/* ============================================================== */}
+          <g id="mascot-jetpack">
+            {/* Connecting Frame / Manifold */}
+            <rect x="36" y="82" width="48" height="11" rx="3.5" fill="url(#metal-dark)" stroke="#1A1624" strokeWidth="0.8" />
+
+            {/* Glowing Neon-Pink Power Strip */}
+            <rect x="46" y="85.5" width="28" height="2.5" rx="1.2" fill="#FF1493" filter="url(#neon-pink-eye-filter)" />
+            <rect x="48" y="86" width="24" height="1.4" rx="0.7" fill="#FFFFFF" />
+
+            {/* Left Thruster Pod */}
+            <rect x="30" y="78" width="13" height="24" rx="5.5" fill="url(#jetpack-body)" stroke="#9F95B5" strokeWidth="0.8" />
+            <rect x="32" y="80" width="3" height="18" rx="1.5" fill="#FFFFFF" fillOpacity="0.55" />
+            {/* Left Exhaust Nozzle */}
+            <path d="M 32 102 L 41 102 L 43 108 L 30 108 Z" fill="url(#nozzle-grad)" stroke="#14101E" strokeWidth="0.8" />
+
+            {/* Right Thruster Pod */}
+            <rect x="77" y="78" width="13" height="24" rx="5.5" fill="url(#jetpack-body)" stroke="#9F95B5" strokeWidth="0.8" />
+            <rect x="79" y="80" width="3" height="18" rx="1.5" fill="#FFFFFF" fillOpacity="0.55" />
+            {/* Right Exhaust Nozzle */}
+            <path d="M 79 102 L 88 102 L 90 108 L 77 108 Z" fill="url(#nozzle-grad)" stroke="#14101E" strokeWidth="0.8" />
+
+            {/* ============================================================ */}
+            {/* JET THRUST FLAMES (Ignite dynamically when FLYING)          */}
+            {/* ============================================================ */}
+            {locomotion === 'FLY' && (
+              <g id="jetpack-flames">
+                {/* LEFT THRUSTER FLAME */}
+                <motion.g
+                  animate={{
+                    scaleY: [1, 1.25, 0.9, 1.2, 1],
+                    scaleX: [1, 0.92, 1.05, 0.95, 1]
+                  }}
+                  transition={{
+                    duration: 0.28,
+                    repeat: Infinity,
+                    ease: 'easeInOut'
+                  }}
+                  style={{ transformOrigin: '36.5px 108px' }}
+                >
+                  {/* Outer Magenta Fire Cone */}
+                  <path
+                    d="M 31 108 Q 36.5 131 36.5 135 Q 36.5 131 42 108 Z"
+                    fill="url(#jet-flame-grad)"
+                    filter="url(#neon-pink-eye-filter)"
+                  />
+                  {/* Mid Hot Pink Core */}
+                  <path
+                    d="M 32.5 108 Q 36.5 125 36.5 128 Q 36.5 125 40.5 108 Z"
+                    fill="#FF1493"
+                  />
+                  {/* Inner White-hot Flame */}
+                  <path
+                    d="M 34 108 Q 36.5 119 36.5 121 Q 36.5 119 39 108 Z"
+                    fill="#FFFFFF"
+                  />
+                </motion.g>
+
+                {/* RIGHT THRUSTER FLAME */}
+                <motion.g
+                  animate={{
+                    scaleY: [1.2, 0.9, 1.25, 1, 1.2],
+                    scaleX: [0.95, 1.05, 0.92, 1, 0.95]
+                  }}
+                  transition={{
+                    duration: 0.28,
+                    repeat: Infinity,
+                    ease: 'easeInOut'
+                  }}
+                  style={{ transformOrigin: '83.5px 108px' }}
+                >
+                  {/* Outer Magenta Fire Cone */}
+                  <path
+                    d="M 78 108 Q 83.5 131 83.5 135 Q 83.5 131 89 108 Z"
+                    fill="url(#jet-flame-grad)"
+                    filter="url(#neon-pink-eye-filter)"
+                  />
+                  {/* Mid Hot Pink Core */}
+                  <path
+                    d="M 79.5 108 Q 83.5 125 83.5 128 Q 83.5 125 87.5 108 Z"
+                    fill="#FF1493"
+                  />
+                  {/* Inner White-hot Flame */}
+                  <path
+                    d="M 81 108 Q 83.5 119 83.5 121 Q 83.5 119 86 108 Z"
+                    fill="#FFFFFF"
+                  />
+                </motion.g>
+
+                {/* Floating Thrust Sparks */}
+                <circle cx="36.5" cy="138" r="1.2" fill="#FF69B4" opacity="0.8" />
+                <circle cx="83.5" cy="139" r="1.3" fill="#FF1493" opacity="0.8" />
+                <circle cx="34" cy="142" r="0.8" fill="#FFFFFF" opacity="0.6" />
+                <circle cx="86" cy="143" r="0.8" fill="#FFFFFF" opacity="0.6" />
+              </g>
+            )}
+          </g>
+
+          {/* ============================================================== */}
+          {/* TORSO & ARMS & ANIMATED FEET                                  */}
           {/* ============================================================== */}
           <g id="mascot-lower-body">
-            {/* Left Foot / Base Pod */}
-            <ellipse cx="44" cy="114" rx="9" ry="7" fill="url(#ceramic-body)" stroke="#B6ADCA" strokeWidth="0.8" />
-            <ellipse cx="43" cy="112" rx="5" ry="3" fill="#FFFFFF" fillOpacity="0.6" />
+            {/* Left Foot / Animated Walking Pod */}
+            <motion.g
+              animate={
+                locomotion === 'WALK'
+                  ? { y: [0, -8, -1, 0], x: [0, 5, -2, 0], rotate: [-8, 14, -2, -8] }
+                  : locomotion === 'FLY'
+                  ? { y: -2, x: 1, rotate: -8 }
+                  : {}
+              }
+              transition={{
+                duration: 0.52,
+                repeat: locomotion === 'WALK' ? Infinity : 0,
+                ease: 'easeInOut'
+              }}
+              style={{ transformOrigin: '44px 114px' }}
+            >
+              <ellipse cx="44" cy="114" rx="9" ry="7" fill="url(#ceramic-body)" stroke="#B6ADCA" strokeWidth="0.8" />
+              <ellipse cx="43" cy="112" rx="5" ry="3" fill="#FFFFFF" fillOpacity="0.6" />
+            </motion.g>
 
-            {/* Right Foot / Base Pod */}
-            <ellipse cx="76" cy="114" rx="9" ry="7" fill="url(#ceramic-body)" stroke="#B6ADCA" strokeWidth="0.8" />
-            <ellipse cx="75" cy="112" rx="5" ry="3" fill="#FFFFFF" fillOpacity="0.6" />
+            {/* Right Foot / Animated Walking Pod */}
+            <motion.g
+              animate={
+                locomotion === 'WALK'
+                  ? { y: [-1, 0, -8, 0], x: [-2, 0, 5, 0], rotate: [-2, -8, 14, -2] }
+                  : locomotion === 'FLY'
+                  ? { y: -2, x: -1, rotate: 8 }
+                  : {}
+              }
+              transition={{
+                duration: 0.52,
+                repeat: locomotion === 'WALK' ? Infinity : 0,
+                ease: 'easeInOut'
+              }}
+              style={{ transformOrigin: '76px 114px' }}
+            >
+              <ellipse cx="76" cy="114" rx="9" ry="7" fill="url(#ceramic-body)" stroke="#B6ADCA" strokeWidth="0.8" />
+              <ellipse cx="75" cy="112" rx="5" ry="3" fill="#FFFFFF" fillOpacity="0.6" />
+            </motion.g>
 
             {/* Round Pear-shaped Torso */}
             <path
@@ -273,17 +457,45 @@ export default function AmehMascot({
               <rect x="64.5" y="103" width="1.2" height="5" rx="0.6" fill="#4B4459" />
             </g>
 
-            {/* Left Arm Nub */}
-            <g>
+            {/* Left Arm Nub with Walk Swing Animation */}
+            <motion.g
+              animate={
+                locomotion === 'WALK'
+                  ? { rotate: [30, 48, 22, 30] }
+                  : locomotion === 'FLY'
+                  ? { rotate: 42 }
+                  : {}
+              }
+              transition={{
+                duration: 0.52,
+                repeat: locomotion === 'WALK' ? Infinity : 0,
+                ease: 'easeInOut'
+              }}
+              style={{ transformOrigin: '32px 89px' }}
+            >
               <ellipse cx="32" cy="89" rx="8" ry="5.5" transform="rotate(35 32 89)" fill="url(#ceramic-body)" stroke="#B6ADCA" strokeWidth="0.8" />
               <ellipse cx="30" cy="87" rx="4" ry="2" transform="rotate(35 30 87)" fill="#FFFFFF" fillOpacity="0.6" />
-            </g>
+            </motion.g>
 
-            {/* Right Arm Nub */}
-            <g>
+            {/* Right Arm Nub with Walk Swing Animation */}
+            <motion.g
+              animate={
+                locomotion === 'WALK'
+                  ? { rotate: [-30, -22, -48, -30] }
+                  : locomotion === 'FLY'
+                  ? { rotate: -42 }
+                  : {}
+              }
+              transition={{
+                duration: 0.52,
+                repeat: locomotion === 'WALK' ? Infinity : 0,
+                ease: 'easeInOut'
+              }}
+              style={{ transformOrigin: '88px 89px' }}
+            >
               <ellipse cx="88" cy="89" rx="8" ry="5.5" transform="rotate(-35 88 89)" fill="url(#ceramic-body)" stroke="#B6ADCA" strokeWidth="0.8" />
               <ellipse cx="86" cy="87" rx="4" ry="2" transform="rotate(-35 86 87)" fill="#FFFFFF" fillOpacity="0.6" />
-            </g>
+            </motion.g>
 
             {/* Neck Joint Ring */}
             <ellipse cx="60" cy="73.5" rx="15" ry="3.5" fill="url(#metal-dark)" stroke="#171220" strokeWidth="0.8" />
