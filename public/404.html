@@ -1,29 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Redirecting · Murasoli Balaji Portfolio</title>
-    <meta name="robots" content="noindex, follow" />
-    <script>
-      // Single Page Application routing redirect for GitHub Pages
-      (function() {
-        var path = window.location.pathname;
-        var query = window.location.search;
-        var hash = window.location.hash;
-        
-        // If visiting /projects or other deep paths, redirect to SPA hash route
-        if (path && path !== '/') {
-          var cleanPath = path.replace(/^\/+/, '');
-          window.location.replace('/#/' + cleanPath + (query || '') + (hash || ''));
-        } else {
-          window.location.replace('/');
-        }
-      })();
+    <meta charset="utf-8">
+    <title>Murasoli Balaji Portfolio</title>
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages
+      // https://github.com/rafgraph/spa-github-pages
+      var pathSegmentsToKeep = 0;
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash
+      );
     </script>
-    <meta http-equiv="refresh" content="0; url=/" />
   </head>
-  <body style="background:#050505;color:#ffffff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
-    <p>Redirecting to <a href="/" style="color:#FF1493;">Murasoli Balaji Portfolio</a>...</p>
+  <body style="background:#050505;color:#ffffff;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;font-family:sans-serif;">
+    <p>Loading Murasoli Balaji Portfolio...</p>
   </body>
 </html>
