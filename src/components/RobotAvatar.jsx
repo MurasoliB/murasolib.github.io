@@ -134,3 +134,4 @@ export default function RobotAvatar({ size = 36, className = "" }) {
     </div>
   );
 }
+

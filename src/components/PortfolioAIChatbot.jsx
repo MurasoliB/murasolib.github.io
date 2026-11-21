@@ -7,7 +7,7 @@ import { sendChatMessage } from '../services/geminiService';
 const WELCOME_MESSAGE = {
   id: 'welcome',
   sender: 'ai',
-  text: "Hey! 👋 I'm Portfolio AI, your guide to Murasoli's portfolio. Want to explore his projects, technical skills, or experience? Ask me anything.",
+  text: "Hey! 👋 I'm AMEH AI, your guide to Murasoli's portfolio and beyond. Want to explore his projects, technical skills, or ask me anything? Ask me anything.",
   timestamp: new Date()
 };
 
@@ -141,7 +141,7 @@ export default function PortfolioAIChatbot() {
       const fallbackAiMessage = {
         id: (Date.now() + 1).toString(),
         sender: 'ai',
-        text: "I'm having a momentary connection glitch, but Murasoli's verified projects include **ULTRON AI Assistant**, **Flood Simulation & GIS**, **OralVision AI**, and **Student Search via Natural Language**. Feel free to explore them in the Projects section or reach out directly at **balajimurasoli@gmail.com**!",
+        text: "I'm having a momentary connection glitch, but I'm **AMEH AI** and I can help you with Murasoli's projects (**ULTRON AI Assistant**, **Flood Simulation & GIS**, **OralVision AI**, **Student Search via Natural Language**) or any general tech query. You can also reach out to Murasoli directly at **balajimurasoli@gmail.com**!",
         timestamp: new Date()
       };
       setMessages((prev) => [...prev, fallbackAiMessage]);
@@ -187,7 +187,7 @@ export default function PortfolioAIChatbot() {
                 <RobotAvatar size={34} />
                 <div className="flex flex-col">
                   <span className="text-[15px] font-bold text-white tracking-wide leading-tight">
-                    Portfolio AI
+                    AMEH AI
                   </span>
                   <div className="flex items-center gap-1.5 mt-0.5">
                     <span className="relative flex h-2 w-2">
@@ -304,7 +304,7 @@ export default function PortfolioAIChatbot() {
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ask me anything about Murasoli..."
+                  placeholder="Ask AMEH AI anything..."
                   disabled={isLoading}
                   className="w-full bg-transparent text-white placeholder-gray-400 text-xs sm:text-[13px] outline-none disabled:opacity-50"
                 />
@@ -340,7 +340,7 @@ export default function PortfolioAIChatbot() {
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.94 }}
             onClick={() => setIsOpen(true)}
-            aria-label="Open Portfolio AI Chat"
+            aria-label="Open AMEH AI Chat"
             className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#0A090D] border-2 border-[#FF1493] shadow-[0_0_24px_rgba(255,20,147,0.55),inset_0_0_12px_rgba(255,20,147,0.2)] flex items-center justify-center cursor-pointer group transition-shadow hover:shadow-[0_0_32px_rgba(255,20,147,0.85)]"
           >
             {/* White Message Icon */}
@@ -357,3 +357,4 @@ export default function PortfolioAIChatbot() {
     </div>
   );
 }
+
