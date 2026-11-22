@@ -6,6 +6,8 @@ export const personalInfo = {
   location: "Tamil Nadu, India",
   educationInstitute: "Kongu Engineering College",
   educationDegree: "B.Tech in Information Technology",
+  diplomaInstitute: "CIT Sandwich Polytechnic College, Coimbatore",
+  diplomaDegree: "Diploma in Computer Engineering",
   experience: "4+ Years of Tech Experience",
   aboutHeading: "Curiosity Drives Innovation.",
   aboutDescription:
@@ -177,7 +179,7 @@ export const journeyTimeline = [
   {
     period: "Past",
     role: "Diploma in Computer Engineering",
-    organization: "Technical Education",
+    organization: "CIT Sandwich Polytechnic College, Coimbatore",
     detail: "Established core engineering foundations across C/C++ programming, computer hardware, operating systems, networking, and applied software development."
   },
   {

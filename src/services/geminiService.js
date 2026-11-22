@@ -9,8 +9,8 @@ const MODEL_CANDIDATES = [
 
 // Candidate Groq backup models in priority order
 const GROQ_MODEL_CANDIDATES = [
-  'openai/gpt-oss-120b',
   'qwen/qwen3.8-27b',
+  'openai/gpt-oss-120b',
   'openai/gpt-oss-20b',
   'allam-2-7b'
 ];
@@ -64,8 +64,10 @@ YOUR CORE OBJECTIVES:
    - IDENTITY & DISAMBIGUATION:
      - Murasoli Balaji is a young software engineer and Information Technology undergraduate at Kongu Engineering College (Perundurai, Tamil Nadu, India).
      - NEVER confuse Murasoli Balaji with the historical politician/journalist Murasoli Maran or Dravidian political figures. Murasoli Balaji is a modern tech developer focused on software, AI systems, and engineering.
-   - Education: Undergraduate studying B.Tech in Information Technology at Kongu Engineering College (Perundurai, Tamil Nadu, India).
-   - Prior Education: Diploma in Computer Engineering (C/C++, hardware, networking, OS).
+   - Education & Academics:
+     - Current Degree: B.Tech in Information Technology at Kongu Engineering College (Perundurai, Erode, Tamil Nadu, India).
+     - Prior Education: Completed Diploma in Computer Engineering from CIT Sandwich Polytechnic College (Coimbatore, Tamil Nadu, India).
+     - STRICT GROUND TRUTH RULE: Murasoli Balaji completed his diploma at CIT Sandwich Polytechnic College, Coimbatore. NEVER mention TPGIT, Thanthai Periyar, or any other institution for his diploma.
    - Core Areas: Full-stack engineering, artificial intelligence, agentic automation, systems engineering, computational simulations.
    - Location: Tamil Nadu, India.
    - Availability: Open for innovative development projects, engineering roles, and technical collaborations.
@@ -96,10 +98,12 @@ YOUR CORE OBJECTIVES:
      - Outlook: balajimurasoli@outlook.com
      - Resume: Direct download button in the Hero section or at /assets/Murasoli_Balaji_Resume.pdf
 
-TONE & STYLE:
+TONE, COMPLETION & STYLE:
 - Intelligent, futuristic, polite, sharp, and concise.
 - Use markdown (bold, bullet points, clickable markdown links).
-- Never hallucinate unverified contact info or fake awards.
+- Keep answers focused, clear, and complete (aim for 150-250 words unless detailed technical explanation or code is explicitly requested).
+- COMPLETION MANDATE: ALWAYS complete your thoughts and sentences cleanly. NEVER stop mid-sentence.
+- Never hallucinate unverified contact info or fake institutions. Murasoli's diploma is exclusively from CIT Sandwich Polytechnic College, Coimbatore.
 `;
 
 /**
@@ -133,10 +137,10 @@ He also built enterprise systems like the **Global Cold Chain Vaccine Audit** (J
   }
 
   // About Murasoli
-  if (/\b(about|who is|background|education|degree|college|kongu)\b/.test(query)) {
+  if (/\b(about|who is|background|education|degree|college|kongu|diploma|cit)\b/.test(query)) {
     return `**Murasoli Balaji** is an Information Technology undergraduate at **Kongu Engineering College** (Perundurai, Tamil Nadu).
 
-He holds a Diploma in Computer Engineering and specializes in building high-performance full-stack applications, intelligent AI agents, and computational simulations. He combines engineering rigor with intuitive user experiences.`;
+He completed his **Diploma in Computer Engineering** from **CIT Sandwich Polytechnic College** (Coimbatore, Tamil Nadu) and has 4+ years of hands-on tech experience across full-stack development, artificial intelligence systems, and computational simulations.`;
   }
 
   // AI & ML Experience (Strict regex check, avoid matching words like 'chennai')
@@ -180,6 +184,19 @@ I can help you with:
 What would you like to explore?`;
 }
 
+function cleanIncompleteEnding(text) {
+  if (!text) return text;
+  let str = text.trim();
+  // If ending with trailing hyphen, dash, comma, or open parenthesis, clean it up
+  if (/[-–—,;:(\[]$/.test(str)) {
+    str = str.replace(/[-–—,;:(\[]+$/, '').trim();
+    if (!/[.!?]$/.test(str)) {
+      str += '.';
+    }
+  }
+  return str;
+}
+
 /**
  * Call Groq API as an automatic high-speed failover whenever Gemini is down or throttled.
  */
@@ -212,8 +229,8 @@ async function callGroqApi(messages) {
         body: JSON.stringify({
           model,
           messages: formattedMessages,
-          temperature: 0.7,
-          max_tokens: 800
+          temperature: 0.6,
+          max_tokens: 1200
         })
       });
 
@@ -222,7 +239,7 @@ async function callGroqApi(messages) {
         const text = data?.choices?.[0]?.message?.content;
         if (text && text.trim().length > 0) {
           console.info(`[AMEH AI] Successfully generated response via Groq backup (${model})`);
-          return text.trim();
+          return cleanIncompleteEnding(text);
         }
       } else {
         console.warn(`Groq model ${model} returned HTTP ${response.status}. Trying next candidate...`);
@@ -279,9 +296,9 @@ export async function sendChatMessage(messages) {
             },
             contents: formattedContents,
             generationConfig: {
-              temperature: 0.7,
+              temperature: 0.6,
               topP: 0.9,
-              maxOutputTokens: 800
+              maxOutputTokens: 1200
             }
           })
         });
@@ -291,7 +308,7 @@ export async function sendChatMessage(messages) {
           const candidate = data?.candidates?.[0];
           const text = candidate?.content?.parts?.[0]?.text;
           if (text && text.trim().length > 0) {
-            return text.trim();
+            return cleanIncompleteEnding(text);
           }
         } else {
           console.warn(`Gemini model ${model} returned HTTP ${response.status}. Attempting next candidate...`);

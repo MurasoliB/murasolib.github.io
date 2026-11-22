@@ -69,7 +69,7 @@ export default function About() {
               </div>
               <div className="py-4 flex items-center justify-between gap-4">
                 <span className="text-white/40 uppercase tracking-widest">Past Education</span>
-                <span className="text-white font-medium">Diploma in Computer Engineering</span>
+                <span className="text-white font-medium">Diploma in Computer Engineering (CIT Sandwich Polytechnic College)</span>
               </div>
               <div className="py-4 flex items-center justify-between gap-4">
                 <span className="text-white/40 uppercase tracking-widest">Experience</span>
