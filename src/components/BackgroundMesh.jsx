@@ -25,7 +25,11 @@ export default function BackgroundMesh() {
     loadedImages[0] = firstImg;
     imagesRef.current = loadedImages;
 
-    // 2. Defer remaining frames until user interaction or idle to prevent Googlebot quota throttling
+    // 2. Defer remaining frames until real human interaction (scroll/touch/pointer)
+    // If a crawler or search bot visits, do not load animation frames to preserve crawl budget
+    const isBot = typeof navigator !== 'undefined' && /bot|google|crawler|spider|robot|crawling/i.test(navigator.userAgent);
+    if (isBot) return;
+
     const loadRemainingFrames = () => {
       if (!isMounted) return;
       for (let i = 2; i <= TOTAL_FRAMES; i++) {
@@ -39,7 +43,9 @@ export default function BackgroundMesh() {
 
     const cleanupTriggers = () => {
       window.removeEventListener('scroll', handleTrigger);
+      window.removeEventListener('wheel', handleTrigger);
       window.removeEventListener('pointerdown', handleTrigger);
+      window.removeEventListener('pointermove', handleTrigger);
       window.removeEventListener('touchstart', handleTrigger);
     };
 
@@ -49,22 +55,14 @@ export default function BackgroundMesh() {
     };
 
     window.addEventListener('scroll', handleTrigger, { passive: true, once: true });
+    window.addEventListener('wheel', handleTrigger, { passive: true, once: true });
     window.addEventListener('pointerdown', handleTrigger, { passive: true, once: true });
+    window.addEventListener('pointermove', handleTrigger, { passive: true, once: true });
     window.addEventListener('touchstart', handleTrigger, { passive: true, once: true });
-
-    // Idle fallback for human visitors after initial paint
-    const timer = setTimeout(() => {
-      if ('requestIdleCallback' in window) {
-        window.requestIdleCallback(loadRemainingFrames);
-      } else {
-        loadRemainingFrames();
-      }
-    }, 2500);
 
     return () => {
       isMounted = false;
       cleanupTriggers();
-      clearTimeout(timer);
     };
   }, []);
 
