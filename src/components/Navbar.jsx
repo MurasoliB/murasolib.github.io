@@ -74,9 +74,12 @@ export default function Navbar() {
             className="flex items-center gap-3 group focus:outline-none"
             aria-label="Home"
           >
-            <div className="w-9 h-9 rounded-xl bg-[#111111] border border-[rgba(255,20,147,0.3)] flex items-center justify-center font-mono font-bold text-sm text-white group-hover:border-[#FF1493] group-hover:shadow-[0_0_15px_rgba(255,20,147,0.5)] transition-all">
-              <span>{personalInfo.monogram.slice(0, 1)}</span>
-              <span className="text-[#FF1493]">{personalInfo.monogram.slice(1)}</span>
+            <div className="w-9 h-9 rounded-xl overflow-hidden bg-[#0A0A0A] border border-[rgba(255,20,147,0.3)] flex items-center justify-center group-hover:border-[#FF1493] group-hover:shadow-[0_0_15px_rgba(255,20,147,0.5)] transition-all">
+              <img
+                src="/assets/images/mb-logo.png"
+                alt="MB Logo"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
             </div>
             <span className="hidden sm:inline text-xs text-[#B3B3B3] font-mono tracking-widest uppercase group-hover:text-white transition-colors">
               / Murasoli Balaji
