@@ -11,29 +11,60 @@ export default function BackgroundMesh() {
   // useScroll tracks document scroll from 0 (top) to 1 (bottom)
   const { scrollYProgress } = useScroll();
 
-  // Preload all 25 frames for instant response without network stalls
+  // Preload frame 1 immediately for instant render, and defer frames 2..25 to avoid crawl quota errors
   useEffect(() => {
     let isMounted = true;
-    const loadedImages = [];
-    let count = 0;
+    const loadedImages = new Array(TOTAL_FRAMES);
 
-    for (let i = 1; i <= TOTAL_FRAMES; i++) {
-      const img = new Image();
-      const frameNum = String(i).padStart(3, '0');
-      img.src = `/assets/frames/ezgif-frame-${frameNum}.jpg`;
-
-      img.onload = () => {
-        count++;
-        if (count === TOTAL_FRAMES && isMounted) {
-          setLoaded(true);
-        }
-      };
-      loadedImages.push(img);
-    }
+    // 1. Immediately load Frame 1 for instant background display
+    const firstImg = new Image();
+    firstImg.src = '/assets/frames/ezgif-frame-001.jpg';
+    firstImg.onload = () => {
+      if (isMounted) setLoaded(true);
+    };
+    loadedImages[0] = firstImg;
     imagesRef.current = loadedImages;
+
+    // 2. Defer remaining frames until user interaction or idle to prevent Googlebot quota throttling
+    const loadRemainingFrames = () => {
+      if (!isMounted) return;
+      for (let i = 2; i <= TOTAL_FRAMES; i++) {
+        if (loadedImages[i - 1]) continue;
+        const img = new Image();
+        const frameNum = String(i).padStart(3, '0');
+        img.src = `/assets/frames/ezgif-frame-${frameNum}.jpg`;
+        loadedImages[i - 1] = img;
+      }
+    };
+
+    const cleanupTriggers = () => {
+      window.removeEventListener('scroll', handleTrigger);
+      window.removeEventListener('pointerdown', handleTrigger);
+      window.removeEventListener('touchstart', handleTrigger);
+    };
+
+    const handleTrigger = () => {
+      loadRemainingFrames();
+      cleanupTriggers();
+    };
+
+    window.addEventListener('scroll', handleTrigger, { passive: true, once: true });
+    window.addEventListener('pointerdown', handleTrigger, { passive: true, once: true });
+    window.addEventListener('touchstart', handleTrigger, { passive: true, once: true });
+
+    // Idle fallback for human visitors after initial paint
+    const timer = setTimeout(() => {
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(loadRemainingFrames);
+      } else {
+        loadRemainingFrames();
+      }
+    }, 2500);
 
     return () => {
       isMounted = false;
+      cleanupTriggers();
+      clearTimeout(timer);
     };
   }, []);
 
