@@ -22,10 +22,21 @@ const QUICK_PROMPTS = [
 const MASCOT_SIZE = 88;
 
 /**
- * Lightweight helper to safely render simple markdown: bold, links, bullets, and linebreaks
+ * Lightweight helper to safely render simple markdown: bold, links, bullets, and linebreaks.
+ * Strictly sanitizes URLs to block javascript: or data: injection.
  */
 function MarkdownText({ content }) {
+  if (!content) return null;
   const lines = content.split('\n');
+
+  const sanitizeLink = (url) => {
+    if (!url) return '#';
+    const trimmed = url.trim();
+    if (trimmed.startsWith('https://') || trimmed.startsWith('http://') || trimmed.startsWith('mailto:') || trimmed.startsWith('/')) {
+      return trimmed;
+    }
+    return '#';
+  };
 
   return (
     <div className="space-y-1.5 leading-relaxed text-inherit">
@@ -54,11 +65,13 @@ function MarkdownText({ content }) {
             );
           } else if (matchedText.startsWith('[') && matchedText.includes('](')) {
             const linkText = matchedText.slice(1, matchedText.indexOf(']('));
-            const linkUrl = matchedText.slice(matchedText.indexOf('](') + 2, -1);
+            const rawUrl = matchedText.slice(matchedText.indexOf('](') + 2, -1);
+            const safeUrl = sanitizeLink(rawUrl);
+
             elements.push(
               <a
                 key={keyCounter++}
-                href={linkUrl}
+                href={safeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#FF69B4] underline decoration-[#FF1493]/60 hover:text-white hover:decoration-white transition-colors"
@@ -164,8 +177,9 @@ export default function PortfolioAIChatbot() {
   };
 
   const handleSendMessage = async (textToSend) => {
-    const query = (textToSend || inputValue).trim();
-    if (!query || isLoading) return;
+    const rawQuery = (textToSend || inputValue).trim();
+    if (!rawQuery || isLoading) return;
+    const query = rawQuery.slice(0, 1000);
 
     const userMessage = {
       id: Date.now().toString(),
@@ -218,7 +232,7 @@ export default function PortfolioAIChatbot() {
   };
 
   const handleInputChange = (e) => {
-    const val = e.target.value;
+    const val = e.target.value.slice(0, 1000);
     setInputValue(val);
     if (!isLoading) {
       if (val.trim().length > 0) {
@@ -378,6 +392,7 @@ export default function PortfolioAIChatbot() {
                   <input
                     ref={inputRef}
                     type="text"
+                    maxLength={1000}
                     value={inputValue}
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}

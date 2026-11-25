@@ -15,10 +15,10 @@ const GROQ_MODEL_CANDIDATES = [
   'allam-2-7b'
 ];
 
-// Obfuscated default keys to avoid secret-scanning false-positives while providing seamless client-side access
-const ENCODED_DEFAULT_KEY = 'QVEuQWI4Uk42SzhISExLM1FwMTVkMmlueUhFSE9Kd0ZsTFZYaU1sZjM4ZWVodVpXVTNLbVE=';
-const GROQ_MASKED_BYTES = [77,89,65,117,98,115,96,75,70,95,127,123,108,111,26,69,18,98,78,79,109,77,88,25,125,109,78,83,72,25,108,115,101,73,70,122,31,112,88,111,90,70,125,75,100,80,97,103,90,109,65,101,120,89,111,111];
-
+/**
+ * Safely retrieve API keys from environment or runtime globals.
+ * No hardcoded API keys are stored in source control.
+ */
 export function getApiKey() {
   const envKey = import.meta.env.VITE_GEMINI_API_KEY;
   if (envKey && envKey !== 'your_gemini_api_key_here') {
@@ -27,11 +27,7 @@ export function getApiKey() {
   if (typeof window !== 'undefined' && window.__PORTFOLIO_GEMINI_KEY__) {
     return window.__PORTFOLIO_GEMINI_KEY__;
   }
-  try {
-    return atob(ENCODED_DEFAULT_KEY);
-  } catch (e) {
-    return '';
-  }
+  return '';
 }
 
 export function getGroqApiKey() {
@@ -42,11 +38,7 @@ export function getGroqApiKey() {
   if (typeof window !== 'undefined' && window.__PORTFOLIO_GROQ_KEY__) {
     return window.__PORTFOLIO_GROQ_KEY__;
   }
-  try {
-    return GROQ_MASKED_BYTES.map((b) => String.fromCharCode(b ^ 0x2a)).join('');
-  } catch (e) {
-    return '';
-  }
+  return '';
 }
 
 // Comprehensive Ground Truth System Prompt for AMEH AI
@@ -111,7 +103,7 @@ TONE, COMPLETION & STYLE:
  * Uses strict word boundary matching so general queries are never misrouted.
  */
 function getSmartFallbackReply(userMessage) {
-  const query = userMessage.toLowerCase().trim();
+  const query = (userMessage || '').toLowerCase().trim();
 
   // Explore Projects
   if (/\b(project|projects|work|portfolio)\b/.test(query) && !query.includes('weather')) {
@@ -165,6 +157,11 @@ He completed his **Diploma in Computer Engineering** from **CIT Sandwich Polytec
 He is always open to discussing new opportunities, collaborations, and software engineering roles!`;
   }
 
+  // Security & Safety inquiry
+  if (/\b(safe|security|hack|secure|privacy)\b/.test(query)) {
+    return `This portfolio is statically hosted on GitHub Pages with strict Content Security Policy (CSP), anti-clickjacking frame guards, sanitization against injection, and zero tracking scripts. Your interaction is private, safe, and protected!`;
+  }
+
   // General questions fallback (e.g. weather, general knowledge)
   if (query.includes('weather')) {
     return `I don't have real-time live sensor or satellite feeds for live weather telemetry right now. For accurate, up-to-the-minute local forecasts, I recommend checking a weather service like Google Weather or AccuWeather!
@@ -210,10 +207,10 @@ async function callGroqApi(messages) {
 
   const recentMessages = messages.slice(-10);
   recentMessages.forEach((msg) => {
-    if (msg.text && msg.text.trim()) {
+    if (msg.text && typeof msg.text === 'string' && msg.text.trim()) {
       formattedMessages.push({
         role: msg.sender === 'user' ? 'user' : 'assistant',
-        content: msg.text
+        content: msg.text.slice(0, 1000)
       });
     }
   });
@@ -238,14 +235,11 @@ async function callGroqApi(messages) {
         const data = await response.json();
         const text = data?.choices?.[0]?.message?.content;
         if (text && text.trim().length > 0) {
-          console.info(`[AMEH AI] Successfully generated response via Groq backup (${model})`);
           return cleanIncompleteEnding(text);
         }
-      } else {
-        console.warn(`Groq model ${model} returned HTTP ${response.status}. Trying next candidate...`);
       }
-    } catch (err) {
-      console.warn(`Groq API call failed on ${model}:`, err);
+    } catch (_) {
+      // Continue to next candidate model
     }
   }
 
@@ -258,17 +252,18 @@ async function callGroqApi(messages) {
  */
 export async function sendChatMessage(messages) {
   const apiKey = getApiKey();
-  const lastUserMsg = messages[messages.length - 1]?.text || '';
+  const rawUserMsg = messages[messages.length - 1]?.text || '';
+  const lastUserMsg = typeof rawUserMsg === 'string' ? rawUserMsg.slice(0, 1000).trim() : '';
 
   // Format conversational contents for Gemini API (only user/model roles)
   const formattedContents = [];
   const recentMessages = messages.slice(-10);
 
   recentMessages.forEach((msg) => {
-    if (msg.text && msg.text.trim()) {
+    if (msg.text && typeof msg.text === 'string' && msg.text.trim()) {
       formattedContents.push({
         role: msg.sender === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.text }]
+        parts: [{ text: msg.text.slice(0, 1000) }]
       });
     }
   });
@@ -310,26 +305,23 @@ export async function sendChatMessage(messages) {
           if (text && text.trim().length > 0) {
             return cleanIncompleteEnding(text);
           }
-        } else {
-          console.warn(`Gemini model ${model} returned HTTP ${response.status}. Attempting next candidate...`);
         }
-      } catch (err) {
-        console.warn(`Gemini API call failed on ${model}:`, err);
+      } catch (_) {
+        // Continue to next candidate model
       }
     }
   }
 
   // 2. Automated Failover: If Gemini is unavailable, immediately invoke Groq API backup
-  console.info('[AMEH AI] Gemini API unavailable or quota reached. Automatically falling back to Groq LPU API backup...');
   try {
     const groqResponse = await callGroqApi(messages);
     if (groqResponse) {
       return groqResponse;
     }
-  } catch (groqErr) {
-    console.warn('[AMEH AI] Groq backup API call failed:', groqErr);
+  } catch (_) {
+    // Fall through to offline fallback
   }
 
-  // 3. Deterministic Offline Fallback: If both live APIs fail, deliver smart contextual reply
+  // 3. Deterministic Offline Fallback: If live APIs are absent or unreachable, deliver smart contextual reply
   return getSmartFallbackReply(lastUserMsg);
 }

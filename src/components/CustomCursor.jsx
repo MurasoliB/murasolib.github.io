@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export default function CustomCursor() {
-  const [position, setPosition] = useState({ x: -100, y: -100 });
-  const [trailing, setTrailing] = useState({ x: -100, y: -100 });
+  const dotRef = useRef(null);
+  const ringRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isTouch, setIsTouch] = useState(false);
@@ -14,9 +14,19 @@ export default function CustomCursor() {
       return;
     }
 
+    let mouseX = -100;
+    let mouseY = -100;
+    let ringX = -100;
+    let ringY = -100;
+    let animId;
+
     const handleMouseMove = (e) => {
-      setPosition({ x: e.clientX, y: e.clientY });
-      if (!isVisible) setIsVisible(true);
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+      }
+      setIsVisible((prev) => (prev ? prev : true));
     };
 
     const handleMouseLeave = () => setIsVisible(false);
@@ -24,24 +34,21 @@ export default function CustomCursor() {
 
     const handleElementHover = (e) => {
       const target = e.target;
-      const isInteractive = target.closest('a, button, input, textarea, select, [role="button"], .interactive-hover');
+      const isInteractive = target && target.closest && target.closest('a, button, input, textarea, select, [role="button"], .interactive-hover');
       setIsHovered(!!isInteractive);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseover', handleElementHover);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('mouseover', handleElementHover, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave);
     document.addEventListener('mouseenter', handleMouseEnter);
 
-    // Trailing ring animation loop
-    let animId;
-    let currX = -100;
-    let currY = -100;
-
     const render = () => {
-      currX += (position.x - currX) * 0.18;
-      currY += (position.y - currY) * 0.18;
-      setTrailing({ x: currX, y: currY });
+      ringX += (mouseX - ringX) * 0.18;
+      ringY += (mouseY - ringY) * 0.18;
+      if (ringRef.current) {
+        ringRef.current.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
+      }
       animId = requestAnimationFrame(render);
     };
     animId = requestAnimationFrame(render);
@@ -53,7 +60,7 @@ export default function CustomCursor() {
       document.removeEventListener('mouseenter', handleMouseEnter);
       cancelAnimationFrame(animId);
     };
-  }, [position.x, position.y, isVisible]);
+  }, []);
 
   if (isTouch || !isVisible) return null;
 
@@ -61,22 +68,20 @@ export default function CustomCursor() {
     <>
       {/* Precision center dot in Hot Pink */}
       <div
-        className="fixed top-0 left-0 w-2 h-2 rounded-full bg-[#FF1493] pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-transform duration-75 shadow-[0_0_10px_#FF1493]"
-        style={{
-          transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
-        }}
+        ref={dotRef}
+        className="fixed top-0 left-0 w-2 h-2 rounded-full bg-[#FF1493] pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 shadow-[0_0_10px_#FF1493] will-change-transform"
+        style={{ transform: 'translate3d(-100px, -100px, 0)' }}
       />
 
       {/* Trailing smooth magnetic aura in Hot Pink */}
       <div
-        className={`fixed top-0 left-0 rounded-full border pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ease-out ${
+        ref={ringRef}
+        className={`fixed top-0 left-0 rounded-full border pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 will-change-transform transition-[width,height,background-color,border-color,box-shadow] duration-200 ease-out ${
           isHovered
-            ? 'w-12 h-12 border-[#FF1493] bg-[#FF1493]/20 scale-125 shadow-[0_0_20px_rgba(255,20,147,0.4)]'
+            ? 'w-12 h-12 border-[#FF1493] bg-[#FF1493]/20 shadow-[0_0_20px_rgba(255,20,147,0.4)]'
             : 'w-7 h-7 border-[#FF1493]/40 bg-[#FF1493]/5'
         }`}
-        style={{
-          transform: `translate3d(${trailing.x}px, ${trailing.y}px, 0)`,
-        }}
+        style={{ transform: 'translate3d(-100px, -100px, 0)' }}
       />
     </>
   );

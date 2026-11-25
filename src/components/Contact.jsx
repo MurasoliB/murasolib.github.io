@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Copy, Check, Send, Mail, Loader2, ExternalLink } from 'lucide-react';
 import { Github, Linkedin } from './Icons';
@@ -15,6 +15,8 @@ export default function Contact() {
     message: '',
   });
   const [status, setStatus] = useState('idle'); // 'idle' | 'submitting' | 'success' | 'activation_needed'
+  const [rateLimitMessage, setRateLimitMessage] = useState('');
+  const lastSubmitTime = useRef(0);
 
   useEffect(() => {
     // Check if redirected back after FormSubmit confirmation
@@ -31,52 +33,88 @@ export default function Contact() {
     }
   }, []);
 
-  const handleCopy = (emailToCopy, key) => {
-    navigator.clipboard.writeText(emailToCopy);
+  const handleCopy = async (emailToCopy, key) => {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(emailToCopy);
+      } else {
+        throw new Error('Clipboard API unavailable');
+      }
+    } catch (_) {
+      try {
+        const textArea = document.createElement('textarea');
+        textArea.value = emailToCopy;
+        textArea.setAttribute('readonly', '');
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        textArea.style.top = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      } catch (err) {
+        console.warn('Fallback copy failed', err);
+      }
+    }
     setCopiedKey(key);
     setTimeout(() => setCopiedKey(null), 2000);
   };
 
   const openWebGmail = () => {
-    const org = formData.company ? ` [${formData.company}]` : '';
-    const subject = encodeURIComponent(`Portfolio Inquiry: ${formData.inquiryType}${org} - ${formData.name || 'Contact'}`);
+    const org = formData.company ? ` [${formData.company.slice(0, 50)}]` : '';
+    const subject = encodeURIComponent(`Portfolio Inquiry: ${formData.inquiryType}${org} - ${formData.name.slice(0, 50) || 'Contact'}`);
     const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\nCompany/Organization: ${formData.company || 'Not Specified (Individual)'}\nInquiry Type: ${formData.inquiryType}\n\nMessage:\n${formData.message}`
+      `Name: ${formData.name.slice(0, 80)}\nEmail: ${formData.email.slice(0, 80)}\nCompany/Organization: ${formData.company.slice(0, 80) || 'Not Specified (Individual)'}\nInquiry Type: ${formData.inquiryType}\n\nMessage:\n${formData.message.slice(0, 2000)}`
     );
-    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${personalInfo.email}&su=${subject}&body=${body}`, '_blank');
+    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(personalInfo.email)}&su=${subject}&body=${body}`, '_blank', 'noopener,noreferrer');
   };
 
   const openWebOutlook = () => {
-    const org = formData.company ? ` [${formData.company}]` : '';
-    const subject = encodeURIComponent(`Portfolio Inquiry: ${formData.inquiryType}${org} - ${formData.name || 'Contact'}`);
+    const org = formData.company ? ` [${formData.company.slice(0, 50)}]` : '';
+    const subject = encodeURIComponent(`Portfolio Inquiry: ${formData.inquiryType}${org} - ${formData.name.slice(0, 50) || 'Contact'}`);
     const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\nCompany/Organization: ${formData.company || 'Not Specified (Individual)'}\nInquiry Type: ${formData.inquiryType}\n\nMessage:\n${formData.message}`
+      `Name: ${formData.name.slice(0, 80)}\nEmail: ${formData.email.slice(0, 80)}\nCompany/Organization: ${formData.company.slice(0, 80) || 'Not Specified (Individual)'}\nInquiry Type: ${formData.inquiryType}\n\nMessage:\n${formData.message.slice(0, 2000)}`
     );
     const targetEmail = personalInfo.outlookEmail || personalInfo.email;
-    window.open(`https://outlook.live.com/mail/0/deeplink/compose?to=${targetEmail}&subject=${subject}&body=${body}`, '_blank');
+    window.open(`https://outlook.live.com/mail/0/deeplink/compose?to=${encodeURIComponent(targetEmail)}&subject=${subject}&body=${body}`, '_blank', 'noopener,noreferrer');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) return;
+    const cleanName = formData.name.trim().slice(0, 100);
+    const cleanEmail = formData.email.trim().slice(0, 120);
+    const cleanMessage = formData.message.trim().slice(0, 3000);
+    const cleanCompany = (formData.company || '').trim().slice(0, 100);
 
+    if (!cleanName || !cleanEmail || !cleanMessage) return;
+
+    // Basic anti-spam rate limiting: max 1 submission per 8 seconds
+    const now = Date.now();
+    if (now - lastSubmitTime.current < 8000) {
+      setRateLimitMessage('Please wait a few seconds before dispatching another message.');
+      setTimeout(() => setRateLimitMessage(''), 4000);
+      return;
+    }
+    lastSubmitTime.current = now;
     setStatus('submitting');
+    setRateLimitMessage('');
 
     try {
-      const subjectTag = formData.company ? `[${formData.company}]` : `[${formData.inquiryType}]`;
-      const response = await fetch(`https://formsubmit.co/ajax/${personalInfo.email}`, {
+      const subjectTag = cleanCompany ? `[${cleanCompany}]` : `[${formData.inquiryType}]`;
+      const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(personalInfo.email)}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
         body: JSON.stringify({
-          Name: formData.name,
-          Email: formData.email,
-          'Company / Organization': formData.company || 'Individual / Personal',
+          Name: cleanName,
+          Email: cleanEmail,
+          'Company / Organization': cleanCompany || 'Individual / Personal',
           'Inquiry Type': formData.inquiryType,
-          Message: formData.message,
-          _subject: `Portfolio Message: ${subjectTag} from ${formData.name}`,
+          Message: cleanMessage,
+          _subject: `Portfolio Message: ${subjectTag} from ${cleanName}`,
           _template: 'table',
         }),
       });
@@ -105,7 +143,7 @@ export default function Contact() {
         setStatus('activation_needed');
       }
     } catch (_) {
-      // If blocked by adblocker / CORS, show one-time activation / web gmail options
+      // If blocked by adblocker / CORS, show one-time activation / web compose options
       setStatus('activation_needed');
     }
   };
@@ -290,8 +328,7 @@ export default function Contact() {
                   To prevent spam, FormSubmit sends a 1-click activation link to <strong className="text-white">{personalInfo.email}</strong> on the first use.
                 </p>
                 <div className="space-y-3 pt-2">
-                  {/* Standard POST triggers FormSubmit's confirmation email to your inbox */}
-                  <form action={`https://formsubmit.co/${personalInfo.email}`} method="POST">
+                  <form action={`https://formsubmit.co/${encodeURIComponent(personalInfo.email)}`} method="POST">
                     <input type="hidden" name="name" value={formData.name || 'Portfolio Activation Test'} />
                     <input type="hidden" name="email" value={formData.email || 'balajimurasoli@gmail.com'} />
                     <input type="hidden" name="Company / Organization" value={formData.company || 'Not Specified (Individual)'} />
@@ -328,6 +365,11 @@ export default function Contact() {
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
+                {rateLimitMessage && (
+                  <div className="p-3 rounded-xl bg-[#FF1493]/15 border border-[#FF1493]/40 text-[#FF69B4] text-xs font-mono">
+                    {rateLimitMessage}
+                  </div>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="contact-name" className="block text-xs font-mono text-white/50 uppercase tracking-wider mb-2">
@@ -338,6 +380,7 @@ export default function Contact() {
                       name="name"
                       type="text"
                       required
+                      maxLength={100}
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="Your name"
@@ -354,6 +397,7 @@ export default function Contact() {
                       name="email"
                       type="email"
                       required
+                      maxLength={120}
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="name@company.com"
@@ -371,6 +415,7 @@ export default function Contact() {
                     id="contact-company"
                     name="company"
                     type="text"
+                    maxLength={100}
                     value={formData.company}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                     placeholder="e.g. Google, Tech Startup, or Independent"
@@ -378,7 +423,7 @@ export default function Contact() {
                   />
                 </div>
 
-                {/* Row 3: Aesthetic Typographic Pills for Inquiry Type (No Emojis) */}
+                {/* Row 3: Aesthetic Typographic Pills for Inquiry Type */}
                 <div className="space-y-2">
                   <label className="block text-xs font-mono text-white/50 uppercase tracking-wider">
                     Inquiry Type
@@ -421,6 +466,7 @@ export default function Contact() {
                     name="message"
                     rows="4"
                     required
+                    maxLength={3000}
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     placeholder="Tell me about the role, project, idea, or problem..."
