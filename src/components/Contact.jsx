@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Copy, Check, Send, Mail, Loader2, ExternalLink } from 'lucide-react';
-import { Github, Linkedin } from './Icons';
+import { Github, Linkedin, Instagram } from './Icons';
 import confetti from 'canvas-confetti';
 import { personalInfo } from '../data/portfolioData';
 
@@ -283,6 +283,16 @@ export default function Contact() {
               >
                 <Linkedin className="w-4 h-4 text-[#FF1493]" />
                 <span className="border-b border-transparent group-hover:border-white pb-0.5">LinkedIn ↗</span>
+              </a>
+
+              <a
+                href={personalInfo.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2 text-[#B3B3B3] hover:text-white transition-colors"
+              >
+                <Instagram className="w-4 h-4 text-[#FF1493]" />
+                <span className="border-b border-transparent group-hover:border-white pb-0.5">Instagram ↗</span>
               </a>
 
               <span className="text-white/30 ml-auto hidden sm:inline">

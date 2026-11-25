@@ -20,6 +20,7 @@ export const personalInfo = {
   resumePdf: "/assets/Murasoli_Balaji_Resume.pdf",
   github: "https://github.com/murasolib",
   linkedin: "https://www.linkedin.com/in/murasolibalaji",
+  instagram: "https://www.instagram.com/balajimurasoli/",
 };
 
 export const skillsList = [

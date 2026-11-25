@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowUp } from 'lucide-react';
-import { Github, Linkedin } from './Icons';
+import { Github, Linkedin, Instagram } from './Icons';
 import { personalInfo } from '../data/portfolioData';
 
 export default function Footer() {
@@ -46,6 +46,15 @@ export default function Footer() {
             className="text-white/60 hover:text-white transition-colors"
           >
             <Linkedin className="w-4 h-4 text-[#FF1493]" />
+          </a>
+          <a
+            href={personalInfo.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            className="text-white/60 hover:text-white transition-colors"
+          >
+            <Instagram className="w-4 h-4 text-[#FF1493]" />
           </a>
           <span className="text-white/20">|</span>
           <button

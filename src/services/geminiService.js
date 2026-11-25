@@ -97,6 +97,7 @@ YOUR CORE OBJECTIVES:
      - Portfolio: https://murasolib.github.io/
      - GitHub: https://github.com/murasolib
      - LinkedIn: https://www.linkedin.com/in/murasolibalaji
+     - Instagram: https://www.instagram.com/balajimurasoli/
      - Email: balajimurasoli@gmail.com
      - Outlook: balajimurasoli@outlook.com
      - Resume: Direct download button in the Hero section or at /assets/Murasoli_Balaji_Resume.pdf
@@ -157,12 +158,13 @@ He completed his **Diploma in Computer Engineering** from **CIT Sandwich Polytec
   }
 
   // Contact Information
-  if (/\b(contact|hire|email|reach|linkedin|github|resume)\b/.test(query)) {
+  if (/\b(contact|hire|email|reach|linkedin|github|instagram|insta|resume)\b/.test(query)) {
     return `You can connect directly with Murasoli through:
 
 • **Email:** [balajimurasoli@gmail.com](mailto:balajimurasoli@gmail.com)
 • **LinkedIn:** [linkedin.com/in/murasolibalaji](https://www.linkedin.com/in/murasolibalaji)
 • **GitHub:** [github.com/murasolib](https://github.com/murasolib)
+• **Instagram:** [@balajimurasoli](https://www.instagram.com/balajimurasoli/)
 • **Resume:** You can download his official PDF resume from the button in the Hero section or view [Resume PDF](/assets/Murasoli_Balaji_Resume.pdf).
 
 He is always open to discussing new opportunities, collaborations, and software engineering roles!`;
