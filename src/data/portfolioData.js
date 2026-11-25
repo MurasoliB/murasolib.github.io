@@ -21,6 +21,7 @@ export const personalInfo = {
   github: "https://github.com/murasolib",
   linkedin: "https://www.linkedin.com/in/murasolibalaji",
   instagram: "https://www.instagram.com/balajimurasoli/",
+  youtube: "https://www.youtube.com/@MurasoliBalaji",
 };
 
 export const skillsList = [

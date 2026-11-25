@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowUp } from 'lucide-react';
-import { Github, Linkedin, Instagram } from './Icons';
+import { Github, Linkedin, Instagram, Youtube } from './Icons';
 import { personalInfo } from '../data/portfolioData';
 
 export default function Footer() {
@@ -55,6 +55,15 @@ export default function Footer() {
             className="text-white/60 hover:text-white transition-colors"
           >
             <Instagram className="w-4 h-4 text-[#FF1493]" />
+          </a>
+          <a
+            href={personalInfo.youtube}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="YouTube"
+            className="text-white/60 hover:text-white transition-colors"
+          >
+            <Youtube className="w-4 h-4 text-[#FF1493]" />
           </a>
           <span className="text-white/20">|</span>
           <button

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
-import { Github, Linkedin, Instagram } from './Icons';
+import { Github, Linkedin, Instagram, Youtube } from './Icons';
 import { personalInfo } from '../data/portfolioData';
 
 const navLinks = [
@@ -157,6 +157,15 @@ export default function Navbar() {
             >
               <Instagram className="w-4 h-4" />
             </a>
+            <a
+              href={personalInfo.youtube}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="YouTube"
+              className="text-[#B3B3B3] hover:text-[#FF1493] hover:scale-110 transition-all"
+            >
+              <Youtube className="w-4 h-4" />
+            </a>
             <button
               onClick={(e) => handleNavClick(e, { targetId: 'contact' })}
               className="text-xs font-mono font-semibold text-white px-5 py-2 rounded-full bg-[#FF1493] hover:bg-[#FF4FBF] shadow-[0_0_20px_rgba(255,20,147,0.45)] hover:shadow-[0_0_25px_rgba(255,20,147,0.7)] transition-all duration-300 cursor-pointer"
@@ -233,6 +242,15 @@ export default function Navbar() {
                   className="text-[#B3B3B3] hover:text-[#FF1493]"
                 >
                   <Instagram className="w-5 h-5" />
+                </a>
+                <a
+                  href={personalInfo.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube"
+                  className="text-[#B3B3B3] hover:text-[#FF1493]"
+                >
+                  <Youtube className="w-5 h-5" />
                 </a>
               </div>
               <span className="text-xs font-mono text-[#B3B3B3]">
