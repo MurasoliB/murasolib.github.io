@@ -1,0 +1,32 @@
+name: Daily Activity Heartbeat
+
+on:
+  schedule:
+    # Runs daily at 12:30 UTC (6:00 PM IST) on GitHub's cloud servers even when offline
+    - cron: '30 12 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Update Heartbeat Timestamp
+        run: |
+          mkdir -p .github
+          date -u +"Last heartbeat: %Y-%m-%d %H:%M:%S UTC" > .github/heartbeat.txt
+
+      - name: Commit & Push
+        run: |
+          git config user.name "MurasoliB"
+          git config user.email "balajimurasoli@gmail.com"
+          git add .github/heartbeat.txt
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: daily heartbeat $(date -u +%Y-%m-%d)"
+            git push
+          fi
