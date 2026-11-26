@@ -2,8 +2,8 @@ name: Daily Activity Heartbeat
 
 on:
   schedule:
-    # Runs daily at 12:30 UTC (6:00 PM IST) on GitHub's cloud servers even when offline
-    - cron: '30 12 * * *'
+    # Runs daily at 18:40 UTC (12:10 AM IST) on GitHub's cloud servers even when offline
+    - cron: '40 18 * * *'
   workflow_dispatch:
 
 permissions:
