@@ -15,18 +15,23 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update Heartbeat Timestamp
+      - name: Update Heartbeat & Commit
+        env:
+          TZ: Asia/Kolkata
         run: |
           mkdir -p .github
-          TZ="Asia/Kolkata" date +"Last heartbeat: %Y-%m-%d %H:%M:%S IST" > .github/heartbeat.txt
-
-      - name: Commit & Push
-        run: |
+          date +"Last heartbeat: %Y-%m-%d %H:%M:%S IST" > .github/heartbeat.txt
           git config user.name "MurasoliB"
           git config user.email "balajimurasoli@gmail.com"
           git add .github/heartbeat.txt
           if ! git diff --cached --quiet; then
-            git commit -m "chore: daily heartbeat $(TZ="Asia/Kolkata" date +%Y-%m-%d)"
+            git commit -m "chore: daily heartbeat $(date +%Y-%m-%d)"
             git push
+            echo "✅ Heartbeat committed and pushed successfully"
+          else
+            echo "⏭️ No changes detected, skipping commit"
           fi
